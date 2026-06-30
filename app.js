@@ -49,20 +49,15 @@ function fromB64(str) {
   );
 }
 
-/**
- * Maps compact config keys → data-cfg attribute values.
- */
 function applyConfigToDOM(cfg) {
   const isFr = cfg.la === 'fr';
 
-  // The big animated names shown in the intro show the OPPOSITE language name
-  // (French when invitation is in Arabic, Arabic when in French) — bilingual elegance
-  const groomDisplay = isFr ? cfg.ga : (cfg.gf2 || cfg.ga);
-  const brideDisplay = isFr ? cfg.ba : (cfg.bf2 || cfg.ba);
+  const groomDisplay = isFr ? (cfg.gf2 || cfg.ga) : cfg.ga;
+  const brideDisplay = isFr ? (cfg.bf2 || cfg.ba) : cfg.ba;
 
   const MAP = {
-    groomAr:          isFr ? (cfg.gf2 || cfg.ga) : cfg.ga,
-    brideAr:          isFr ? (cfg.bf2 || cfg.ba) : cfg.ba,
+    groomAr:          groomDisplay,
+    brideAr:          brideDisplay,
     groomNameDisplay: groomDisplay,  // shown in the big animated names + envelope banner
     brideNameDisplay: brideDisplay,
     groomFather: cfg.gf,
@@ -81,10 +76,8 @@ function applyConfigToDOM(cfg) {
   applyLanguage(cfg.la || 'ar');
 
   // Set page title dynamically
-  const groom = MAP.groomAr || cfg.ga;
-  const bride = MAP.brideAr || cfg.ba;
-  if (groom && bride) {
-    document.title = isFr ? `Mariage de ${groom} & ${bride}` : `حفل زفاف ${groom} و ${bride}`;
+  if (groomDisplay && brideDisplay) {
+    document.title = isFr ? `Mariage de ${groomDisplay} & ${brideDisplay}` : `حفل زفاف ${groomDisplay} و ${brideDisplay}`;
   }
 }
 
