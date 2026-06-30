@@ -186,6 +186,16 @@
         </div>
       </div>
 
+      <!-- Guest Name input field -->
+      <div class="card">
+        <div class="card-title">👤 اسم الضيف (اختياري)</div>
+        <div class="field" style="margin-top:10px">
+          <label>أدخل اسم الضيف لتوليد رابط مخصص وتتبع زياراته بشكل منفصل:</label>
+          <input id="guestNameInput" type="text" placeholder="مثال: أحمد، عائلة العبيدي..." style="font-size:0.95rem; width:100%; border:1px solid var(--border); padding:10px; border-radius:6px; background:rgba(0,0,0,0.2); color:white;">
+          <small style="color:var(--text-muted); display:block; margin-top:6px; font-size:0.76rem">إذا تم ملء هذا الحقل, فسيتم تتبع هذا الضيف باسمه في لوحة المتابعة بالأسفل.</small>
+        </div>
+      </div>
+
       <div class="card">
         <div class="card-title">📦 اختر الباقة</div>
         <div class="pack-selector">
@@ -297,12 +307,13 @@ function buildInvSlug(groomFr, brideFr) {
 }
 
 // ── Firebase Firestore operations ──
-async function saveInvitationToFirebase(slug, cfg, pack) {
+async function saveInvitationToFirebase(slug, cfg, pack, guestName) {
   initFirebase();
   await _db.collection('invitations').doc(slug).set({
     config:  cfg,
     count:   0,
     pack:    pack,
+    guestName: guestName || 'عام',
     created: firebase.firestore.FieldValue.serverTimestamp()
   });
 }
@@ -385,41 +396,84 @@ function val(id) {
   return el ? el.value.trim() : '';
 }
 
-function saveAll() {
+async function saveAll() {
   const cfg = buildConfig();
   localStorage.setItem('weddingAdminConfig', JSON.stringify(cfg));
   localStorage.setItem('weddingAdminProdUrl', val('prodUrlInput'));
-  const now = new Date().toLocaleTimeString('ar-TN');
-  document.getElementById('lastSavedLabel').textContent = 'آخر حفظ: ' + now;
-  showToast('✅ تم حفظ جميع البيانات');
+  const label = document.getElementById('lastSavedLabel');
+  label.textContent = '⏳ جاري حفظ الإعدادات...';
+
+  try {
+    initFirebase();
+    await _db.collection('settings').doc('global').set({
+      config: cfg,
+      prodUrl: val('prodUrlInput'),
+      updated: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    const now = new Date().toLocaleTimeString('ar-TN');
+    label.textContent = 'آخر حفظ (سيرفر): ' + now;
+    showToast('✅ تم حفظ جميع البيانات على السيرفر');
+  } catch (e) {
+    console.error('Settings save failed:', e);
+    const now = new Date().toLocaleTimeString('ar-TN');
+    label.textContent = 'آخر حفظ (محلي فقط): ' + now;
+    showToast('⚠️ تم حفظ التغييرات محلياً فقط');
+  }
 }
 
-function loadSaved() {
+function applyConfigToFields(c) {
+  set('groomAr',           c.ga  || '');
+  set('groomFr',           c.gf2 || '');   
+  set('brideAr',           c.ba  || '');
+  set('brideFr',           c.bf2 || '');
+  set('groomFather',       c.gf  || '');
+  set('groomMother',       c.gm  || '');
+  set('brideFather',       c.bf  || '');
+  set('brideMother',       c.bm  || '');
+  set('weddingDate',       c.wd  || '');
+  set('weddingDateDisplay',c.wdd || '');
+  if (c.ev) {
+    window._adminEvents = c.ev.map(e => ({
+      nameAr:   e.n, date: e.d, time: e.t, ampm: e.a,
+      location: e.l, lat:  e.la != null ? String(e.la) : '',
+      lng:      e.lo != null ? String(e.lo) : '', emoji: e.e
+    }));
+    renderEvents();
+  }
+}
+
+async function loadSaved() {
   const raw = localStorage.getItem('weddingAdminConfig');
   const savedProdUrl = localStorage.getItem('weddingAdminProdUrl');
   if (savedProdUrl) {
     set('prodUrlInput', savedProdUrl);
   }
-  if (!raw) return;
+  if (raw) {
+    try {
+      const c = JSON.parse(raw);
+      applyConfigToFields(c);
+      document.getElementById('lastSavedLabel').textContent = 'محفوظ (محلي)';
+    } catch(err) { console.warn('Load local error', err); }
+  }
+
   try {
-    const c = JSON.parse(raw);
-    set('groomAr',           c.ga  || '');
-    set('groomFr',           c.gf2 || '');   // not stored in short format, fine
-    set('brideAr',           c.ba  || '');
-    set('brideFr',           c.bf2 || '');
-    set('groomFather',       c.gf  || '');
-    set('groomMother',       c.gm  || '');
-    set('brideFather',       c.bf  || '');
-    set('brideMother',       c.bm  || '');
-    set('weddingDate',       c.wd  || '');
-    set('weddingDateDisplay',c.wdd || '');
-    if (c.ev) window._adminEvents = c.ev.map(e => ({
-      nameAr:   e.n, date: e.d, time: e.t, ampm: e.a,
-      location: e.l, lat:  e.la != null ? String(e.la) : '',
-      lng:      e.lo != null ? String(e.lo) : '', emoji: e.e
-    }));
-    document.getElementById('lastSavedLabel').textContent = 'محفوظ';
-  } catch(err) { console.warn('Load error', err); }
+    initFirebase();
+    const doc = await _db.collection('settings').doc('global').get();
+    if (doc.exists) {
+      const data = doc.data();
+      if (data.prodUrl) {
+        set('prodUrlInput', data.prodUrl);
+        localStorage.setItem('weddingAdminProdUrl', data.prodUrl);
+      }
+      if (data.config) {
+        applyConfigToFields(data.config);
+        localStorage.setItem('weddingAdminConfig', JSON.stringify(data.config));
+      }
+      document.getElementById('lastSavedLabel').textContent = 'محفوظ (سيرفر)';
+    }
+  } catch (e) {
+    console.error('Failed to load settings from Firestore:', e);
+  }
 }
 
 function set(id, v) {
@@ -441,6 +495,7 @@ function renderEvents() {
   const events = window._adminEvents || DEFAULT_EVENTS;
   window._adminEvents = events;
   const c = document.getElementById('events-container');
+  if (!c) return;
   c.innerHTML = '';
   events.forEach((ev, i) => {
     const card = document.createElement('div');
@@ -503,16 +558,19 @@ function selectPack(el) {
   selectedPack = parseInt(el.dataset.pack);
 }
 
-// ── Generate Link (stores config on JSONBlob → short URL) ──
 // ── Generate Link (Firebase → short personalized URL) ──
 async function generateLink() {
-  saveAll();
+  await saveAll();
 
   const cfg = buildConfig();
   cfg.ps = selectedPack;
 
-  // Build personalized slug from Latin names
-  const invSlug = buildInvSlug(val('groomFr'), val('brideFr'));
+  const guestName = val('guestNameInput');
+
+  // Build unique personalized slug
+  const baseSlug = buildInvSlug(val('groomFr'), val('brideFr'));
+  const randSuffix = Math.random().toString(36).substring(2, 6);
+  const invSlug = `${baseSlug}-${randSuffix}`;
   cfg.id = invSlug;
 
   // Build base URL
@@ -528,25 +586,14 @@ async function generateLink() {
     base = window.location.href.replace('admin.html', INVITATION_FILE);
   }
 
-  const isLocal    = base.startsWith('file:');
   const shortUrlEl = document.getElementById('shortUrl');
   document.getElementById('linkOutputBox').classList.add('visible');
   document.getElementById('linkOutputBox').scrollIntoView({ behavior:'smooth', block:'center' });
 
-  if (isLocal) {
-    const b64 = toB64(JSON.stringify(cfg));
-    _longUrl = _shortUrl = base + '?c=' + b64;
-    document.getElementById('generatedUrl').textContent = _longUrl;
-    document.getElementById('linkIdDisplay').textContent = invSlug;
-    document.getElementById('packDisplay').textContent   = selectedPack;
-    shortUrlEl.innerHTML = `<div style="font-size:0.85rem;color:#e67e22">⚠️ وضع محلي — افتح <code>index.html</code> مباشرة للمعاينة.</div>`;
-    return;
-  }
-
   shortUrlEl.textContent = '⏳ جاري الحفظ على Firebase...';
 
   try {
-    await saveInvitationToFirebase(invSlug, cfg, selectedPack);
+    await saveInvitationToFirebase(invSlug, cfg, selectedPack, guestName);
 
     const inviteUrl = `${base}?inv=${invSlug}`;
     _longUrl = _shortUrl = inviteUrl;
@@ -556,12 +603,11 @@ async function generateLink() {
     document.getElementById('packDisplay').textContent   = selectedPack;
     shortUrlEl.textContent = inviteUrl;
 
-    // Save to local history
-    const hist = getHistory();
-    const filtered = hist.filter(h => h.id !== invSlug);
-    filtered.unshift({ id:invSlug, ps:selectedPack, created:new Date().toISOString(), url:inviteUrl });
-    localStorage.setItem('weddingLinkHistory', JSON.stringify(filtered));
-    renderLinksHistory();
+    // Reset guest name field for next guest
+    const gInput = document.getElementById('guestNameInput');
+    if (gInput) gInput.value = '';
+
+    await renderLinksHistory();
     showToast('🎉 تم إنشاء الرابط!');
 
   } catch(e) {
@@ -581,35 +627,76 @@ function shareWhatsApp() {
 }
 function openShortLink() { window.open(_shortUrl, '_blank'); }
 
-// ── History ──
-function getHistory() { try { return JSON.parse(localStorage.getItem('weddingLinkHistory')||'[]'); } catch(e){ return []; } }
+// ── History (Firestore-based) ──
+async function renderLinksHistory() {
+  const c = document.getElementById('links-history');
+  if (!c) return;
+  c.innerHTML = '<div style="color:var(--text-muted);font-size:0.82rem;text-align:center;padding:20px"><span class="spinner"></span> جاري تحميل الروابط من السيرفر...</div>';
 
-function renderLinksHistory() {
-  const hist = getHistory();
-  const c    = document.getElementById('links-history');
-  if (!hist.length) {
-    c.innerHTML = '<div style="color:var(--text-muted);font-size:0.82rem;text-align:center;padding:20px">لا توجد روابط بعد</div>';
-    return;
+  try {
+    initFirebase();
+    const querySnapshot = await _db.collection('invitations').get();
+    const hist = [];
+    
+    querySnapshot.forEach(doc => {
+      const data = doc.data();
+      hist.push({
+        id: doc.id,
+        ps: data.pack || 100,
+        guestName: data.guestName || 'عام',
+        created: data.created ? (data.created.toDate ? data.created.toDate().toISOString() : new Date(data.created).toISOString()) : new Date().toISOString()
+      });
+    });
+
+    // Sort by created date descending
+    hist.sort((a, b) => new Date(b.created) - new Date(a.created));
+
+    if (!hist.length) {
+      c.innerHTML = '<div style="color:var(--text-muted);font-size:0.82rem;text-align:center;padding:20px">لا توجد روابط بعد</div>';
+      return;
+    }
+
+    // Build the base URL for the links
+    const prodUrl = val('prodUrlInput');
+    let base;
+    if (prodUrl) {
+      let cleanProd = prodUrl.trim();
+      if (!cleanProd.startsWith('http')) cleanProd = 'https://' + cleanProd;
+      if (cleanProd.endsWith('/')) base = cleanProd + INVITATION_FILE;
+      else if (cleanProd.endsWith(INVITATION_FILE)) base = cleanProd;
+      else base = cleanProd + '/' + INVITATION_FILE;
+    } else {
+      base = window.location.href.replace('admin.html', INVITATION_FILE);
+    }
+
+    c.innerHTML = hist.map(h => {
+      const url = `${base}?inv=${h.id}`;
+      return `
+      <div class="link-history-item" id="lhi-${h.id}">
+        <div class="lh-info">
+          <div class="lh-pack" style="font-weight:700;color:var(--gold-light)">👤 الضيف: ${h.guestName}</div>
+          <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px">معرّف الرابط: <span style="font-family:monospace;color:var(--gold)">${h.id}</span> · باقة: ${h.ps} مشاركة</div>
+          <div id="ctr-${h.id}" style="margin:6px 0;font-size:0.8rem;color:var(--text-muted)">⏳ جاري تحميل الرصيد...</div>
+          <div class="lh-date" style="font-size:0.7rem;color:rgba(255,255,255,0.4)">📅 ${new Date(h.created).toLocaleString('ar-TN')}</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;margin-top:8px">
+          <button class="btn btn-outline" style="padding:4px 8px;font-size:0.72rem" onclick="quickCopy('${url}')">📋 نسخ</button>
+          <button class="btn btn-ghost"   style="padding:4px 8px;font-size:0.72rem" onclick="shareHistLink('${url}')">💬 واتساب</button>
+          <button class="btn btn-ghost"   style="padding:4px 8px;font-size:0.72rem;color:var(--gold)" onclick="updateLinkConfig('${h.id}')" title="تحديث هذه الدعوة بالبيانات الحالية للنموذج">🔄 تحديث</button>
+          <button class="btn btn-ghost"   style="padding:4px 8px;font-size:0.72rem;color:#e74c3c" onclick="deleteLink('${h.id}')">🗑️</button>
+        </div>
+      </div>`;
+    }).join('');
+
+    // Attach real-time Firebase listeners for each link to show the counter in real time
+    hist.forEach(h => {
+      watchInvitation(h.id, data => updateCounter(h.id, data));
+    });
+
+  } catch (err) {
+    console.error('Error fetching invitations:', err);
+    c.innerHTML = '<div style="color:#e74c3c;font-size:0.82rem;text-align:center;padding:20px">❌ فشل تحميل الروابط من السيرفر</div>';
   }
-
-  c.innerHTML = hist.map(h => `
-    <div class="link-history-item" id="lhi-${h.id}">
-      <div class="lh-info">
-        <div class="lh-pack">📦 ${h.ps} مشاركة &nbsp;·&nbsp; <span style="font-family:monospace;font-size:0.78rem;color:var(--gold)">${h.id}</span></div>
-        <div id="ctr-${h.id}" style="margin:5px 0;font-size:0.8rem;color:var(--text-muted)">⏳ جاري تحميل الرصيد...</div>
-        <div class="lh-date">${new Date(h.created).toLocaleString('ar-TN')}</div>
-      </div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">
-        <button class="btn btn-outline" style="padding:5px 10px;font-size:0.72rem" onclick="quickCopy('${h.url}')">📋 نسخ</button>
-        <button class="btn btn-ghost"   style="padding:5px 10px;font-size:0.72rem" onclick="shareHistLink('${h.url}')">💬 واتساب</button>
-        <button class="btn btn-ghost"   style="padding:5px 10px;font-size:0.72rem;color:#e74c3c" onclick="deleteLink('${h.id}')">🗑️</button>
-      </div>
-    </div>`).join('');
-
-  // Attach real-time Firebase listeners for each link to show the counter in real time
-  hist.forEach(h => {
-    watchInvitation(h.id, data => updateCounter(h.id, data));
-  });
 }
 
 function updateCounter(slug, data) {
@@ -635,23 +722,68 @@ function shareHistLink(url) {
 }
 
 function quickCopy(url) { navigator.clipboard.writeText(url).then(() => showToast('📋 تم النسخ!')); }
-function deleteLink(id) {
-  if (_fbListeners[id]) { _fbListeners[id](); delete _fbListeners[id]; }
-  localStorage.setItem('weddingLinkHistory', JSON.stringify(getHistory().filter(h => h.id !== id)));
-  renderLinksHistory(); showToast('🗑️ تم الحذف');
+
+async function updateLinkConfig(id) {
+  if (!confirm(`هل أنت متأكد من تحديث تفاصيل الدعوة الخاصة بالرابط (${id}) بالبيانات الحالية للنموذج؟`)) return;
+  try {
+    initFirebase();
+    const cfg = buildConfig();
+    cfg.id = id;
+    
+    await _db.collection('invitations').doc(id).update({
+      config: cfg
+    });
+    
+    showToast('✅ تم تحديث بيانات الدعوة بنجاح على السيرفر!');
+  } catch (e) {
+    console.error('Failed to update invitation config:', e);
+    showToast('❌ فشل التحديث: ' + e.message);
+  }
 }
-function clearHistory() {
-  if (!confirm('حذف جميع الروابط؟')) return;
-  Object.keys(_fbListeners).forEach(k => { _fbListeners[k](); delete _fbListeners[k]; });
-  localStorage.removeItem('weddingLinkHistory');
-  renderLinksHistory(); showToast('🗑️ تم المسح');
+
+async function deleteLink(id) {
+  if (!confirm(`هل أنت متأكد من حذف هذا الرابط (${id}) نهائياً من السيرفر؟`)) return;
+  try {
+    initFirebase();
+    if (_fbListeners[id]) { _fbListeners[id](); delete _fbListeners[id]; }
+    await _db.collection('invitations').doc(id).delete();
+    showToast('🗑️ تم الحذف من السيرفر بنجاح');
+    await renderLinksHistory();
+  } catch (e) {
+    console.error('Failed to delete invitation:', e);
+    showToast('❌ فشل الحذف: ' + e.message);
+  }
+}
+
+async function clearHistory() {
+  if (!confirm('🚨 هل أنت متأكد من حذف جميع الروابط نهائياً من السيرفر؟ لا يمكن التراجع عن هذا الإجراء!')) return;
+  try {
+    initFirebase();
+    // Stop all listeners
+    Object.keys(_fbListeners).forEach(k => { _fbListeners[k](); delete _fbListeners[k]; });
+    
+    const querySnapshot = await _db.collection('invitations').get();
+    const batch = _db.batch();
+    querySnapshot.forEach(doc => {
+      batch.delete(doc.ref);
+    });
+    await batch.commit();
+    
+    showToast('🗑️ تم مسح جميع الروابط من السيرفر');
+    await renderLinksHistory();
+  } catch (e) {
+    console.error('Failed to clear invitations:', e);
+    showToast('❌ فشل مسح الروابط: ' + e.message);
+  }
 }
 
 // ── Toast ──
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
+  if (t) {
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
 }
 </script>
 </body>
