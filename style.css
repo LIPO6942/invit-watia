@@ -145,7 +145,9 @@ body:not(.env-open) {
   overflow: hidden;
   transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
   box-shadow: 0 0 30px rgba(0,0,0,0.4);
+  isolation: isolate;
 }
+
 
 .left-panel {
   left: 0;
@@ -216,14 +218,20 @@ body:not(.env-open) {
   position: relative;
   z-index: 2;
   overflow: hidden;
+  /* Warm cream background so mix-blend-mode:multiply on the img removes white cleanly */
+  background: radial-gradient(circle at 40% 35%, #faf0d0 0%, #c9973a 60%, #7a4a00 100%);
+  isolation: isolate;
 }
+
 
 #seal-3d-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+  mix-blend-mode: multiply;
 }
+
 
 #seal-3d-monogram-text {
   position: absolute;
@@ -1274,8 +1282,9 @@ body.lang-fr .timeline-item:nth-child(even) .tl-right-cell {
   width: 100%;
   height: 100%;
   object-fit: fill;
-  filter: url(#remove-black-mask);
-  opacity: 0.9;
+  mix-blend-mode: multiply;
+  opacity: 0.95;
 }
+
 
 
