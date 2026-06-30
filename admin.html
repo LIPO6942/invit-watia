@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة إدارة الدعوة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css">
+<style>
+/* Floating save bar */
+.save-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(10,6,2,0.97);
+  border-top: 1px solid rgba(201,168,76,0.25);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  z-index: 50;
+  backdrop-filter: blur(8px);
+}
+.save-bar-text { font-size:0.78rem; color:var(--text-muted); }
+.save-bar-text span { color:var(--gold); font-weight:700; }
+.main-content { padding-bottom: 70px !important; }
+
+/* Link display improvements */
+.link-url {
+  font-family: 'Courier New', monospace;
+  font-size: 0.7rem;
+  color: var(--gold-light);
+  word-break: break-all;
+  background: rgba(0,0,0,0.4);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  direction: ltr;
+  max-height: 80px;
+  overflow-y: auto;
+}
+.short-link-url {
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #5ddb9a;
+  word-break: break-all;
+  background: rgba(93,219,154,0.07);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  direction: ltr;
+  border: 1px solid rgba(93,219,154,0.3);
+}
+.link-section-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 5px;
+}
+.spinner {
+  display: inline-block;
+  width: 16px; height: 16px;
+  border: 2px solid rgba(201,168,76,0.3);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══ -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">👑</div>
+    <div class="login-title">لوحة الإدارة</div>
+    <div class="login-sub">إدارة دعوة الزفاف</div>
+    <input id="pwdInput" class="login-input" type="password" placeholder="••••••••" dir="ltr" autocomplete="current-password">
+    <button class="login-btn" onclick="doLogin()">دخول</button>
+    <div class="login-error" id="loginError"></div>
+  </div>
+</div>
+
+<!-- ══ ADMIN APP ══ -->
+<div id="admin-app" style="display:none">
+
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-title">💍 لوحة التحكم</div>
+      <div class="sidebar-logo-sub">إدارة الدعوة</div>
+    </div>
+    <div class="nav-item active"  onclick="showPage('page-couple')">    <span class="nav-icon">💑</span><span class="nav-label">المتزوجان</span></div>
+    <div class="nav-item"         onclick="showPage('page-families')">  <span class="nav-icon">👨‍👩‍👦</span><span class="nav-label">العائلات</span></div>
+    <div class="nav-item"         onclick="showPage('page-date')">      <span class="nav-icon">📅</span><span class="nav-label">التاريخ</span></div>
+    <div class="nav-item"         onclick="showPage('page-programme')"> <span class="nav-icon">🗓️</span><span class="nav-label">البرنامج</span></div>
+    <div class="nav-item"         onclick="showPage('page-links')">     <span class="nav-icon">🔗</span><span class="nav-label">الروابط</span></div>
+    <div class="sidebar-bottom">
+      <button class="logout-btn" onclick="doLogout()">🚪 خروج</button>
+    </div>
+  </nav>
+
+  <main class="main-content">
+
+    <!-- ▸ PAGE 1 — Couple -->
+    <div class="page active" id="page-couple">
+      <div class="page-title">💑 المتزوجان</div>
+      <div class="page-subtitle">أسماء العريس والعروس</div>
+      <div class="card">
+        <div class="card-title">🌙 العريس</div>
+        <div class="form-row">
+          <div class="field"><label>الاسم بالعربية</label><input id="groomAr" type="text" value="مرتضى"></div>
+          <div class="field"><label>Prénom en français</label><input id="groomFr" type="text" value="Mortadha" dir="ltr"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">🌸 العروسة</div>
+        <div class="form-row">
+          <div class="field"><label>الاسم بالعربية</label><input id="brideAr" type="text" value="مريم"></div>
+          <div class="field"><label>Prénom en français</label><input id="brideFr" type="text" value="Mariam" dir="ltr"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ▸ PAGE 2 — Families -->
+    <div class="page" id="page-families">
+      <div class="page-title">👨‍👩‍👦 العائلات</div>
+      <div class="page-subtitle">أسماء والدَي كل عائلة</div>
+      <div class="card">
+        <div class="card-title">👔 عائلة العريس</div>
+        <div class="form-row">
+          <div class="field"><label>الأب</label><input id="groomFather" type="text" value="محمد الرياحي"></div>
+          <div class="field"><label>الأم</label><input id="groomMother" type="text" value="جميلة السويح"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">👗 عائلة العروسة</div>
+        <div class="form-row">
+          <div class="field"><label>الأب</label><input id="brideFather" type="text" value="خالد العمري"></div>
+          <div class="field"><label>الأم</label><input id="brideMother" type="text" value="عواطف بلقاسم"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ▸ PAGE 3 — Date -->
+    <div class="page" id="page-date">
+      <div class="page-title">📅 تاريخ الزفاف</div>
+      <div class="page-subtitle">يُضبط العدّاد التنازلي تلقائياً</div>
+      <div class="card">
+        <div class="card-title">⏰ موعد الحفل</div>
+        <div class="form-row">
+          <div class="field"><label>التاريخ والوقت</label><input id="weddingDate" type="datetime-local" value="2026-07-12T15:30" dir="ltr"></div>
+          <div class="field"><label>العرض في الدعوة</label><input id="weddingDateDisplay" type="text" value="الأحد 12 جويلية 2026"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ▸ PAGE 4 — Programme -->
+    <div class="page" id="page-programme">
+      <div class="page-title">🗓️ برنامج الحفل</div>
+      <div class="page-subtitle">5 أحداث قابلة للتعديل</div>
+      <div id="events-container"></div>
+    </div>
+
+    <!-- ▸ PAGE 5 — Links -->
+    <div class="page" id="page-links">
+      <div class="page-title">🔗 إنشاء رابط الدعوة</div>
+      <div class="page-subtitle">احفظ أولاً ثم اختر الباقة وأنشئ الرابط</div>
+
+      <div class="card">
+        <div class="card-title">📦 اختر الباقة</div>
+        <div class="pack-selector">
+          <div class="pack-card" data-pack="50"  onclick="selectPack(this)"><div class="pack-num">50</div><div class="pack-label">مشاركة</div><div class="pack-price">باقة صغيرة</div></div>
+          <div class="pack-card selected" data-pack="100" onclick="selectPack(this)"><div class="pack-num">100</div><div class="pack-label">مشاركة</div><div class="pack-price">⭐ الأكثر شيوعاً</div></div>
+          <div class="pack-card" data-pack="150" onclick="selectPack(this)"><div class="pack-num">150</div><div class="pack-label">مشاركة</div><div class="pack-price">باقة كبيرة</div></div>
+        </div>
+        <button class="btn btn-primary" style="width:100%" id="generateBtn" onclick="generateLink()">
+          ✨ إنشاء الرابط
+        </button>
+      </div>
+
+      <!-- Output box -->
+      <div class="card link-output-box" id="linkOutputBox">
+        <div class="card-title">🎉 الرابط جاهز!</div>
+
+        <!-- Short URL (primary) -->
+        <div class="link-section-label">🟢 الرابط المختصر (للمشاركة)</div>
+        <div class="short-link-url" id="shortUrl">جاري التقصير…</div>
+
+        <!-- Long URL (secondary, hidden by default) -->
+        <details style="margin-bottom:10px">
+          <summary style="font-size:0.75rem;color:var(--text-muted);cursor:pointer;padding:4px 0">عرض الرابط الكامل ▾</summary>
+          <div class="link-url" id="generatedUrl" style="margin-top:6px"></div>
+        </details>
+
+        <div class="link-actions">
+          <button class="btn btn-primary" onclick="copyShortLink()">📋 نسخ الرابط</button>
+          <button class="btn btn-outline" onclick="shareWhatsApp()">💬 واتساب</button>
+          <button class="btn btn-ghost"   onclick="openShortLink()">🔗 فتح</button>
+        </div>
+        <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:0.76rem;color:var(--text-muted)">
+          معرّف الرابط: <span id="linkIdDisplay" style="color:var(--gold);font-family:monospace"></span> ·
+          الباقة: <span id="packDisplay" style="color:var(--gold);font-weight:700"></span> مشاركة
+        </div>
+      </div>
+
+      <!-- History -->
+      <div class="card">
+        <div class="card-title">📊 الروابط المُنشأة</div>
+        <div id="links-history"></div>
+        <div style="margin-top:12px">
+          <button class="btn btn-danger" style="font-size:0.78rem;padding:7px 14px" onclick="clearHistory()">🗑️ حذف كل الروابط</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ══ SINGLE FLOATING SAVE BAR ══ -->
+  <div class="save-bar">
+    <div class="save-bar-text">احفظ التغييرات قبل إنشاء الرابط · <span id="lastSavedLabel">لم يُحفظ بعد</span></div>
+    <button class="btn btn-primary" onclick="saveAll()" style="padding:11px 28px;font-size:1rem">
+      💾 حفظ جميع البيانات
+    </button>
+  </div>
+
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ════════════════════════════════════════════
+   ADMIN LOGIC
+════════════════════════════════════════════ */
+const ADMIN_PASSWORD = 'admin2026';
+const INVITATION_FILE = 'index.html'; // relative path
+
+let selectedPack   = 100;
+let _shortUrl      = '';
+let _longUrl       = '';
+
+// ── Helpers: Unicode-safe base64 ──
+function toB64(str) {
+  return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/gi,
+    (_, p1) => String.fromCharCode(parseInt(p1, 16))
+  ));
+}
+
+// ── Auth ──
+function doLogin() {
+  if (document.getElementById('pwdInput').value === ADMIN_PASSWORD) {
+    document.getElementById('login-screen').classList.add('hide');
+    setTimeout(() => {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('admin-app').style.display    = 'flex';
+      initAdmin();
+    }, 500);
+  } else {
+    const e = document.getElementById('loginError');
+    e.textContent = '❌ كلمة المرور غير صحيحة';
+    setTimeout(() => e.textContent = '', 2500);
+    document.getElementById('pwdInput').value = '';
+  }
+}
+document.getElementById('pwdInput').addEventListener('keydown', e => { if (e.key==='Enter') doLogin(); });
+function doLogout() { location.reload(); }
+
+// ── Navigation ──
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const map = { 'page-couple':0,'page-families':1,'page-date':2,'page-programme':3,'page-links':4 };
+  document.querySelectorAll('.nav-item')[map[id]].classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ── Init ──
+function initAdmin() {
+  loadSaved();
+  renderEvents();
+  renderLinksHistory();
+}
+
+// ── Save / Load ──
+function buildConfig() {
+  // Use COMPACT short keys to minimize URL length
+  return {
+    v:  1,                   // version
+    ga: val('groomAr'),
+    gf2:val('groomFr'),
+    gf: val('groomFather'),
+    gm: val('groomMother'),
+    ba: val('brideAr'),
+    bf2:val('brideFr'),
+    bf: val('brideFather'),
+    bm: val('brideMother'),
+    wd: val('weddingDate'),
+    wdd:val('weddingDateDisplay'),
+    ev: collectEvents().map(e => ({
+      n: e.nameAr,
+      d: e.date,
+      t: e.time,
+      a: e.ampm,
+      l: e.location,
+      la: e.lat  ? parseFloat(e.lat)  : null,
+      lo: e.lng  ? parseFloat(e.lng)  : null,
+      e:  e.emoji,
+    })),
+  };
+}
+
+function val(id) {
+  const el = document.getElementById(id);
+  return el ? el.value.trim() : '';
+}
+
+function saveAll() {
+  const cfg = buildConfig();
+  localStorage.setItem('weddingAdminConfig', JSON.stringify(cfg));
+  const now = new Date().toLocaleTimeString('ar-TN');
+  document.getElementById('lastSavedLabel').textContent = 'آخر حفظ: ' + now;
+  showToast('✅ تم حفظ جميع البيانات');
+}
+
+function loadSaved() {
+  const raw = localStorage.getItem('weddingAdminConfig');
+  if (!raw) return;
+  try {
+    const c = JSON.parse(raw);
+    set('groomAr',           c.ga  || '');
+    set('groomFr',           c.gf2 || '');   // not stored in short format, fine
+    set('brideAr',           c.ba  || '');
+    set('brideFr',           c.bf2 || '');
+    set('groomFather',       c.gf  || '');
+    set('groomMother',       c.gm  || '');
+    set('brideFather',       c.bf  || '');
+    set('brideMother',       c.bm  || '');
+    set('weddingDate',       c.wd  || '');
+    set('weddingDateDisplay',c.wdd || '');
+    if (c.ev) window._adminEvents = c.ev.map(e => ({
+      nameAr:   e.n, date: e.d, time: e.t, ampm: e.a,
+      location: e.l, lat:  e.la != null ? String(e.la) : '',
+      lng:      e.lo != null ? String(e.lo) : '', emoji: e.e
+    }));
+    document.getElementById('lastSavedLabel').textContent = 'محفوظ';
+  } catch(err) { console.warn('Load error', err); }
+}
+
+function set(id, v) {
+  const el = document.getElementById(id);
+  if (el && v) el.value = v;
+}
+
+// ── Events ──
+const EMOJI_OPTIONS = ['💍','🏡','📷','🍽️','🎉','🌹','💐','🎊','🕌','🎶'];
+const DEFAULT_EVENTS = [
+  { nameAr:'مراسم العقد',   date:'12/07/2026', time:'3:30', ampm:'PM', location:'فضاء الحبيب، طبلبة',    lat:'35.632714', lng:'10.941811', emoji:'💍' },
+  { nameAr:'استقبال الضيوف',date:'13/07/2026', time:'4:30', ampm:'PM', location:'منزل العريس، طبلبة',    lat:'35.642004', lng:'10.966089', emoji:'🏡' },
+  { nameAr:'جلسة تصوير',   date:'14/07/2026', time:'5:00', ampm:'PM', location:'برج الراس، المهدية',    lat:'35.508971', lng:'11.081458', emoji:'📷' },
+  { nameAr:'مأدبة العشاء', date:'15/07/2026', time:'6:30', ampm:'PM', location:'منزل العريس، طبلبة',    lat:'35.642004', lng:'10.966089', emoji:'🍽️'},
+  { nameAr:'حفل الأفراح',  date:'16/07/2026', time:'8:00', ampm:'PM', location:'فضاء موازين، قصر هلال', lat:'35.658203', lng:'10.880335', emoji:'🎉' },
+];
+
+function renderEvents() {
+  const events = window._adminEvents || DEFAULT_EVENTS;
+  window._adminEvents = events;
+  const c = document.getElementById('events-container');
+  c.innerHTML = '';
+  events.forEach((ev, i) => {
+    const card = document.createElement('div');
+    card.className = 'event-card';
+    card.innerHTML = `
+      <div class="event-card-header">
+        <span class="event-num">الحدث ${i+1}</span>
+        <div class="event-emoji-picker" id="ep${i}"></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>اسم الحدث</label><input class="ev-nameAr" type="text" value="${ev.nameAr||''}"></div>
+        <div class="field"><label>التاريخ</label><input class="ev-date" type="text" value="${ev.date||''}" dir="ltr"></div>
+      </div>
+      <div class="form-row three">
+        <div class="field"><label>الوقت</label><input class="ev-time" type="text" value="${ev.time||''}" dir="ltr"></div>
+        <div class="field"><label>ص/م</label><select class="ev-ampm"><option ${ev.ampm==='AM'?'selected':''}>AM</option><option ${ev.ampm==='PM'?'selected':''}>PM</option></select></div>
+        <div class="field"><label>الإيموجي</label><input class="ev-emoji" type="text" value="${ev.emoji||'🎉'}" readonly style="cursor:pointer;text-align:center;font-size:1.3rem"></div>
+      </div>
+      <div class="form-row single">
+        <div class="field"><label>اسم المكان</label><input class="ev-location" type="text" value="${ev.location||''}"></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>Latitude</label><input class="ev-lat" type="text" value="${ev.lat||''}" dir="ltr"></div>
+        <div class="field"><label>Longitude</label><input class="ev-lng" type="text" value="${ev.lng||''}" dir="ltr"></div>
+      </div>`;
+    c.appendChild(card);
+    // Emoji picker
+    const picker = card.querySelector(`#ep${i}`);
+    EMOJI_OPTIONS.forEach(em => {
+      const b = document.createElement('button');
+      b.className = 'emoji-btn' + (em===ev.emoji?' selected':'');
+      b.textContent = em;
+      b.onclick = () => {
+        picker.querySelectorAll('.emoji-btn').forEach(x=>x.classList.remove('selected'));
+        b.classList.add('selected');
+        card.querySelector('.ev-emoji').value = em;
+      };
+      picker.appendChild(b);
+    });
+  });
+}
+
+function collectEvents() {
+  return Array.from(document.querySelectorAll('.event-card')).map(card => ({
+    nameAr:   card.querySelector('.ev-nameAr').value.trim(),
+    date:     card.querySelector('.ev-date').value.trim(),
+    time:     card.querySelector('.ev-time').value.trim(),
+    ampm:     card.querySelector('.ev-ampm').value,
+    emoji:    card.querySelector('.ev-emoji').value,
+    location: card.querySelector('.ev-location').value.trim(),
+    lat:      card.querySelector('.ev-lat').value.trim(),
+    lng:      card.querySelector('.ev-lng').value.trim(),
+  }));
+}
+
+// ── Pack ──
+function selectPack(el) {
+  document.querySelectorAll('.pack-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedPack = parseInt(el.dataset.pack);
+}
+
+// ── Generate Link ──
+async function generateLink() {
+  // Auto-save first
+  saveAll();
+
+  const cfg = buildConfig();
+  cfg.ps  = selectedPack;
+  cfg.id  = genId();
+
+  // Encode: compact JSON → unicode-safe base64
+  const json    = JSON.stringify(cfg);
+  const b64     = toB64(json);
+  
+  // Build the invitation URL
+  const base = window.location.href.replace('admin.html', INVITATION_FILE);
+  _longUrl = base + '?c=' + b64;
+
+  const isLocalFile = window.location.protocol === 'file:';
+
+  // Show output box
+  document.getElementById('generatedUrl').textContent = _longUrl;
+  document.getElementById('linkIdDisplay').textContent = cfg.id;
+  document.getElementById('packDisplay').textContent   = selectedPack;
+  
+  const shortUrlEl = document.getElementById('shortUrl');
+  document.getElementById('linkOutputBox').classList.add('visible');
+  document.getElementById('linkOutputBox').scrollIntoView({behavior:'smooth',block:'center'});
+
+  if (isLocalFile) {
+    _shortUrl = _longUrl;
+    shortUrlEl.innerHTML = `
+      <div style="font-size:0.85rem; line-height:1.6; color:#e67e22; text-align:right;">
+        ⚠️ <strong>تنبيه للمعاينة المحلية:</strong> أنت تقوم بتشغيل الملف محلياً (file://). 
+        مواقع تقصير الروابط لا تدعم الروابط المحلية. 
+        <br>
+        <span style="color:#2ecc71">💡 حل ممتاز:</span> لا تحتاج لنسخ روابط طويلة للتجربة محلياً! فقط افتح ملف <code>index.html</code> مباشرة في المتصفح وسيقرأ التعديلات تلقائياً من الذاكرة المحلية (localStorage).
+        <br>
+        <span style="color:#faf5ef">الرابط الكامل للمعاينة المحلية:</span>
+        <div style="font-size:0.75rem; word-break:break-all; background:rgba(0,0,0,0.3); padding:8px; border-radius:6px; margin-top:5px; font-family:monospace; direction:ltr; text-align:left;">${_longUrl}</div>
+      </div>
+    `;
+  } else {
+    shortUrlEl.textContent = '⏳ جاري تقصير الرابط…';
+    _shortUrl = _longUrl; // fallback
+    try {
+      const res = await fetch('https://tinyurl.com/api-create.php?url=' + encodeURIComponent(_longUrl));
+      if (res.ok) {
+        const text = (await res.text()).trim();
+        if (text.startsWith('http')) {
+          _shortUrl = text;
+        }
+      }
+    } catch(e) { /* fail silently, use long URL */ }
+    shortUrlEl.textContent = _shortUrl;
+  }
+
+  // Save to history
+  const hist = getHistory();
+  hist.unshift({ id:cfg.id, ps:selectedPack, created:new Date().toISOString(), short:_shortUrl, long:_longUrl });
+  localStorage.setItem('weddingLinkHistory', JSON.stringify(hist));
+  renderLinksHistory();
+  showToast('🎉 تم إنشاء الرابط!');
+}
+
+function genId() {
+  return Date.now().toString(36).toUpperCase().slice(-5) + Math.random().toString(36).slice(2,5).toUpperCase();
+}
+
+// ── Link actions ──
+function copyShortLink() {
+  navigator.clipboard.writeText(_shortUrl).then(() => showToast('📋 تم نسخ الرابط!'));
+}
+function shareWhatsApp() {
+  const msg = encodeURIComponent('🌹 دعوة زفاف\n\n' + _shortUrl);
+  window.open('https://wa.me/?text=' + msg, '_blank');
+}
+function openShortLink() { window.open(_shortUrl, '_blank'); }
+
+// ── History ──
+function getHistory() { try { return JSON.parse(localStorage.getItem('weddingLinkHistory')||'[]'); } catch(e){ return []; } }
+
+function renderLinksHistory() {
+  const hist = getHistory();
+  const c    = document.getElementById('links-history');
+  if (!hist.length) {
+    c.innerHTML = '<div style="color:var(--text-muted);font-size:0.82rem;text-align:center;padding:20px">لا توجد روابط بعد</div>';
+    return;
+  }
+  c.innerHTML = hist.map(h => `
+    <div class="link-history-item">
+      <div class="lh-info">
+        <div class="lh-pack">📦 ${h.ps} مشاركة</div>
+        <div class="lh-id">${h.short||h.id}</div>
+        <div class="lh-date">${new Date(h.created).toLocaleString('ar-TN')}</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">
+        <button class="btn btn-outline" style="padding:5px 10px;font-size:0.72rem" onclick="quickCopy('${h.short||h.long}')">📋</button>
+        <button class="btn btn-ghost"   style="padding:5px 10px;font-size:0.72rem" onclick="deleteLink('${h.id}')">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+function quickCopy(url) { navigator.clipboard.writeText(url).then(()=>showToast('📋 تم النسخ!')); }
+function deleteLink(id) {
+  localStorage.setItem('weddingLinkHistory', JSON.stringify(getHistory().filter(h=>h.id!==id)));
+  renderLinksHistory(); showToast('🗑️ تم الحذف');
+}
+function clearHistory() {
+  if (!confirm('حذف جميع الروابط؟')) return;
+  localStorage.removeItem('weddingLinkHistory');
+  renderLinksHistory(); showToast('🗑️ تم المسح');
+}
+
+// ── Toast ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>
