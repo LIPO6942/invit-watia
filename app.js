@@ -54,9 +54,17 @@ function fromB64(str) {
  */
 function applyConfigToDOM(cfg) {
   const isFr = cfg.la === 'fr';
+
+  // The big animated names shown in the intro show the OPPOSITE language name
+  // (French when invitation is in Arabic, Arabic when in French) — bilingual elegance
+  const groomDisplay = isFr ? cfg.ga : (cfg.gf2 || cfg.ga);
+  const brideDisplay = isFr ? cfg.ba : (cfg.bf2 || cfg.ba);
+
   const MAP = {
-    groomAr:     isFr ? (cfg.gf2 || cfg.ga) : cfg.ga,
-    brideAr:     isFr ? (cfg.bf2 || cfg.ba) : cfg.ba,
+    groomAr:          isFr ? (cfg.gf2 || cfg.ga) : cfg.ga,
+    brideAr:          isFr ? (cfg.bf2 || cfg.ba) : cfg.ba,
+    groomNameDisplay: groomDisplay,  // shown in the big animated names + envelope banner
+    brideNameDisplay: brideDisplay,
     groomFather: cfg.gf,
     groomMother: cfg.gm,
     brideFather: cfg.bf,
