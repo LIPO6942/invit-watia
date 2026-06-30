@@ -16,6 +16,8 @@
 ═══════════════════════════════════════════════════════════════════ */
 
 let _weddingDateTime = '2026-07-12T15:30:00';
+let _currentRole = null; // 'groom' | 'bride' or null
+let _roleWishes = [];
 
 /* ──────────────────────────────────────────────
    Firebase config (shared with admin.html)
@@ -69,9 +71,47 @@ function applyConfigToDOM(cfg) {
 
   // Apply language translations
   applyLanguage(cfg.la || 'ar');
+
+  // Set page title dynamically
+  const groom = MAP.groomAr || cfg.ga;
+  const bride = MAP.brideAr || cfg.ba;
+  if (groom && bride) {
+    document.title = isFr ? `Mariage de ${groom} & ${bride}` : `حفل زفاف ${groom} و ${bride}`;
+  }
+}
+
+function checkRoleView() {
+  const params = new URLSearchParams(window.location.search);
+  const view = params.get('view');
+  if (view === 'groom' || view === 'bride') {
+    _currentRole = view;
+    const mbToggle = document.getElementById('mailbox-toggle');
+    if (mbToggle) {
+      mbToggle.style.display = 'flex';
+    }
+  }
+}
+
+function processWishesForRole(dataWishes) {
+  if (dataWishes && Array.isArray(dataWishes)) {
+    const wishes = [...dataWishes];
+    wishes.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    
+    if (_currentRole === 'groom') {
+      _roleWishes = wishes.filter(w => w.target === 'groom' || w.target === 'both' || !w.target);
+    } else if (_currentRole === 'bride') {
+      _roleWishes = wishes.filter(w => w.target === 'bride' || w.target === 'both' || !w.target);
+    }
+    
+    const badge = document.getElementById('mailbox-badge');
+    if (badge) {
+      badge.textContent = _roleWishes.length;
+    }
+  }
 }
 
 function loadConfigFromURL() {
+  checkRoleView();
   const params  = new URLSearchParams(window.location.search);
   const invSlug = params.get('inv');   // Firebase personalized slug
   const blobId  = params.get('b');     // JSONBlob ID (legacy)
@@ -95,6 +135,9 @@ function loadConfigFromURL() {
           showPackExpired();
           return;
         }
+
+        /* Process wishes for Groom/Bride private inbox */
+        processWishesForRole(data.wishes);
 
         /* Apply config */
         if (cfg.wd) _weddingDateTime = cfg.wd;
@@ -123,6 +166,10 @@ function loadConfigFromURL() {
         const count = (data.count || 0) + 1;
         const pack  = data.pack || cfg.ps || 9999;
         if (count > pack) { showPackExpired(); return; }
+
+        /* Process wishes for Groom/Bride private inbox */
+        processWishesForRole(data.wishes);
+
         if (cfg.wd) _weddingDateTime = cfg.wd;
         applyConfigToDOM(cfg);
         if (cfg.ev && cfg.ev.length) rebuildTimelineFromConfig(cfg.ev);
@@ -219,12 +266,46 @@ function showPackExpired() {
 /* ────────────────────────────────────────────────
    1. ENVELOPE OPEN
 ──────────────────────────────────────────────── */
+function startWeddingMusic() {
+  const audio = document.getElementById('wedding-audio');
+  const btn = document.getElementById('music-toggle');
+  if (!audio) return;
+  
+  audio.volume = 0.4;
+  audio.play().then(() => {
+    if (btn) btn.classList.remove('paused');
+  }).catch(err => {
+    console.warn("Audio autoplay blocked or failed. User needs to toggle manually.", err);
+    if (btn) btn.classList.add('paused');
+  });
+}
+
+window.toggleMusic = function() {
+  const audio = document.getElementById('wedding-audio');
+  const btn = document.getElementById('music-toggle');
+  if (!audio || !btn) return;
+  
+  if (audio.paused) {
+    audio.play().then(() => {
+      btn.classList.remove('paused');
+    }).catch(e => {
+      console.warn("Failed to play audio:", e);
+    });
+  } else {
+    audio.pause();
+    btn.classList.add('paused');
+  }
+};
+
 window.openEnvelopeNow = function() {
   const inv = document.getElementById('invitation');
   if (!inv || inv.classList.contains('open')) return;
   inv.classList.add('open');
   document.body.classList.add('env-open');
-  playCrackSound();
+  
+  // Play the actual wedding march MP3 song
+  startWeddingMusic();
+  
   setTimeout(() => {
     spawnPetals();
     startHeartClock();
@@ -589,60 +670,7 @@ document.addEventListener('click', () => {
    3D TILT EFFECT ON ENVELOPE
    ──────────────────────────────────────────────── */
 function init3DTilt() {
-  const envelopeSection = document.getElementById('envelope-section');
-  const invitation = document.getElementById('invitation');
-  if (!envelopeSection || !invitation) return;
-
-  let isMouseOver = false;
-
-  function applyTilt(xVal, yVal) {
-    if (invitation.classList.contains('open')) {
-      invitation.style.transform = 'none';
-      return;
-    }
-    const xRotate = (yVal * -12).toFixed(2);
-    const yRotate = (xVal * 12).toFixed(2);
-    invitation.style.transform = `perspective(1000px) rotateX(${xRotate}deg) rotateY(${yRotate}deg)`;
-    invitation.style.transition = 'transform 0.1s ease';
-  }
-
-  envelopeSection.addEventListener('mousemove', e => {
-    isMouseOver = true;
-    const rect = envelopeSection.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    const xNorm = (x / rect.width) * 2 - 1;
-    const yNorm = (y / rect.height) * 2 - 1;
-    
-    applyTilt(xNorm, yNorm);
-  });
-
-  envelopeSection.addEventListener('mouseleave', () => {
-    isMouseOver = false;
-    if (!invitation.classList.contains('open')) {
-      invitation.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
-      invitation.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
-    }
-  });
-
-  window.addEventListener('deviceorientation', e => {
-    if (isMouseOver || invitation.classList.contains('open')) return;
-    
-    let beta = e.beta;
-    let gamma = e.gamma;
-    
-    if (beta === null || gamma === null) return;
-    
-    const targetBeta = 45;
-    let bDiff = (beta - targetBeta) / 25;
-    let gDiff = gamma / 20;
-    
-    bDiff = Math.max(-1, Math.min(1, bDiff));
-    gDiff = Math.max(-1, Math.min(1, gDiff));
-    
-    applyTilt(gDiff, bDiff);
-  }, true);
+  // Disabled to keep envelope static/fixed and prevent rendering bugs on mobile screens
 }
 
 /* ────────────────────────────────────────────────
@@ -651,10 +679,12 @@ function init3DTilt() {
 window.submitWish = function() {
   const nameInput = document.getElementById('gb-name');
   const messageInput = document.getElementById('gb-message');
+  const recipientSelect = document.getElementById('gb-recipient');
   if (!nameInput || !messageInput) return;
 
   const name = nameInput.value.trim();
   const msg = messageInput.value.trim();
+  const recipient = recipientSelect ? recipientSelect.value : 'both';
   if (!name || !msg) {
     alert('الرجاء كتابة الاسم والتهنئة 🌹');
     return;
@@ -665,7 +695,7 @@ window.submitWish = function() {
 
   if (!invSlug) {
     // Local preview fallback
-    const localWish = { name, message: msg, timestamp: new Date().toISOString() };
+    const localWish = { name, message: msg, target: recipient, timestamp: new Date().toISOString() };
     allWishes.unshift(localWish);
     renderWishesScroller();
     nameInput.value = '';
@@ -679,6 +709,7 @@ window.submitWish = function() {
     wishes: firebase.firestore.FieldValue.arrayUnion({
       name: name,
       message: msg,
+      target: recipient,
       timestamp: new Date().toISOString()
     })
   })
@@ -686,12 +717,61 @@ window.submitWish = function() {
     nameInput.value = '';
     messageInput.value = '';
     alert('شكراً لك! تم إرسال تهنئتك بنجاح للعروسين ✨');
+    
+    // Add real-time update to _roleWishes if this wish matches the current role view
+    const newWish = { name, message: msg, target: recipient, timestamp: new Date().toISOString() };
+    if (_currentRole === 'groom' && (recipient === 'groom' || recipient === 'both')) {
+      _roleWishes.unshift(newWish);
+    } else if (_currentRole === 'bride' && (recipient === 'bride' || recipient === 'both')) {
+      _roleWishes.unshift(newWish);
+    }
+    const badge = document.getElementById('mailbox-badge');
+    if (badge) badge.textContent = _roleWishes.length;
+
     loadAllWishes();
   })
   .catch(err => {
     console.error('Failed to submit wish:', err);
     alert('عذراً، حدث خطأ أثناء إرسال التهنئة. الرجاء المحاولة مرة أخرى.');
   });
+};
+
+window.openWishesWall = function() {
+  const overlay = document.getElementById('wishes-wall-overlay');
+  const titleEl = document.getElementById('wishes-wall-title');
+  const listEl = document.getElementById('wishes-wall-list');
+  if (!overlay || !listEl) return;
+
+  overlay.style.display = 'flex';
+  
+  if (titleEl) {
+    titleEl.textContent = _currentRole === 'groom' ? 'صندوق تهاني العريس 🤵' : 'صندوق تهاني العروسة 👰';
+  }
+
+  if (_roleWishes.length === 0) {
+    listEl.innerHTML = `<div style="text-align:center;color:var(--brown-light);padding:40px;font-style:italic">لا توجد رسائل موجهة لك بعد 💌</div>`;
+    return;
+  }
+
+  listEl.innerHTML = _roleWishes.map(w => {
+    const targetLabel = w.target === 'groom' ? '🤵 خاص بالعريس' : w.target === 'bride' ? '👰 خاص بالعروسة' : '💑 للعروسين';
+    const dateStr = w.timestamp ? new Date(w.timestamp).toLocaleString('ar-TN') : '';
+    return `
+      <div class="wishes-wall-card">
+        <div class="wishes-wall-guest">
+          <span>👤 ${w.name}</span>
+          <span style="font-size:0.7rem;background:rgba(201,168,76,0.15);color:var(--brown);padding:2px 8px;border-radius:10px">${targetLabel}</span>
+        </div>
+        <div class="wishes-wall-msg">"${w.message}"</div>
+        <div class="wishes-wall-date">📅 ${dateStr}</div>
+      </div>
+    `;
+  }).join('');
+};
+
+window.closeWishesWall = function() {
+  const overlay = document.getElementById('wishes-wall-overlay');
+  if (overlay) overlay.style.display = 'none';
 };
 
 let allWishes = [];

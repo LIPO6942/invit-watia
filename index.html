@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>حفل زفاف مرتضى و مريم</title>
+<title>دعوة زفاف</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Scheherazade+New:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
@@ -42,29 +42,29 @@
           <div class="hero-bg-parallax"></div>
           <div class="petals-layer" id="petals"></div>
           <div class="intro-overlay">
-            <div class="basmala font-amiri" data-tr="basmala">بارك الله لهما وبارك عليهما وجمع بينهما في خير</div>
-            <div class="divider-ornament">✦ ✦ ✦</div>
+            <div class="basmala font-amiri" data-tr="basmala">بارك الله لهما وبارك عليهما وجمع بينهما<br>في خير</div>
+            <div class="divider-ornament">✦✦✦</div>
             <p class="p1-invite-text" data-tr="invite_title">تتشرف عائلتا</p>
             <div class="families-row">
               <div class="family-block">
                 <div class="family-label" data-tr="mr">السيد</div>
                 <div class="family-name font-amiri" data-cfg="groomFather">محمد الرياحي</div>
-                <div class="family-label" style="margin-top:6px" data-tr="mrs">والسيدة</div>
+                <div class="family-label-mrs" data-tr="mrs">والسيدة</div>
                 <div class="family-name font-amiri" data-cfg="groomMother">جميلة السويح</div>
               </div>
               <div class="and-symbol" data-tr="and">و</div>
               <div class="family-block">
                 <div class="family-label" data-tr="mr">السيد</div>
                 <div class="family-name font-amiri" data-cfg="brideFather">خالد العمري</div>
-                <div class="family-label" style="margin-top:6px" data-tr="mrs">والسيدة</div>
+                <div class="family-label-mrs" data-tr="mrs">والسيدة</div>
                 <div class="family-name font-amiri" data-cfg="brideMother">عواطف بلقاسم</div>
               </div>
             </div>
             <p class="p1-invite-text" style="margin:10px 0 4px" data-tr="invite_desc">بدعوتكم لحضور حفل زفاف نجليهما</p>
-            <div class="names-main">
-              <span class="groom-name" data-cfg="groomAr">مرتضى</span>
-              <span class="names-divider" data-tr="and_char">&</span>
-              <span class="bride-name" data-cfg="brideAr">مريم</span>
+            <div class="names-main animated-names">
+              <span class="groom-name animated-groom" data-cfg="groomAr">مرتضى</span>
+              <span class="names-divider animated-divider" data-tr="and_char">&</span>
+              <span class="bride-name animated-bride" data-cfg="brideAr">مريم</span>
             </div>
             <div class="shimmer-line"></div>
           </div>
@@ -234,6 +234,11 @@
           <!-- Submit Wish form -->
           <div class="guestbook-form" style="max-width: 360px; margin: 0 auto; background: rgba(255,255,255,0.7); padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid rgba(201,168,76,0.2)">
             <input type="text" id="gb-name" class="guestbook-input" placeholder="اسمك الكريم" data-tr-placeholder="gb_name_placeholder" required autocomplete="name">
+            <select id="gb-recipient" class="guestbook-input recipient-select">
+              <option value="both" selected>إلى: العروسين معاً 💑</option>
+              <option value="groom">إلى: العريس 🤵</option>
+              <option value="bride">إلى: العروسة 👰</option>
+            </select>
             <textarea id="gb-message" class="guestbook-textarea" placeholder="أكتب تهنئتك هنا..." data-tr-placeholder="gb_msg_placeholder" rows="3" required></textarea>
             <button class="guestbook-submit-btn" onclick="submitWish()" data-tr="gb_submit">إرسال التهنئة ✨</button>
           </div>
@@ -674,6 +679,41 @@
 
 <!-- ══ ADMIN LINK (hidden, accessed via URL hash) ══ -->
 <a href="admin.html" id="admin-shortcut" style="display:none">admin</a>
+
+<!-- Floating Music Toggle -->
+<button id="music-toggle" class="music-btn paused" onclick="toggleMusic()" aria-label="Toggle Music">
+  <div class="music-disc">
+    <svg class="music-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M9 18V5l12-2v13"></path>
+      <circle cx="6" cy="18" r="3"></circle>
+      <circle cx="18" cy="16" r="3"></circle>
+    </svg>
+  </div>
+  <div class="music-slash"></div>
+</button>
+<audio id="wedding-audio" src="assets/wedding_march.mp3" loop></audio>
+
+<!-- Floating Mailbox Toggle (Only shown to groom/bride) -->
+<button id="mailbox-toggle" class="mailbox-btn" onclick="openWishesWall()" style="display:none;" aria-label="Open Wishes Board">
+  <div class="mailbox-badge" id="mailbox-badge">0</div>
+  <span class="mailbox-icon">📬</span>
+</button>
+
+<!-- Dedicated Wishes Wall Modal for Groom/Bride -->
+<div id="wishes-wall-overlay" style="display:none;">
+  <div class="wishes-wall-backdrop" onclick="closeWishesWall()"></div>
+  <div class="wishes-wall-content">
+    <button class="wishes-wall-close" onclick="closeWishesWall()">✕</button>
+    <div class="wishes-wall-header">
+      <div class="wishes-wall-icon">💌</div>
+      <h2 class="wishes-wall-title font-amiri" id="wishes-wall-title">تهاني العريس</h2>
+      <p class="wishes-wall-subtitle" id="wishes-wall-subtitle">مرحباً بك! هنا جميع التهاني المرسلة إليك</p>
+    </div>
+    <div class="wishes-wall-list" id="wishes-wall-list">
+      <!-- Wishes cards will go here dynamically -->
+    </div>
+  </div>
+</div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <!-- Firebase SDK -->

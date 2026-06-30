@@ -764,12 +764,16 @@ async function renderLinksHistory() {
         <details style="margin-top:10px;background:rgba(255,255,255,0.04);border-radius:6px;padding:8px 12px;border:1px solid rgba(255,255,255,0.05)">
           <summary style="font-size:0.75rem;color:var(--gold-light);cursor:pointer;user-select:none">💬 عرض التهاني (${h.wishes.length}) ▾</summary>
           <div style="margin-top:6px;font-size:0.78rem;color:var(--text-muted);display:flex;flex-direction:column;gap:8px">
-            ${h.wishes.map(w => `
+            ${h.wishes.map(w => {
+              const targetText = w.target === 'groom' ? '🤵 العريس' : w.target === 'bride' ? '👰 العروسة' : '💑 كلاهما';
+              const targetColor = w.target === 'groom' ? '#3498db' : w.target === 'bride' ? '#e74c3c' : '#2ecc71';
+              return `
               <div style="border-bottom:1px solid rgba(255,255,255,0.05);padding-bottom:6px">
-                <strong>${w.name}:</strong> "${w.message}"
+                <strong>${w.name}</strong> <span style="font-size:0.68rem;color:${targetColor};background:rgba(255,255,255,0.05);padding:1px 6px;border-radius:4px;margin-right:6px">${targetText}</span>: "${w.message}"
                 <span style="font-size:0.65rem;display:block;color:rgba(255,255,255,0.3);margin-top:2px">📅 ${new Date(w.timestamp).toLocaleString('ar-TN')}</span>
               </div>
-            `).join('')}
+              `;
+            }).join('')}
           </div>
         </details>`;
       }
@@ -784,7 +788,9 @@ async function renderLinksHistory() {
           ${wishesHTML}
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;margin-top:8px;width:100%">
-          <button class="btn btn-outline" style="padding:4px 8px;font-size:0.72rem" onclick="quickCopy('${url}')">📋 نسخ</button>
+          <button class="btn btn-outline" style="padding:4px 8px;font-size:0.72rem" onclick="quickCopy('${url}')" title="رابط الضيف">📋 رابط الضيف</button>
+          <button class="btn btn-outline" style="padding:4px 8px;font-size:0.72rem;border-color:#3498db;color:#3498db" onclick="quickCopy('${url}&view=groom')" title="نسخ رابط العريس">🤵 رابط العريس</button>
+          <button class="btn btn-outline" style="padding:4px 8px;font-size:0.72rem;border-color:#e74c3c;color:#e74c3c" onclick="quickCopy('${url}&view=bride')" title="نسخ رابط العروسة">👰 رابط العروسة</button>
           <button class="btn btn-ghost"   style="padding:4px 8px;font-size:0.72rem" onclick="shareHistLink('${url}')">💬 واتساب</button>
           <button class="btn btn-ghost"   style="padding:4px 8px;font-size:0.72rem;color:var(--gold)" onclick="updateLinkConfig('${h.id}')" title="تحديث هذه الدعوة بالبيانات الحالية للنموذج">🔄 تحديث</button>
           <button class="btn btn-ghost"   style="padding:4px 8px;font-size:0.72rem;color:#e74c3c" onclick="deleteLink('${h.id}')">🗑️</button>
