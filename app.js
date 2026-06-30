@@ -122,6 +122,8 @@ function loadConfigFromURL() {
         if (cfg.wd) _weddingDateTime = cfg.wd;
         applyConfigToDOM(cfg);
         if (cfg.ev && cfg.ev.length) rebuildTimelineFromConfig(cfg.ev);
+        if (cfg.th && cfg.th !== 'gold') document.body.classList.add('theme-' + cfg.th);
+        applyEnvelopeDesign(cfg);
         fetch(`https://jsonblob.com/api/jsonBlob/${blobId}`, {
           method: 'PUT', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ...data, count })
@@ -138,6 +140,8 @@ function loadConfigFromURL() {
     if (cfg.wd) _weddingDateTime = cfg.wd;
     applyConfigToDOM(cfg);
     if (cfg.ev && cfg.ev.length) rebuildTimelineFromConfig(cfg.ev);
+    if (cfg.th && cfg.th !== 'gold') document.body.classList.add('theme-' + cfg.th);
+    applyEnvelopeDesign(cfg);
     if (cfg.id && cfg.ps) checkAndIncrementPack(cfg.id, cfg.ps);
 
   } else {
@@ -753,3 +757,42 @@ document.addEventListener('DOMContentLoaded', () => {
   // 4. Load Guestbook wishes
   loadAllWishes();
 });
+
+/* ────────────────────────────────────────────────
+   ENVELOPE DESIGN — applies motif & seal from config
+   ──────────────────────────────────────────────── */
+function applyEnvelopeDesign(cfg) {
+  if (!cfg) return;
+
+  // ── Motif (ep: 'floral' | 'vintage') ──
+  const pattern = cfg.ep || 'floral';
+  const showFloral  = pattern === 'floral';
+  const showVintage = pattern === 'vintage';
+
+  document.querySelectorAll('.panel-branches').forEach(el => {
+    el.style.display = showFloral ? '' : 'none';
+  });
+  document.querySelectorAll('.panel-vintage').forEach(el => {
+    // Vintage SVGs have display:none inline style — toggle it properly
+    el.style.display = showVintage ? 'block' : 'none';
+  });
+
+  // ── Seal symbol (es: 'heart' | 'rings' | 'monogram' | 'bismillah') ──
+  const seal = cfg.es || 'heart';
+  const SEALS = ['heart', 'rings', 'monogram', 'bismillah'];
+  SEALS.forEach(s => {
+    const el = document.getElementById('seal-symbol-' + s);
+    if (el) el.style.display = (s === seal) ? '' : 'none';
+  });
+
+  // Update monogram initials if seal is monogram
+  if (seal === 'monogram') {
+    const monoEl = document.getElementById('seal-monogram-text');
+    if (monoEl) {
+      const g = (cfg.ga || '').charAt(0).toUpperCase();
+      const b = (cfg.ba || '').charAt(0).toUpperCase();
+      monoEl.textContent = g && b ? `${g} & ${b}` : 'M & M';
+    }
+  }
+}
+

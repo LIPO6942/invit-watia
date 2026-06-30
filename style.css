@@ -192,8 +192,8 @@ body:not(.env-open) {
   top: 50%;
   transform: translate(-50%, -50%);
   z-index: 20;
-  width: 130px;
-  height: 130px;
+  width: 220px;
+  height: 220px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -222,13 +222,13 @@ body:not(.env-open) {
 /* Golden halo behind the seal */
 .seal-halo {
   position: absolute;
-  width: 160px;
-  height: 160px;
+  width: 220px;
+  height: 220px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(252,230,140,0.45) 0%, rgba(201,168,76,0.18) 40%, transparent 70%);
+  background: radial-gradient(circle, rgba(252,230,140,0.35) 0%, rgba(201,168,76,0.14) 45%, transparent 70%);
   animation: haloBreath 3.5s ease-in-out infinite;
   pointer-events: none;
   z-index: 0;
@@ -241,8 +241,8 @@ body:not(.env-open) {
 
 .seal-text-svg {
   position: absolute;
-  width: 130px;
-  height: 130px;
+  width: 220px;
+  height: 220px;
   top: 0;
   left: 0;
   animation: rotateSealText 14s linear infinite;
@@ -397,14 +397,14 @@ body:not(.env-open) {
 /* Sparkles around the seal */
 .seal-sparkles {
   position: absolute;
-  width: 180px;
-  height: 180px;
+  width: 210px;
+  height: 210px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   pointer-events: none;
   z-index: 1;
-  animation: sparkleRing 20s linear infinite;
+  animation: sparkleRing 22s linear infinite;
 }
 
 @keyframes sparkleRing {
