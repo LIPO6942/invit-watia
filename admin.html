@@ -449,6 +449,32 @@ function selectPack(el) {
   selectedPack = parseInt(el.dataset.pack);
 }
 
+// ── JSONP is.gd URL Shortener (Bypasses CORS completely) ──
+function shortenWithIsGd(url) {
+  return new Promise((resolve, reject) => {
+    const callbackName = 'isgd_cb_' + Math.random().toString(36).slice(2, 10);
+    
+    window[callbackName] = function(data) {
+      document.body.removeChild(script);
+      delete window[callbackName];
+      if (data && data.shorturl) {
+        resolve(data.shorturl);
+      } else {
+        reject(new Error(data.errormessage || 'Shortening failed'));
+      }
+    };
+    
+    const script = document.createElement('script');
+    script.src = `https://is.gd/create.php?format=json&url=${encodeURIComponent(url)}&callback=${callbackName}`;
+    script.onerror = function() {
+      document.body.removeChild(script);
+      delete window[callbackName];
+      reject(new Error('Network error'));
+    };
+    document.body.appendChild(script);
+  });
+}
+
 // ── Generate Link ──
 async function generateLink() {
   // Auto-save first
@@ -463,11 +489,9 @@ async function generateLink() {
   const b64     = toB64(json);
   
   // Build the base invitation URL
-  // If user entered a production URL, use that. Otherwise use current window host.
   const prodUrl = val('prodUrlInput');
   let base;
   if (prodUrl) {
-    // Standardize URL to end with index.html
     let cleanProd = prodUrl.trim();
     if (!cleanProd.startsWith('http://') && !cleanProd.startsWith('https://')) {
       cleanProd = 'https://' + cleanProd;
@@ -514,26 +538,13 @@ async function generateLink() {
     shortUrlEl.textContent = '⏳ جاري تقصير الرابط…';
     _shortUrl = _longUrl; // fallback
 
-    // 1. Try is.gd (Instant redirect, no preview delay)
     try {
-      const res = await fetch('https://is.gd/create.php?format=simple&url=' + encodeURIComponent(_longUrl));
-      if (res.ok) {
-        const text = (await res.text()).trim();
-        if (text.startsWith('http')) {
-          _shortUrl = text;
-        }
-      }
-    } catch(e1) {
-      // 2. Fallback to TinyURL if is.gd fails (e.g. CORS block)
-      try {
-        const res = await fetch('https://tinyurl.com/api-create.php?url=' + encodeURIComponent(_longUrl));
-        if (res.ok) {
-          const text = (await res.text()).trim();
-          if (text.startsWith('http')) {
-            _shortUrl = text;
-          }
-        }
-      } catch(e2) { /* fail silently, use long URL */ }
+      const short = await shortenWithIsGd(_longUrl);
+      _shortUrl = short;
+    } catch(err) {
+      console.warn('is.gd failed:', err);
+      // Fallback: use long URL directly if shortening fails, no TinyURL
+      _shortUrl = _longUrl;
     }
     
     shortUrlEl.textContent = _shortUrl;
