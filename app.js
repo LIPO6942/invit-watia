@@ -55,44 +55,76 @@ function applyConfigToDOM(cfg) {
 
 function loadConfigFromURL() {
   const params  = new URLSearchParams(window.location.search);
-  let encoded = params.get('c');
+  const blobId  = params.get('b');   // short JSONBlob-based link
+  let   encoded = params.get('c');   // old base64 fallback
 
-  let cfg;
-  if (encoded) {
+  if (blobId) {
+    // ── JSONBlob path: fetch config + counter ──
+    fetch(`https://jsonblob.com/api/jsonBlob/${blobId}`, {
+      headers: { 'Accept': 'application/json' }
+    })
+    .then(r => {
+      if (!r.ok) throw new Error('blob not found');
+      return r.json();
+    })
+    .then(data => {
+      const cfg   = data.config;
+      const count = (data.count || 0) + 1; // this visit counts
+      const pack  = data.pack || cfg.ps || 9999;
+
+      // Check expiry BEFORE showing invitation
+      if (count > pack) {
+        showPackExpired();
+        return;
+      }
+
+      // Apply config to DOM
+      if (cfg.wd) _weddingDateTime = cfg.wd;
+      applyConfigToDOM(cfg);
+      if (cfg.ev && cfg.ev.length) rebuildTimelineFromConfig(cfg.ev);
+
+      // Increment counter on JSONBlob (fire-and-forget)
+      fetch(`https://jsonblob.com/api/jsonBlob/${blobId}`, {
+        method:  'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ ...data, count })
+      }).catch(() => {});
+    })
+    .catch(err => {
+      console.warn('[InvitApp] JSONBlob fetch failed:', err);
+      // Fail-open: show invitation with default values
+    });
+
+  } else if (encoded) {
+    // ── base64 / LZString path ──
+    // Restore + characters (URLSearchParams converts them to spaces)
+    encoded = encoded.replace(/ /g, '+');
+    let cfg;
     try {
-      // Restore '+' characters because URLSearchParams converts them to spaces
-      encoded = encoded.replace(/ /g, '+');
       cfg = JSON.parse(fromB64(encoded));
     } catch (e) {
       console.warn('[InvitApp] Could not parse config from URL:', e);
       return;
     }
+    if (cfg.wd) _weddingDateTime = cfg.wd;
+    applyConfigToDOM(cfg);
+    if (cfg.ev && cfg.ev.length) rebuildTimelineFromConfig(cfg.ev);
+    if (cfg.id && cfg.ps) checkAndIncrementPack(cfg.id, cfg.ps);
+
   } else {
-    // Local testing fallback: read directly from localStorage if present
+    // ── localStorage fallback (local testing) ──
     const raw = localStorage.getItem('weddingAdminConfig');
     if (raw) {
       try {
-        cfg = JSON.parse(raw);
+        const cfg = JSON.parse(raw);
+        if (cfg.wd) _weddingDateTime = cfg.wd;
+        applyConfigToDOM(cfg);
+        if (cfg.ev && cfg.ev.length) rebuildTimelineFromConfig(cfg.ev);
       } catch (e) {}
     }
   }
-
-  if (!cfg) return;
-
-  // Override wedding date for countdown
-  if (cfg.wd) _weddingDateTime = cfg.wd;
-
-  // Apply text values immediately
-  applyConfigToDOM(cfg);
-
-  // Rebuild timeline if events provided
-  if (cfg.ev && cfg.ev.length) rebuildTimelineFromConfig(cfg.ev);
-
-  // Pack expiry check (only run on guest URL hits)
-  if (encoded && cfg.id && cfg.ps) {
-    checkAndIncrementPack(cfg.id, cfg.ps);
-  }
 }
+
 
 /**
  * Rebuilds the #timeline div from the ev[] array in config.

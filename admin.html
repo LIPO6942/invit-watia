@@ -255,11 +255,40 @@ let selectedPack   = 100;
 let _shortUrl      = '';
 let _longUrl       = '';
 
-// ── Helpers: Unicode-safe base64 ──
+// ── Helpers: Unicode-safe base64 (kept for possible fallback) ──
 function toB64(str) {
   return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/gi,
     (_, p1) => String.fromCharCode(parseInt(p1, 16))
   ));
+}
+
+// ── JSONBlob helpers (short URL + live counter) ──
+async function saveToBlob(data) {
+  const res = await fetch('https://jsonblob.com/api/jsonBlob', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  if (!res.ok) throw new Error('blob create failed');
+  const location = res.headers.get('Location') || '';
+  // Location: https://jsonblob.com/api/jsonBlob/BLOB_ID
+  return location.split('/').pop();
+}
+
+async function getBlobData(blobId) {
+  const res = await fetch(`https://jsonblob.com/api/jsonBlob/${blobId}`, {
+    headers: { 'Accept': 'application/json' }
+  });
+  if (!res.ok) throw new Error('blob read failed');
+  return res.json();
+}
+
+async function updateBlob(blobId, data) {
+  await fetch(`https://jsonblob.com/api/jsonBlob/${blobId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
 }
 
 // ── Auth ──
@@ -449,66 +478,79 @@ function selectPack(el) {
   selectedPack = parseInt(el.dataset.pack);
 }
 
-// ── Generate Link (no external shortener — direct URL works on WhatsApp) ──
-function generateLink() {
-  // Auto-save first
+// ── Generate Link (stores config on JSONBlob → short URL) ──
+async function generateLink() {
   saveAll();
 
   const cfg = buildConfig();
   cfg.ps  = selectedPack;
   cfg.id  = genId();
 
-  // Encode: compact JSON → unicode-safe base64
-  const json = JSON.stringify(cfg);
-  const b64  = toB64(json);
-  
-  // Build the base invitation URL
+  // Build base URL (Vercel production or current host)
   const prodUrl = val('prodUrlInput');
   let base;
   if (prodUrl) {
     let cleanProd = prodUrl.trim();
-    if (!cleanProd.startsWith('http://') && !cleanProd.startsWith('https://')) {
-      cleanProd = 'https://' + cleanProd;
-    }
-    if (cleanProd.endsWith('/')) {
-      base = cleanProd + INVITATION_FILE;
-    } else if (cleanProd.endsWith(INVITATION_FILE)) {
-      base = cleanProd;
-    } else {
-      base = cleanProd + '/' + INVITATION_FILE;
-    }
+    if (!cleanProd.startsWith('http')) cleanProd = 'https://' + cleanProd;
+    if (cleanProd.endsWith('/')) base = cleanProd + INVITATION_FILE;
+    else if (cleanProd.endsWith(INVITATION_FILE)) base = cleanProd;
+    else base = cleanProd + '/' + INVITATION_FILE;
   } else {
     base = window.location.href.replace('admin.html', INVITATION_FILE);
   }
 
-  _longUrl = base + '?c=' + b64;
-  _shortUrl = _longUrl; // No shortener — use full URL directly
-
-  const isLocal = _longUrl.startsWith('file:');
+  const isLocal = base.startsWith('file:');
   const shortUrlEl = document.getElementById('shortUrl');
-
-  // Populate output box
-  document.getElementById('generatedUrl').textContent = _longUrl;
-  document.getElementById('linkIdDisplay').textContent = cfg.id;
-  document.getElementById('packDisplay').textContent   = selectedPack;
   document.getElementById('linkOutputBox').classList.add('visible');
   document.getElementById('linkOutputBox').scrollIntoView({behavior:'smooth', block:'center'});
 
   if (isLocal) {
-    shortUrlEl.innerHTML = `
-      <div style="font-size:0.85rem;line-height:1.6;color:#e67e22;text-align:right;">
-        ⚠️ <strong>تنبيه للمعاينة المحلية:</strong> أنت تعمل محلياً (file://).
-        <br>
-        <span style="color:#2ecc71">💡 حل:</span> افتح <code>index.html</code> مباشرة في المتصفح وسيقرأ التعديلات تلقائياً من الذاكرة المحلية.
-      </div>
-    `;
+    // Local file mode: embed config in URL (LZ-like base64)
+    const b64 = toB64(JSON.stringify(cfg));
+    _longUrl = _shortUrl = base + '?c=' + b64;
+    document.getElementById('generatedUrl').textContent = _longUrl;
+    document.getElementById('linkIdDisplay').textContent = cfg.id;
+    document.getElementById('packDisplay').textContent = selectedPack;
+    shortUrlEl.innerHTML = `<div style="font-size:0.85rem;color:#e67e22">
+      ⚠️ وضع محلي — افتح <code>index.html</code> مباشرة للمعاينة.</div>`;
   } else {
-    shortUrlEl.textContent = _longUrl;
+    shortUrlEl.textContent = '⏳ جاري حفظ البيانات...';
+    let blobId = null;
+    try {
+      // Save config + counter to JSONBlob
+      blobId = await saveToBlob({ config: cfg, count: 0, pack: selectedPack });
+    } catch(e) {
+      console.warn('JSONBlob failed, falling back to base64 URL', e);
+    }
+
+    let inviteUrl;
+    if (blobId) {
+      // Short URL: only the blob ID in the query string
+      inviteUrl = base + '?b=' + blobId;
+    } else {
+      // Fallback: embed config in URL via base64
+      const b64 = toB64(JSON.stringify(cfg));
+      inviteUrl = base + '?c=' + b64;
+    }
+
+    _longUrl = _shortUrl = inviteUrl;
+    document.getElementById('generatedUrl').textContent = inviteUrl;
+    document.getElementById('linkIdDisplay').textContent = cfg.id;
+    document.getElementById('packDisplay').textContent = selectedPack;
+    shortUrlEl.textContent = inviteUrl;
+
+    // Save history with blobId for counter tracking
+    const hist = getHistory();
+    hist.unshift({ id:cfg.id, blobId, ps:selectedPack, created:new Date().toISOString(), url:inviteUrl });
+    localStorage.setItem('weddingLinkHistory', JSON.stringify(hist));
+    renderLinksHistory();
+    showToast('🎉 تم إنشاء الرابط!');
+    return;
   }
 
-  // Save to history
+  // Local fallback history save
   const hist = getHistory();
-  hist.unshift({ id:cfg.id, ps:selectedPack, created:new Date().toISOString(), short:_longUrl, long:_longUrl });
+  hist.unshift({ id:cfg.id, blobId:null, ps:selectedPack, created:new Date().toISOString(), url:_longUrl });
   localStorage.setItem('weddingLinkHistory', JSON.stringify(hist));
   renderLinksHistory();
   showToast('🎉 تم إنشاء الرابط!');
@@ -542,14 +584,39 @@ function renderLinksHistory() {
     <div class="link-history-item">
       <div class="lh-info">
         <div class="lh-pack">📦 ${h.ps} مشاركة</div>
-        <div class="lh-id">${h.short||h.id}</div>
+        <div id="rem-${h.id}" style="font-size:0.78rem;color:var(--text-muted);margin:3px 0">
+          ${h.blobId ? '⏳ اضغط لتحديث الرصيد' : ''}
+        </div>
         <div class="lh-date">${new Date(h.created).toLocaleString('ar-TN')}</div>
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">
-        <button class="btn btn-outline" style="padding:5px 10px;font-size:0.72rem" onclick="quickCopy('${h.short||h.long}')">📋</button>
+        <button class="btn btn-outline" style="padding:5px 10px;font-size:0.72rem" onclick="quickCopy('${h.url||h.short||h.long}')">📋</button>
+        ${h.blobId ? `<button class="btn btn-ghost" style="padding:5px 10px;font-size:0.72rem" onclick="checkRemaining('${h.id}','${h.blobId}',${h.ps})">🔄 رصيد</button>` : ''}
         <button class="btn btn-ghost"   style="padding:5px 10px;font-size:0.72rem" onclick="deleteLink('${h.id}')">🗑️</button>
       </div>
     </div>`).join('');
+}
+
+async function checkRemaining(id, blobId, packSize) {
+  const el = document.getElementById('rem-' + id);
+  el.innerHTML = '⏳ جاري التحقق...';
+  try {
+    const data = await getBlobData(blobId);
+    const used = data.count || 0;
+    const remaining = Math.max(0, packSize - used);
+    const pct = Math.round((used / packSize) * 100);
+    const color = remaining === 0 ? '#e74c3c' : remaining < packSize * 0.2 ? '#f39c12' : '#2ecc71';
+    el.innerHTML = `
+      <div style="font-size:0.78rem">
+        📊 فُتح: <strong>${used}</strong> / ${packSize}
+        &nbsp;| متبقي: <strong style="color:${color}">${remaining}</strong>
+        <div style="height:4px;background:rgba(255,255,255,0.1);border-radius:2px;margin-top:4px">
+          <div style="width:${pct}%;height:4px;background:${color};border-radius:2px;transition:width 0.5s"></div>
+        </div>
+      </div>`;
+  } catch(e) {
+    el.innerHTML = '<span style="color:#e74c3c">❌ تعذّر التحقق</span>';
+  }
 }
 
 function quickCopy(url) { navigator.clipboard.writeText(url).then(()=>showToast('📋 تم النسخ!')); }
