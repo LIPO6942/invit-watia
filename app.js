@@ -101,6 +101,7 @@ function loadConfigFromURL() {
         if (cfg.th && cfg.th !== 'gold') {
           document.body.classList.add('theme-' + cfg.th);
         }
+        applyEnvelopeDesign(cfg);
 
         /* Atomic counter increment */
         _db.collection('invitations').doc(invSlug).update({
@@ -153,6 +154,7 @@ function loadConfigFromURL() {
         if (cfg.th && cfg.th !== 'gold') {
           document.body.classList.add('theme-' + cfg.th);
         }
+        applyEnvelopeDesign(cfg);
       } catch (e) {}
     }
   }
@@ -213,6 +215,7 @@ window.openEnvelopeNow = function() {
   const inv = document.getElementById('invitation');
   if (!inv || inv.classList.contains('open')) return;
   inv.classList.add('open');
+  document.body.classList.add('env-open');
   playCrackSound();
   setTimeout(() => {
     spawnPetals();

@@ -97,6 +97,14 @@ body {
   will-change: transform;
 }
 
+/* Scroll Guard on Body when envelope is closed */
+body:not(.env-open) {
+  overflow: hidden;
+  height: 100vh;
+  position: fixed;
+  width: 100%;
+}
+
 /* The card that holds wedding content — initially hidden below panels */
 .env-card {
   position: relative;
@@ -108,16 +116,22 @@ body {
 
 #wedding-content {
   opacity: 0;
-  transition: opacity 0.6s ease;
+  visibility: hidden;
+  height: 0;
+  overflow: hidden;
+  transition: opacity 0.6s ease, visibility 0.6s;
 }
 
 .invitation.open #wedding-content {
   opacity: 1;
+  visibility: visible;
+  height: auto;
+  overflow: visible;
 }
 
 /* ─────── 2. Envelope Panels (Flaps) ─────── */
 .env-panel {
-  position: fixed;
+  position: absolute;
   top: 0;
   width: 50%;
   height: 100%;
@@ -126,7 +140,7 @@ body {
   display: flex;
   align-items: stretch;
   overflow: hidden;
-  transition: transform 1s cubic-bezier(0.77, 0, 0.18, 1);
+  transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
   box-shadow: 0 0 30px rgba(0,0,0,0.4);
 }
 
@@ -157,7 +171,7 @@ body {
 .left-panel::after  { right: 0; }
 .right-panel::after { left: 0; }
 
-.panel-branches {
+.panel-branches, .panel-vintage {
   width: 100%;
   height: 100%;
   position: absolute;
@@ -170,7 +184,7 @@ body {
 
 /* ─────── 3. Seal ─────── */
 .seal-wrapper {
-  position: fixed;
+  position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -932,13 +946,6 @@ body {
 /* ─────── 11. Responsive guard ─────── */
 @media (min-width: 430px) {
   .invitation { margin: 0 auto; }
-  .env-panel  { max-width: 215px; }
-  .left-panel { left: calc(50% - 215px); }
-  .right-panel{ right: calc(50% - 215px); }
-  .seal-wrapper {
-    left: 50%;
-    max-width: 130px;
-  }
 }
 
 /* ─────── 12. Guestbook Styling ─────── */

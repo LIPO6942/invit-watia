@@ -146,6 +146,27 @@
           </div>
         </div>
       </div>
+      <div class="card">
+        <div class="card-title">✉️ تصميم ظرف الرسالة (L'enveloppe)</div>
+        <div class="form-row" style="margin-top:10px">
+          <div class="field">
+            <label>نقشة الغلاف (Motif)</label>
+            <select id="envPattern">
+              <option value="floral">🌸 أوراق ونباتات طبيعية (Floral)</option>
+              <option value="vintage">⚜️ إطار كلاسيكي مزخرف (Vintage)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>شعار الختم الشمعي (Sceau)</label>
+            <select id="envSeal">
+              <option value="heart">❤️ قلب كلاسيكي (Cœur)</option>
+              <option value="rings">💍 خاتمين الزفاف (Alliances)</option>
+              <option value="monogram">✨ الحرف الأول من الإسمين (Monogramme)</option>
+              <option value="bismillah">🕌 البسملة الشريفة (Bismillah)</option>
+            </select>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- ▸ PAGE 2 — Families -->
@@ -403,6 +424,8 @@ function buildConfig() {
   return {
     v:  1,                   // version
     th: window._selectedTheme || 'gold', // theme
+    ep: val('envPattern'),   // envelope pattern
+    es: val('envSeal'),      // envelope seal
     ga: val('groomAr'),
     gf2:val('groomFr'),
     gf: val('groomFather'),
@@ -467,6 +490,8 @@ function applyConfigToFields(c) {
   set('brideMother',       c.bm  || '');
   set('weddingDate',       c.wd  || '');
   set('weddingDateDisplay',c.wdd || '');
+  set('envPattern',        c.ep  || 'floral');
+  set('envSeal',           c.es  || 'heart');
   
   if (c.th) {
     window._selectedTheme = c.th;

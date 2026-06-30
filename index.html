@@ -246,6 +246,7 @@
 
     <!-- ─── Envelope Panels (left & right flaps, drawn with CSS) ─── -->
     <div class="env-panel left-panel" id="leftPanel">
+      <!-- Motif 1: Floral (Branches) -->
       <svg class="panel-branches" viewBox="0 0 200 600" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M10,580 Q60,420 30,200 Q50,380 130,20" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
         <path d="M10,400 Q100,340 80,180 Q100,300 180,80" stroke="#c9a84c" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
@@ -259,15 +260,27 @@
         <path d="M90,155 C72,135 102,120 108,142 C114,164 100,172 90,155 Z" fill="#c9a84c" opacity="0.5"/>
         <path d="M52,100 C36,80 64,66 70,88 C76,110 62,118 52,100 Z" fill="#c9a84c" opacity="0.5"/>
         <path d="M120,60 C104,40 132,26 138,48 C144,70 130,78 120,60 Z" fill="#c9a84c" opacity="0.5"/>
-        <!-- Left-extending leaves -->
         <path d="M10,480 C-10,464 8,445 22,460 Z" fill="#c9a84c" opacity="0.4"/>
         <path d="M14,380 C-8,362 10,342 26,358 Z" fill="#c9a84c" opacity="0.4"/>
         <path d="M16,280 C-6,263 12,242 28,260 Z" fill="#c9a84c" opacity="0.4"/>
         <path d="M20,180 C-4,162 15,140 30,158 Z" fill="#c9a84c" opacity="0.4"/>
       </svg>
+      <!-- Motif 2: Vintage (Ornamental frame) -->
+      <svg class="panel-vintage" viewBox="0 0 200 600" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:none">
+        <path d="M10,10 L50,10 A40,40 0 0,0 10,50 Z" fill="none" stroke="#c9a84c" stroke-width="1.8"/>
+        <path d="M10,590 L50,590 A40,40 0 0,1 10,550 Z" fill="none" stroke="#c9a84c" stroke-width="1.8"/>
+        <line x1="18" y1="50" x2="18" y2="550" stroke="#c9a84c" stroke-width="1" stroke-dasharray="4,4"/>
+        <line x1="24" y1="40" x2="24" y2="560" stroke="#c9a84c" stroke-width="1.5"/>
+        <circle cx="24" cy="300" r="14" fill="none" stroke="#c9a84c" stroke-width="1.8"/>
+        <circle cx="24" cy="300" r="8" fill="none" stroke="#c9a84c" stroke-width="1"/>
+        <path d="M24,280 L24,320 M4,300 L44,300" stroke="#c9a84c" stroke-width="1.2"/>
+        <path d="M24,150 Q36,150 24,162 Q12,150 24,150 Z" fill="#c9a84c" opacity="0.6"/>
+        <path d="M24,450 Q36,450 24,462 Q12,450 24,450 Z" fill="#c9a84c" opacity="0.6"/>
+      </svg>
     </div>
 
     <div class="env-panel right-panel" id="rightPanel">
+      <!-- Motif 1: Floral (Branches, Mirrored) -->
       <svg class="panel-branches" viewBox="0 0 200 600" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform:scaleX(-1)">
         <path d="M10,580 Q60,420 30,200 Q50,380 130,20" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
         <path d="M10,400 Q100,340 80,180 Q100,300 180,80" stroke="#c9a84c" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
@@ -285,6 +298,18 @@
         <path d="M16,280 C-6,263 12,242 28,260 Z" fill="#c9a84c" opacity="0.4"/>
         <path d="M20,180 C-4,162 15,140 30,158 Z" fill="#c9a84c" opacity="0.4"/>
       </svg>
+      <!-- Motif 2: Vintage (Ornamental frame, Mirrored) -->
+      <svg class="panel-vintage" viewBox="0 0 200 600" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform:scaleX(-1); display:none">
+        <path d="M10,10 L50,10 A40,40 0 0,0 10,50 Z" fill="none" stroke="#c9a84c" stroke-width="1.8"/>
+        <path d="M10,590 L50,590 A40,40 0 0,1 10,550 Z" fill="none" stroke="#c9a84c" stroke-width="1.8"/>
+        <line x1="18" y1="50" x2="18" y2="550" stroke="#c9a84c" stroke-width="1" stroke-dasharray="4,4"/>
+        <line x1="24" y1="40" x2="24" y2="560" stroke="#c9a84c" stroke-width="1.5"/>
+        <circle cx="24" cy="300" r="14" fill="none" stroke="#c9a84c" stroke-width="1.8"/>
+        <circle cx="24" cy="300" r="8" fill="none" stroke="#c9a84c" stroke-width="1"/>
+        <path d="M24,280 L24,320 M4,300 L44,300" stroke="#c9a84c" stroke-width="1.2"/>
+        <path d="M24,150 Q36,150 24,162 Q12,150 24,150 Z" fill="#c9a84c" opacity="0.6"/>
+        <path d="M24,450 Q36,450 24,462 Q12,450 24,450 Z" fill="#c9a84c" opacity="0.6"/>
+      </svg>
     </div>
 
     <!-- ─── Gold Seal ─── -->
@@ -296,11 +321,34 @@
           <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1.2"/>
           <circle cx="100" cy="100" r="82" fill="url(#sealInner)"/>
           <circle cx="100" cy="100" r="76" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
-          <!-- Hand-drawn heart -->
-          <path d="M100,136 C68,108 60,80 78,64 C90,52 100,65 100,65 C100,65 110,52 122,64 C140,80 132,108 100,136 Z"
-                fill="none" stroke="rgba(255,248,220,0.9)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M98,130 C76,108 72,86 84,72 C90,65 98,70 98,70"
-                fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round"/>
+          
+          <!-- Seal Symbol 1: Heart -->
+          <g id="seal-symbol-heart">
+            <path d="M100,136 C68,108 60,80 78,64 C90,52 100,65 100,65 C100,65 110,52 122,64 C140,80 132,108 100,136 Z"
+                  fill="none" stroke="rgba(255,248,220,0.9)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M98,130 C76,108 72,86 84,72 C90,65 98,70 98,70"
+                  fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round"/>
+          </g>
+
+          <!-- Seal Symbol 2: Intertwined Rings -->
+          <g id="seal-symbol-rings" style="display:none">
+            <circle cx="85" cy="100" r="22" fill="none" stroke="rgba(255,248,220,0.9)" stroke-width="4"/>
+            <rect x="79" y="74" width="12" height="6" fill="rgba(255,248,220,0.9)" transform="rotate(-15 85 100)"/>
+            <circle cx="115" cy="100" r="22" fill="none" stroke="rgba(255,248,220,0.9)" stroke-width="4"/>
+            <rect x="109" y="74" width="12" height="6" fill="rgba(255,248,220,0.9)" transform="rotate(15 115 100)"/>
+          </g>
+
+          <!-- Seal Symbol 3: Initials Monogram -->
+          <g id="seal-symbol-monogram" style="display:none">
+            <text x="100" y="112" font-family="'Amiri', serif" font-size="34" font-weight="bold" fill="rgba(255,248,220,0.9)" text-anchor="middle" id="seal-monogram-text">M & M</text>
+          </g>
+
+          <!-- Seal Symbol 4: Bismillah / Islamic Ornament -->
+          <g id="seal-symbol-bismillah" style="display:none">
+            <path d="M65,100 Q100,60 135,100 Q100,140 65,100 Z" fill="none" stroke="rgba(255,248,220,0.9)" stroke-width="2.5"/>
+            <text x="100" y="107" font-family="'Amiri', serif" font-size="20" font-weight="bold" fill="rgba(255,248,220,0.9)" text-anchor="middle">﷽</text>
+          </g>
+          
           <!-- Center pin -->
           <circle cx="100" cy="100" r="5" fill="rgba(255,248,220,0.7)"/>
           <defs>
