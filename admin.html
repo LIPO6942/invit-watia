@@ -150,6 +150,13 @@
         <div class="card-title">✉️ تصميم ظرف الرسالة (L'enveloppe)</div>
         <div class="form-row" style="margin-top:10px">
           <div class="field">
+            <label>لغة الدعوة (Langue)</label>
+            <select id="invLanguage">
+              <option value="ar">العربية (Arabe)</option>
+              <option value="fr">الفرنسية (Français)</option>
+            </select>
+          </div>
+          <div class="field">
             <label>نقشة الغلاف (Motif)</label>
             <select id="envPattern">
               <option value="floral">🌸 أوراق ونباتات طبيعية (Floral)</option>
@@ -426,6 +433,7 @@ function buildConfig() {
     th: window._selectedTheme || 'gold', // theme
     ep: val('envPattern'),   // envelope pattern
     es: val('envSeal'),      // envelope seal
+    la: val('invLanguage'),  // invitation language
     ga: val('groomAr'),
     gf2:val('groomFr'),
     gf: val('groomFather'),
@@ -492,6 +500,7 @@ function applyConfigToFields(c) {
   set('weddingDateDisplay',c.wdd || '');
   set('envPattern',        c.ep  || 'floral');
   set('envSeal',           c.es  || 'heart');
+  set('invLanguage',       c.la  || 'ar');
   
   if (c.th) {
     window._selectedTheme = c.th;

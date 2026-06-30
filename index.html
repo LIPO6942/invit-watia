@@ -28,34 +28,34 @@
           <div class="hero-bg-parallax"></div>
           <div class="petals-layer" id="petals"></div>
           <div class="intro-overlay">
-            <div class="basmala font-amiri">بارك الله لهما وبارك عليهما وجمع بينهما في خير</div>
+            <div class="basmala font-amiri" data-tr="basmala">بارك الله لهما وبارك عليهما وجمع بينهما في خير</div>
             <div class="divider-ornament">✦ ✦ ✦</div>
-            <p class="p1-invite-text">تتشرف عائلتا</p>
+            <p class="p1-invite-text" data-tr="invite_title">تتشرف عائلتا</p>
             <div class="families-row">
               <div class="family-block">
-                <div class="family-label">السيد</div>
+                <div class="family-label" data-tr="mr">السيد</div>
                 <div class="family-name font-amiri" data-cfg="groomFather">محمد الرياحي</div>
-                <div class="family-label" style="margin-top:6px">والسيدة</div>
+                <div class="family-label" style="margin-top:6px" data-tr="mrs">والسيدة</div>
                 <div class="family-name font-amiri" data-cfg="groomMother">جميلة السويح</div>
               </div>
-              <div class="and-symbol">و</div>
+              <div class="and-symbol" data-tr="and">و</div>
               <div class="family-block">
-                <div class="family-label">السيد</div>
+                <div class="family-label" data-tr="mr">السيد</div>
                 <div class="family-name font-amiri" data-cfg="brideFather">خالد العمري</div>
-                <div class="family-label" style="margin-top:6px">والسيدة</div>
+                <div class="family-label" style="margin-top:6px" data-tr="mrs">والسيدة</div>
                 <div class="family-name font-amiri" data-cfg="brideMother">عواطف بلقاسم</div>
               </div>
             </div>
-            <p class="p1-invite-text" style="margin:10px 0 4px">بدعوتكم لحضور حفل زفاف نجليهما</p>
+            <p class="p1-invite-text" style="margin:10px 0 4px" data-tr="invite_desc">بدعوتكم لحضور حفل زفاف نجليهما</p>
             <div class="names-main">
               <span class="groom-name" data-cfg="groomAr">مرتضى</span>
-              <span class="names-divider">&</span>
+              <span class="names-divider" data-tr="and_char">&</span>
               <span class="bride-name" data-cfg="brideAr">مريم</span>
             </div>
             <div class="shimmer-line"></div>
           </div>
           <div class="scroll-hint">
-            <span>اسحب للأسفل</span>
+            <span data-tr="scroll_hint">اسحب للأسفل</span>
             <div class="scroll-arrow"></div>
           </div>
         </section>
@@ -65,25 +65,25 @@
           <div class="countdown-bg-image"></div>
           <div class="cd-section-petals" id="cdPetals"></div>
           <div class="countdown-content">
-            <div class="section-title font-amiri">العد التنازلي</div>
-            <div class="section-subtitle font-amiri">لحظات تفصلنا عن اللقاء</div>
+            <div class="section-title font-amiri" data-tr="countdown_title">العد التنازلي</div>
+            <div class="section-subtitle font-amiri" data-tr="countdown_subtitle">لحظات تفصلنا عن اللقاء</div>
 
             <div class="countdown-grid">
               <div class="cd-unit">
                 <div class="cd-box"><span class="cd-number" id="cd-days">12</span></div>
-                <span class="cd-label">يوم</span>
+                <span class="cd-label" data-tr="days">يوم</span>
               </div>
               <div class="cd-unit">
                 <div class="cd-box"><span class="cd-number" id="cd-hours">00</span></div>
-                <span class="cd-label">ساعة</span>
+                <span class="cd-label" data-tr="hours">ساعة</span>
               </div>
               <div class="cd-unit">
                 <div class="cd-box"><span class="cd-number" id="cd-mins">00</span></div>
-                <span class="cd-label">دقيقة</span>
+                <span class="cd-label" data-tr="mins">دقيقة</span>
               </div>
               <div class="cd-unit">
                 <div class="cd-box"><span class="cd-number" id="cd-secs">00</span></div>
-                <span class="cd-label">ثانية</span>
+                <span class="cd-label" data-tr="secs">ثانية</span>
               </div>
             </div>
 
@@ -214,14 +214,14 @@
 
         <!-- ── GUESTBOOK SECTION ── -->
         <section class="w-section" id="guestbook-section" style="padding: 40px 24px; text-align: center; border-top: 1px solid rgba(201,168,76,0.15); background: rgba(255,248,240,0.45)">
-          <div class="section-title font-amiri" style="font-size: 2rem; color: var(--gold); margin-bottom: 8px">دفتر التهاني</div>
-          <div class="section-subtitle font-amiri" style="color: var(--brown-mid); margin-bottom: 24px">شاركونا فرحتنا بكلمة طيبة للعروسين</div>
+          <div class="section-title font-amiri" style="font-size: 2rem; color: var(--gold); margin-bottom: 8px" data-tr="guestbook_title">دفتر التهاني</div>
+          <div class="section-subtitle font-amiri" style="color: var(--brown-mid); margin-bottom: 24px" data-tr="guestbook_subtitle">شاركونا فرحتنا بكلمة طيبة للعروسين</div>
           
           <!-- Submit Wish form -->
           <div class="guestbook-form" style="max-width: 360px; margin: 0 auto; background: rgba(255,255,255,0.7); padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid rgba(201,168,76,0.2)">
-            <input type="text" id="gb-name" class="guestbook-input" placeholder="اسمك الكريم" required autocomplete="name">
-            <textarea id="gb-message" class="guestbook-textarea" placeholder="أكتب تهنئتك هنا..." rows="3" required></textarea>
-            <button class="guestbook-submit-btn" onclick="submitWish()">إرسال التهنئة ✨</button>
+            <input type="text" id="gb-name" class="guestbook-input" placeholder="اسمك الكريم" data-tr-placeholder="gb_name_placeholder" required autocomplete="name">
+            <textarea id="gb-message" class="guestbook-textarea" placeholder="أكتب تهنئتك هنا..." data-tr-placeholder="gb_msg_placeholder" rows="3" required></textarea>
+            <button class="guestbook-submit-btn" onclick="submitWish()" data-tr="gb_submit">إرسال التهنئة ✨</button>
           </div>
 
           <!-- List of Wishes -->
@@ -236,7 +236,7 @@
         <section id="closing-section">
           <div class="closing-shimmer"></div>
           <div class="closing-names font-amiri"><span data-cfg="groomAr">مرتضى</span> &amp; <span data-cfg="brideAr">مريم</span></div>
-          <div class="closing-tagline font-amiri">يسعدنا مشاركتكم هذه الفرحة</div>
+          <div class="closing-tagline font-amiri" data-tr="closing_tagline">يسعدنا مشاركتكم هذه الفرحة</div>
           <div class="closing-heart">❤</div>
           <div class="closing-shimmer" style="margin-top:12px"></div>
         </section>
@@ -358,15 +358,41 @@
       </svg>
       <!-- Motif 2: Vintage (Ornamental frame) -->
       <svg class="panel-vintage" viewBox="0 0 200 600" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:none">
-        <path d="M10,10 L50,10 A40,40 0 0,0 10,50 Z" fill="none" stroke="#c9a84c" stroke-width="1.8"/>
-        <path d="M10,590 L50,590 A40,40 0 0,1 10,550 Z" fill="none" stroke="#c9a84c" stroke-width="1.8"/>
-        <line x1="18" y1="50" x2="18" y2="550" stroke="#c9a84c" stroke-width="1" stroke-dasharray="4,4"/>
-        <line x1="24" y1="40" x2="24" y2="560" stroke="#c9a84c" stroke-width="1.5"/>
-        <circle cx="24" cy="300" r="14" fill="none" stroke="#c9a84c" stroke-width="1.8"/>
-        <circle cx="24" cy="300" r="8"  fill="none" stroke="#c9a84c" stroke-width="1"/>
-        <path d="M24,280 L24,320 M4,300 L44,300" stroke="#c9a84c" stroke-width="1.2"/>
-        <path d="M24,150 Q36,150 24,162 Q12,150 24,150 Z" fill="#c9a84c" opacity="0.6"/>
-        <path d="M24,450 Q36,450 24,462 Q12,450 24,450 Z" fill="#c9a84c" opacity="0.6"/>
+        <!-- Top and Bottom Solid Borders -->
+        <line x1="12" y1="12" x2="195" y2="12" stroke="#c9a84c" stroke-width="1.5" opacity="0.8"/>
+        <line x1="12" y1="588" x2="195" y2="588" stroke="#c9a84c" stroke-width="1.5" opacity="0.8"/>
+        
+        <!-- Outer left border solid and dashed -->
+        <line x1="12" y1="12" x2="12" y2="588" stroke="#c9a84c" stroke-width="2" opacity="0.9"/>
+        <line x1="18" y1="18" x2="18" y2="582" stroke="#c9a84c" stroke-width="1" stroke-dasharray="3,3" opacity="0.75"/>
+        
+        <!-- Top corner flourish -->
+        <path d="M12,12 C28,12 42,20 42,36 C42,50 20,44 32,58" fill="none" stroke="#c9a84c" stroke-width="1.2" opacity="0.85"/>
+        <path d="M12,12 L12,42 C12,42 18,28 26,28 C34,28 26,12 12,12 Z" fill="#c9a84c" opacity="0.6"/>
+        <circle cx="28" cy="18" r="2.5" fill="#c9a84c" opacity="0.8"/>
+        
+        <!-- Bottom corner flourish -->
+        <path d="M12,588 C28,588 42,580 42,564 C42,550 20,556 32,542" fill="none" stroke="#c9a84c" stroke-width="1.2" opacity="0.85"/>
+        <path d="M12,588 L12,558 C12,558 18,572 26,572 C34,572 26,588 12,588 Z" fill="#c9a84c" opacity="0.6"/>
+        <circle cx="28" cy="582" r="2.5" fill="#c9a84c" opacity="0.8"/>
+
+        <!-- Accent flourishes along the frame line -->
+        <path d="M18,160 Q34,160 28,175" fill="none" stroke="#c9a84c" stroke-width="1.2" opacity="0.8"/>
+        <circle cx="28" cy="179" r="2" fill="#c9a84c" opacity="0.9"/>
+        <path d="M18,440 Q34,440 28,425" fill="none" stroke="#c9a84c" stroke-width="1.2" opacity="0.8"/>
+        <circle cx="28" cy="421" r="2" fill="#c9a84c" opacity="0.9"/>
+        
+        <!-- Central medallion scrollwork at the center-left outer edge -->
+        <path d="M18,300 C18,260 48,270 48,300 C48,330 18,340 18,300" fill="none" stroke="#c9a84c" stroke-width="1.8" opacity="0.9"/>
+        <path d="M18,280 Q38,280 32,300 Q38,320 18,320" fill="none" stroke="#c9a84c" stroke-width="1.2" opacity="0.75"/>
+        <circle cx="34" cy="300" r="4.5" fill="#c9a84c" opacity="0.95"/>
+        <path d="M18,290 C26,290 28,295 28,300 C28,305 26,310 18,310 Z" fill="#c9a84c" opacity="0.5"/>
+
+        <!-- Intricate lace detail near the open/inner edge (right side of panel, x = 185 to 198) -->
+        <path d="M190,40 C194,50 194,550 190,560" fill="none" stroke="#c9a84c" stroke-width="1" opacity="0.6"/>
+        <!-- Elegant vertical lace borders -->
+        <path d="M195,50 L195,550" stroke="#c9a84c" stroke-width="1.5" stroke-dasharray="10,10" opacity="0.85"/>
+        <path d="M195,50 C185,60 185,70 195,80 C185,90 185,100 195,110 C185,120 185,130 195,140 C185,150 185,160 195,170 C185,180 185,190 195,200 C185,210 185,220 195,230 C185,240 185,250 195,260 C185,270 185,280 195,290 C185,300 185,310 195,320 C185,330 185,340 195,350 C185,360 185,370 195,380 C185,390 185,400 195,410 C185,420 185,430 195,440 C185,450 185,460 195,470 C185,480 185,490 195,500 C185,510 185,520 195,530 C185,540 185,550 195,560" fill="none" stroke="#c9a84c" stroke-width="1" opacity="0.75"/>
       </svg>
     </div>
 
@@ -391,15 +417,41 @@
       </svg>
       <!-- Motif 2: Vintage (Ornamental frame, Mirrored) -->
       <svg class="panel-vintage" viewBox="0 0 200 600" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform:scaleX(-1); display:none">
-        <path d="M10,10 L50,10 A40,40 0 0,0 10,50 Z" fill="none" stroke="#c9a84c" stroke-width="1.8"/>
-        <path d="M10,590 L50,590 A40,40 0 0,1 10,550 Z" fill="none" stroke="#c9a84c" stroke-width="1.8"/>
-        <line x1="18" y1="50" x2="18" y2="550" stroke="#c9a84c" stroke-width="1" stroke-dasharray="4,4"/>
-        <line x1="24" y1="40" x2="24" y2="560" stroke="#c9a84c" stroke-width="1.5"/>
-        <circle cx="24" cy="300" r="14" fill="none" stroke="#c9a84c" stroke-width="1.8"/>
-        <circle cx="24" cy="300" r="8"  fill="none" stroke="#c9a84c" stroke-width="1"/>
-        <path d="M24,280 L24,320 M4,300 L44,300" stroke="#c9a84c" stroke-width="1.2"/>
-        <path d="M24,150 Q36,150 24,162 Q12,150 24,150 Z" fill="#c9a84c" opacity="0.6"/>
-        <path d="M24,450 Q36,450 24,462 Q12,450 24,450 Z" fill="#c9a84c" opacity="0.6"/>
+        <!-- Top and Bottom Solid Borders -->
+        <line x1="12" y1="12" x2="195" y2="12" stroke="#c9a84c" stroke-width="1.5" opacity="0.8"/>
+        <line x1="12" y1="588" x2="195" y2="588" stroke="#c9a84c" stroke-width="1.5" opacity="0.8"/>
+        
+        <!-- Outer left border solid and dashed -->
+        <line x1="12" y1="12" x2="12" y2="588" stroke="#c9a84c" stroke-width="2" opacity="0.9"/>
+        <line x1="18" y1="18" x2="18" y2="582" stroke="#c9a84c" stroke-width="1" stroke-dasharray="3,3" opacity="0.75"/>
+        
+        <!-- Top corner flourish -->
+        <path d="M12,12 C28,12 42,20 42,36 C42,50 20,44 32,58" fill="none" stroke="#c9a84c" stroke-width="1.2" opacity="0.85"/>
+        <path d="M12,12 L12,42 C12,42 18,28 26,28 C34,28 26,12 12,12 Z" fill="#c9a84c" opacity="0.6"/>
+        <circle cx="28" cy="18" r="2.5" fill="#c9a84c" opacity="0.8"/>
+        
+        <!-- Bottom corner flourish -->
+        <path d="M12,588 C28,588 42,580 42,564 C42,550 20,556 32,542" fill="none" stroke="#c9a84c" stroke-width="1.2" opacity="0.85"/>
+        <path d="M12,588 L12,558 C12,558 18,572 26,572 C34,572 26,588 12,588 Z" fill="#c9a84c" opacity="0.6"/>
+        <circle cx="28" cy="582" r="2.5" fill="#c9a84c" opacity="0.8"/>
+
+        <!-- Accent flourishes along the frame line -->
+        <path d="M18,160 Q34,160 28,175" fill="none" stroke="#c9a84c" stroke-width="1.2" opacity="0.8"/>
+        <circle cx="28" cy="179" r="2" fill="#c9a84c" opacity="0.9"/>
+        <path d="M18,440 Q34,440 28,425" fill="none" stroke="#c9a84c" stroke-width="1.2" opacity="0.8"/>
+        <circle cx="28" cy="421" r="2" fill="#c9a84c" opacity="0.9"/>
+        
+        <!-- Central medallion scrollwork at the center-left outer edge -->
+        <path d="M18,300 C18,260 48,270 48,300 C48,330 18,340 18,300" fill="none" stroke="#c9a84c" stroke-width="1.8" opacity="0.9"/>
+        <path d="M18,280 Q38,280 32,300 Q38,320 18,320" fill="none" stroke="#c9a84c" stroke-width="1.2" opacity="0.75"/>
+        <circle cx="34" cy="300" r="4.5" fill="#c9a84c" opacity="0.95"/>
+        <path d="M18,290 C26,290 28,295 28,300 C28,305 26,310 18,310 Z" fill="#c9a84c" opacity="0.5"/>
+
+        <!-- Intricate lace detail near the open/inner edge (right side of panel, x = 185 to 198) -->
+        <path d="M190,40 C194,50 194,550 190,560" fill="none" stroke="#c9a84c" stroke-width="1" opacity="0.6"/>
+        <!-- Elegant vertical lace borders -->
+        <path d="M195,50 L195,550" stroke="#c9a84c" stroke-width="1.5" stroke-dasharray="10,10" opacity="0.85"/>
+        <path d="M195,50 C185,60 185,70 195,80 C185,90 185,100 195,110 C185,120 185,130 195,140 C185,150 185,160 195,170 C185,180 185,190 195,200 C185,210 185,220 195,230 C185,240 185,250 195,260 C185,270 185,280 195,290 C185,300 185,310 195,320 C185,330 185,340 195,350 C185,360 185,370 195,380 C185,390 185,400 195,410 C185,420 185,430 195,440 C185,450 185,460 195,470 C185,480 185,490 195,500 C185,510 185,520 195,530 C185,540 185,550 195,560" fill="none" stroke="#c9a84c" stroke-width="1" opacity="0.75"/>
       </svg>
     </div>
 
@@ -445,7 +497,14 @@
 
           <!-- Seal Symbol 3: Initials Monogram -->
           <g id="seal-symbol-monogram" style="display:none">
-            <text x="100" y="112" font-family="'Amiri', serif" font-size="34" font-weight="bold" fill="rgba(255,248,220,0.9)" text-anchor="middle" id="seal-monogram-text">M &amp; M</text>
+            <!-- Decorative borders/wreath for initials monogram -->
+            <circle cx="100" cy="100" r="54" fill="none" stroke="rgba(255,248,220,0.5)" stroke-width="1" stroke-dasharray="3,3"/>
+            <path d="M100,38 C105,38 108,42 108,46 C108,50 102,56 100,58 C98,56 92,50 92,46 C92,42 95,38 100,38 Z" fill="rgba(255,248,220,0.85)"/>
+            <path d="M100,162 C105,162 108,158 108,154 C108,150 102,144 100,142 C98,144 92,150 92,154 C92,158 95,162 100,162 Z" fill="rgba(255,248,220,0.85)"/>
+            <path d="M60,70 Q46,100 60,130" fill="none" stroke="rgba(255,248,220,0.7)" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M140,70 Q154,100 140,130" fill="none" stroke="rgba(255,248,220,0.7)" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- Embossed initials text using gold text gradient -->
+            <text x="100" y="112" font-family="'Playfair Display', 'Amiri', serif" font-style="italic" font-size="28" font-weight="bold" fill="url(#sealTextGrad)" text-anchor="middle" id="seal-monogram-text" letter-spacing="1">M &amp; M</text>
           </g>
 
           <!-- Seal Symbol 4: Bismillah / Islamic Ornament -->
@@ -467,6 +526,13 @@
               <stop offset="60%"  stop-color="#B38728"/>
               <stop offset="100%" stop-color="#6a3800"/>
             </radialGradient>
+            <!-- Gold metallic linear gradient for monogram initials -->
+            <linearGradient id="sealTextGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%"   stop-color="#FFFFFF"/>
+              <stop offset="35%"  stop-color="#FFFDF0"/>
+              <stop offset="70%"  stop-color="#E5C158"/>
+              <stop offset="100%" stop-color="#885A00"/>
+            </linearGradient>
           </defs>
         </svg>
       </div>

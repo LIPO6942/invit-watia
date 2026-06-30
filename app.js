@@ -51,9 +51,10 @@ function fromB64(str) {
  * Maps compact config keys → data-cfg attribute values.
  */
 function applyConfigToDOM(cfg) {
+  const isFr = cfg.la === 'fr';
   const MAP = {
-    groomAr:     cfg.ga,
-    brideAr:     cfg.ba,
+    groomAr:     isFr ? (cfg.gf2 || cfg.ga) : cfg.ga,
+    brideAr:     isFr ? (cfg.bf2 || cfg.ba) : cfg.ba,
     groomFather: cfg.gf,
     groomMother: cfg.gm,
     brideFather: cfg.bf,
@@ -65,6 +66,9 @@ function applyConfigToDOM(cfg) {
       el.textContent = val;
     });
   });
+
+  // Apply language translations
+  applyLanguage(cfg.la || 'ar');
 }
 
 function loadConfigFromURL() {
@@ -789,10 +793,109 @@ function applyEnvelopeDesign(cfg) {
   if (seal === 'monogram') {
     const monoEl = document.getElementById('seal-monogram-text');
     if (monoEl) {
-      const g = (cfg.ga || '').charAt(0).toUpperCase();
-      const b = (cfg.ba || '').charAt(0).toUpperCase();
+      const isFr = cfg.la === 'fr';
+      const groomName = isFr ? (cfg.gf2 || cfg.ga) : cfg.ga;
+      const brideName = isFr ? (cfg.bf2 || cfg.ba) : cfg.ba;
+      const g = (groomName || '').trim().charAt(0).toUpperCase();
+      const b = (brideName || '').trim().charAt(0).toUpperCase();
       monoEl.textContent = g && b ? `${g} & ${b}` : 'M & M';
     }
+  }
+}
+
+/* ────────────────────────────────────────────────
+   TRANSLATION & LOCALIZATION SYSTEM
+   ──────────────────────────────────────────────── */
+const TRANSLATIONS = {
+  ar: {
+    basmala: 'بارك الله لهما وبارك عليهما وجمع بينهما في خير',
+    invite_title: 'تتشرف عائلتا',
+    mr: 'السيد',
+    mrs: 'والسيدة',
+    and: 'و',
+    invite_desc: 'بدعوتكم لحضور حفل زفاف نجليهما',
+    and_char: '&',
+    scroll_hint: 'اسحب للأسفل',
+    countdown_title: 'العد التنازلي',
+    countdown_subtitle: 'لحظات تفصلنا عن اللقاء',
+    days: 'يوم',
+    hours: 'ساعة',
+    mins: 'دقيقة',
+    secs: 'ثانية',
+    program_title: 'برنامج الحفل',
+    location_btn: 'الموقع',
+    guestbook_title: 'دفتر التهاني',
+    guestbook_subtitle: 'شاركونا فرحتنا بكلمة طيبة للعروسين',
+    gb_name_placeholder: 'اسمك الكريم',
+    gb_msg_placeholder: 'أكتب تهنئتك هنا...',
+    gb_submit: 'إرسال التهنئة ✨',
+    closing_tagline: 'يسعدنا مشاركتكم هذه الفرحة',
+  },
+  fr: {
+    basmala: 'Que Dieu les bénisse, les comble de bonheur et les réunisse.',
+    invite_title: 'Les familles',
+    mr: 'M.',
+    mrs: 'et Mme',
+    and: 'et',
+    invite_desc: 'ont l\'honneur de vous inviter au mariage de leurs enfants',
+    and_char: '&',
+    scroll_hint: 'Faites défiler vers le bas',
+    countdown_title: 'Compte à rebours',
+    countdown_subtitle: 'Quelques instants nous séparent de ce grand jour',
+    days: 'Jours',
+    hours: 'Heures',
+    mins: 'Minutes',
+    secs: 'Secondes',
+    program_title: 'Programme de la Fête',
+    location_btn: 'Localisation',
+    guestbook_title: 'Livre d\'or',
+    guestbook_subtitle: 'Laissez un message de félicitations aux mariés',
+    gb_name_placeholder: 'Votre Nom',
+    gb_msg_placeholder: 'Écrivez votre message ici...',
+    gb_submit: 'Envoyer les félicitations ✨',
+    closing_tagline: 'Nous sommes honorés de partager ce moment avec vous',
+  }
+};
+
+function applyLanguage(lang) {
+  const dict = TRANSLATIONS[lang] || TRANSLATIONS.ar;
+  const isFr = lang === 'fr';
+
+  // Set html properties
+  document.documentElement.lang = lang;
+  document.documentElement.dir = isFr ? 'ltr' : 'rtl';
+
+  // Apply language class to body
+  if (isFr) {
+    document.body.classList.add('lang-fr');
+    document.body.classList.remove('lang-ar');
+  } else {
+    document.body.classList.add('lang-ar');
+    document.body.classList.remove('lang-fr');
+  }
+
+  // Translate static texts
+  document.querySelectorAll('[data-tr]').forEach(el => {
+    const key = el.getAttribute('data-tr');
+    if (dict[key]) {
+      el.textContent = dict[key];
+    }
+  });
+
+  // Translate placeholders
+  document.querySelectorAll('[data-tr-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-tr-placeholder');
+    if (dict[key]) {
+      el.setAttribute('placeholder', dict[key]);
+    }
+  });
+
+  // Update circular text path around wax seal
+  const circularText = document.querySelector('.seal-text-svg textPath');
+  if (circularText) {
+    circularText.textContent = isFr
+      ? 'Cliquez pour ouvrir l\'invitation ✦ Cliquez pour ouvrir ✦'
+      : 'اضغط لفتح الدعوة ✦ اضغط لفتح الدعوة ✦';
   }
 }
 

@@ -743,7 +743,7 @@ body:not(.env-open) {
   gap: 10px;
   width: 100%;
   max-width: 340px;
-  direction: rtl;
+  direction: inherit;
 }
 
 .cd-unit {
@@ -1217,3 +1217,35 @@ body:not(.env-open) {
   transform: translateY(-2px);
   border-color: rgba(201,168,76,0.3);
 }
+
+/* ── French Language Overrides ── */
+body.lang-fr .wish-item {
+  text-align: left;
+}
+
+body.lang-fr .tl-left-cell {
+  text-align: right;
+  align-items: flex-end;
+}
+
+body.lang-fr .tl-right-cell {
+  text-align: left;
+  align-items: flex-start;
+}
+
+body.lang-fr .timeline-item:nth-child(even) .tl-left-cell {
+  text-align: left;
+  align-items: flex-start;
+}
+
+body.lang-fr .timeline-item:nth-child(even) .tl-right-cell {
+  text-align: right;
+  align-items: flex-end;
+}
+
+/* ── Monogram Styling ── */
+#seal-monogram-text {
+  text-shadow: 0 2px 4px rgba(74,44,10,0.4);
+  font-weight: 700;
+}
+
