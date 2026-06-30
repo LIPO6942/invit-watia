@@ -244,7 +244,98 @@
       </div><!-- /wedding-content -->
     </div><!-- /env-card -->
 
-    <!-- ─── Envelope Panels (left & right flaps, drawn with CSS) ─── -->
+    <!-- ─── Envelope Face Decorations ─── -->
+
+    <!-- ① Corner Ornaments (filigree) -->
+    <svg class="env-corner env-corner-tl" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4,4 L30,4" stroke="#c9a84c" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M4,4 L4,30" stroke="#c9a84c" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M4,4 Q28,4 28,28" stroke="#c9a84c" stroke-width="1" stroke-dasharray="3,3" opacity="0.6"/>
+      <circle cx="4" cy="4" r="3.5" fill="#c9a84c" opacity="0.8"/>
+      <circle cx="28" cy="14" r="2" fill="#c9a84c" opacity="0.5"/>
+      <circle cx="14" cy="28" r="2" fill="#c9a84c" opacity="0.5"/>
+      <path d="M16,4 Q22,10 16,16 Q10,22 16,28" fill="none" stroke="#c9a84c" stroke-width="1" opacity="0.5"/>
+    </svg>
+    <svg class="env-corner env-corner-tr" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform:scaleX(-1)">
+      <path d="M4,4 L30,4" stroke="#c9a84c" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M4,4 L4,30" stroke="#c9a84c" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M4,4 Q28,4 28,28" stroke="#c9a84c" stroke-width="1" stroke-dasharray="3,3" opacity="0.6"/>
+      <circle cx="4" cy="4" r="3.5" fill="#c9a84c" opacity="0.8"/>
+      <circle cx="28" cy="14" r="2" fill="#c9a84c" opacity="0.5"/>
+      <circle cx="14" cy="28" r="2" fill="#c9a84c" opacity="0.5"/>
+      <path d="M16,4 Q22,10 16,16 Q10,22 16,28" fill="none" stroke="#c9a84c" stroke-width="1" opacity="0.5"/>
+    </svg>
+    <svg class="env-corner env-corner-bl" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform:scaleY(-1)">
+      <path d="M4,4 L30,4" stroke="#c9a84c" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M4,4 L4,30" stroke="#c9a84c" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M4,4 Q28,4 28,28" stroke="#c9a84c" stroke-width="1" stroke-dasharray="3,3" opacity="0.6"/>
+      <circle cx="4" cy="4" r="3.5" fill="#c9a84c" opacity="0.8"/>
+      <circle cx="28" cy="14" r="2" fill="#c9a84c" opacity="0.5"/>
+      <circle cx="14" cy="28" r="2" fill="#c9a84c" opacity="0.5"/>
+      <path d="M16,4 Q22,10 16,16 Q10,22 16,28" fill="none" stroke="#c9a84c" stroke-width="1" opacity="0.5"/>
+    </svg>
+    <svg class="env-corner env-corner-br" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform:scale(-1,-1)">
+      <path d="M4,4 L30,4" stroke="#c9a84c" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M4,4 L4,30" stroke="#c9a84c" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M4,4 Q28,4 28,28" stroke="#c9a84c" stroke-width="1" stroke-dasharray="3,3" opacity="0.6"/>
+      <circle cx="4" cy="4" r="3.5" fill="#c9a84c" opacity="0.8"/>
+      <circle cx="28" cy="14" r="2" fill="#c9a84c" opacity="0.5"/>
+      <circle cx="14" cy="28" r="2" fill="#c9a84c" opacity="0.5"/>
+      <path d="M16,4 Q22,10 16,16 Q10,22 16,28" fill="none" stroke="#c9a84c" stroke-width="1" opacity="0.5"/>
+    </svg>
+
+    <!-- ② Calligraphy Names Banner (top center) -->
+    <div class="env-names-banner">
+      <div class="env-banner-ornament">❧</div>
+      <div class="env-banner-names font-amiri">
+        <span class="env-banner-groom" data-cfg="groomAr">مرتضى</span>
+        <span class="env-banner-amp"> &amp; </span>
+        <span class="env-banner-bride" data-cfg="brideAr">مريم</span>
+      </div>
+      <div class="env-banner-ornament" style="transform:scaleX(-1)">❧</div>
+    </div>
+
+    <!-- ③ Horizontal dividers (golden dashed lines) -->
+    <div class="env-divider-top"></div>
+    <div class="env-divider-bottom"></div>
+
+    <!-- ④ Radiating rays from center (behind seal) -->
+    <svg class="env-rays" viewBox="0 0 430 760" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="rayGrad" cx="50%" cy="50%">
+          <stop offset="0%"   stop-color="#c9a84c" stop-opacity="0.18"/>
+          <stop offset="100%" stop-color="#c9a84c" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <!-- 12 rays evenly spaced -->
+      <line x1="215" y1="380" x2="215" y2="0"   stroke="url(#rayGrad)" stroke-width="28"/>
+      <line x1="215" y1="380" x2="215" y2="760"  stroke="url(#rayGrad)" stroke-width="28"/>
+      <line x1="215" y1="380" x2="0"   y2="380"  stroke="url(#rayGrad)" stroke-width="28"/>
+      <line x1="215" y1="380" x2="430" y2="380"  stroke="url(#rayGrad)" stroke-width="28"/>
+      <line x1="215" y1="380" x2="0"   y2="165"  stroke="url(#rayGrad)" stroke-width="18"/>
+      <line x1="215" y1="380" x2="430" y2="165"  stroke="url(#rayGrad)" stroke-width="18"/>
+      <line x1="215" y1="380" x2="0"   y2="595"  stroke="url(#rayGrad)" stroke-width="18"/>
+      <line x1="215" y1="380" x2="430" y2="595"  stroke="url(#rayGrad)" stroke-width="18"/>
+      <line x1="215" y1="380" x2="90"  y2="55"   stroke="url(#rayGrad)" stroke-width="12"/>
+      <line x1="215" y1="380" x2="340" y2="55"   stroke="url(#rayGrad)" stroke-width="12"/>
+      <line x1="215" y1="380" x2="90"  y2="705"  stroke="url(#rayGrad)" stroke-width="12"/>
+      <line x1="215" y1="380" x2="340" y2="705"  stroke="url(#rayGrad)" stroke-width="12"/>
+    </svg>
+
+    <!-- ⑤ Floating golden dust particles (6 particles per half) -->
+    <div class="env-dust-layer" id="envDustLayer">
+      <div class="env-dust" style="left:18%;top:22%;animation-delay:0s;animation-duration:6s"></div>
+      <div class="env-dust" style="left:75%;top:15%;animation-delay:1.2s;animation-duration:7.5s"></div>
+      <div class="env-dust" style="left:32%;top:68%;animation-delay:2.4s;animation-duration:5.5s"></div>
+      <div class="env-dust" style="left:82%;top:72%;animation-delay:0.7s;animation-duration:8s"></div>
+      <div class="env-dust" style="left:60%;top:40%;animation-delay:3.1s;animation-duration:6.5s"></div>
+      <div class="env-dust" style="left:12%;top:55%;animation-delay:1.8s;animation-duration:7s"></div>
+      <div class="env-dust env-dust-lg" style="left:48%;top:20%;animation-delay:4s;animation-duration:9s"></div>
+      <div class="env-dust env-dust-lg" style="left:22%;top:80%;animation-delay:2s;animation-duration:8.5s"></div>
+      <div class="env-dust env-dust-lg" style="left:78%;top:50%;animation-delay:5s;animation-duration:7.2s"></div>
+    </div>
+
+    <!-- ─── Envelope Panels (left & right flaps) ─── -->
     <div class="env-panel left-panel" id="leftPanel">
       <!-- Motif 1: Floral (Branches) -->
       <svg class="panel-branches" viewBox="0 0 200 600" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -272,7 +363,7 @@
         <line x1="18" y1="50" x2="18" y2="550" stroke="#c9a84c" stroke-width="1" stroke-dasharray="4,4"/>
         <line x1="24" y1="40" x2="24" y2="560" stroke="#c9a84c" stroke-width="1.5"/>
         <circle cx="24" cy="300" r="14" fill="none" stroke="#c9a84c" stroke-width="1.8"/>
-        <circle cx="24" cy="300" r="8" fill="none" stroke="#c9a84c" stroke-width="1"/>
+        <circle cx="24" cy="300" r="8"  fill="none" stroke="#c9a84c" stroke-width="1"/>
         <path d="M24,280 L24,320 M4,300 L44,300" stroke="#c9a84c" stroke-width="1.2"/>
         <path d="M24,150 Q36,150 24,162 Q12,150 24,150 Z" fill="#c9a84c" opacity="0.6"/>
         <path d="M24,450 Q36,450 24,462 Q12,450 24,450 Z" fill="#c9a84c" opacity="0.6"/>
@@ -305,7 +396,7 @@
         <line x1="18" y1="50" x2="18" y2="550" stroke="#c9a84c" stroke-width="1" stroke-dasharray="4,4"/>
         <line x1="24" y1="40" x2="24" y2="560" stroke="#c9a84c" stroke-width="1.5"/>
         <circle cx="24" cy="300" r="14" fill="none" stroke="#c9a84c" stroke-width="1.8"/>
-        <circle cx="24" cy="300" r="8" fill="none" stroke="#c9a84c" stroke-width="1"/>
+        <circle cx="24" cy="300" r="8"  fill="none" stroke="#c9a84c" stroke-width="1"/>
         <path d="M24,280 L24,320 M4,300 L44,300" stroke="#c9a84c" stroke-width="1.2"/>
         <path d="M24,150 Q36,150 24,162 Q12,150 24,150 Z" fill="#c9a84c" opacity="0.6"/>
         <path d="M24,450 Q36,450 24,462 Q12,450 24,450 Z" fill="#c9a84c" opacity="0.6"/>
@@ -314,6 +405,20 @@
 
     <!-- ─── Gold Seal ─── -->
     <div class="seal-wrapper" id="sealWrapper">
+
+      <!-- ⑥ Sparkles ring (8 animated stars around seal) -->
+      <div class="seal-halo"></div>
+      <div class="seal-sparkles">
+        <div class="sparkle sp-1">✦</div>
+        <div class="sparkle sp-2">✦</div>
+        <div class="sparkle sp-3">✦</div>
+        <div class="sparkle sp-4">✦</div>
+        <div class="sparkle sp-5">·</div>
+        <div class="sparkle sp-6">·</div>
+        <div class="sparkle sp-7">✦</div>
+        <div class="sparkle sp-8">·</div>
+      </div>
+
       <div class="seal" id="seal" onclick="openEnvelopeNow()">
         <svg class="seal-svg" viewBox="0 0 200 200">
           <!-- Outer rings -->
@@ -332,7 +437,7 @@
 
           <!-- Seal Symbol 2: Intertwined Rings -->
           <g id="seal-symbol-rings" style="display:none">
-            <circle cx="85" cy="100" r="22" fill="none" stroke="rgba(255,248,220,0.9)" stroke-width="4"/>
+            <circle cx="85"  cy="100" r="22" fill="none" stroke="rgba(255,248,220,0.9)" stroke-width="4"/>
             <rect x="79" y="74" width="12" height="6" fill="rgba(255,248,220,0.9)" transform="rotate(-15 85 100)"/>
             <circle cx="115" cy="100" r="22" fill="none" stroke="rgba(255,248,220,0.9)" stroke-width="4"/>
             <rect x="109" y="74" width="12" height="6" fill="rgba(255,248,220,0.9)" transform="rotate(15 115 100)"/>
@@ -340,7 +445,7 @@
 
           <!-- Seal Symbol 3: Initials Monogram -->
           <g id="seal-symbol-monogram" style="display:none">
-            <text x="100" y="112" font-family="'Amiri', serif" font-size="34" font-weight="bold" fill="rgba(255,248,220,0.9)" text-anchor="middle" id="seal-monogram-text">M & M</text>
+            <text x="100" y="112" font-family="'Amiri', serif" font-size="34" font-weight="bold" fill="rgba(255,248,220,0.9)" text-anchor="middle" id="seal-monogram-text">M &amp; M</text>
           </g>
 
           <!-- Seal Symbol 4: Bismillah / Islamic Ornament -->
@@ -353,13 +458,13 @@
           <circle cx="100" cy="100" r="5" fill="rgba(255,248,220,0.7)"/>
           <defs>
             <radialGradient id="sealOuter" cx="40%" cy="35%">
-              <stop offset="0%" stop-color="#FCF6BA"/>
-              <stop offset="45%" stop-color="#BF953F"/>
+              <stop offset="0%"   stop-color="#FCF6BA"/>
+              <stop offset="45%"  stop-color="#BF953F"/>
               <stop offset="100%" stop-color="#7a4a00"/>
             </radialGradient>
             <radialGradient id="sealInner" cx="40%" cy="35%">
-              <stop offset="0%" stop-color="#e8cc7a"/>
-              <stop offset="60%" stop-color="#B38728"/>
+              <stop offset="0%"   stop-color="#e8cc7a"/>
+              <stop offset="60%"  stop-color="#B38728"/>
               <stop offset="100%" stop-color="#6a3800"/>
             </radialGradient>
           </defs>
@@ -380,6 +485,7 @@
 
   </div><!-- /invitation -->
 </div><!-- /envelope-section -->
+
 
 <!-- ══ MAP MODAL ══ -->
 <div id="map-modal">
