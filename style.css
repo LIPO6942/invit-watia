@@ -19,6 +19,47 @@
   --gold-grad: linear-gradient(135deg, #FCF6BA 0%, #BF953F 40%, #FBF5B7 60%, #AA771C 80%, #c9a84c 100%);
 }
 
+/* ─────── Theme Pink (Rose Poudré) ─────── */
+body.theme-pink {
+  --gold:        #d48a82;
+  --gold-light:  #f5dedc;
+  --gold-dark:   #9c4e46;
+  --cream:       #fefaf8;
+  --ivory:       #fbf1ef;
+  --brown:       #3e1814;
+  --brown-mid:   #692f29;
+  --brown-light: #8e4941;
+  --shadow: 0 4px 20px rgba(62,24,20,0.25);
+  --gold-grad: linear-gradient(135deg, #fce4e2 0%, #c48078 40%, #fadbd8 60%, #9e4c43 80%, #d48a82 100%);
+}
+body.theme-pink, 
+body.theme-pink #envelope-section {
+  background: radial-gradient(ellipse at 40% 30%, #57201a 0%, #300f0b 60%, #1a0503 100%);
+}
+body.theme-pink .left-panel {
+  background: linear-gradient(135deg, #fefaf8 0%, #f7eae7 100%);
+}
+
+/* ─────── Theme Emerald (Vert Émeraude) ─────── */
+body.theme-emerald {
+  --gold:        #c9a84c; /* Gold accents fit perfectly with emerald green */
+  --gold-light:  #f5e6c0;
+  --gold-dark:   #8a6000;
+  --cream:       #f5f9f6;
+  --ivory:       #eaf2ec;
+  --brown:       #051d11;
+  --brown-mid:   #0d3621;
+  --brown-light: #165333;
+  --shadow: 0 4px 20px rgba(5,29,17,0.25);
+}
+body.theme-emerald,
+body.theme-emerald #envelope-section {
+  background: radial-gradient(ellipse at 40% 30%, #0d3621 0%, #061f12 60%, #020b06 100%);
+}
+body.theme-emerald .left-panel {
+  background: linear-gradient(135deg, #f5f9f6 0%, #dbeae0 100%);
+}
+
 html, body {
   width: 100%; height: 100%;
   overflow-x: hidden;
@@ -52,6 +93,8 @@ body {
   background: var(--cream);
   overflow: hidden;
   box-shadow: 0 0 60px rgba(0,0,0,0.7);
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 /* The card that holds wedding content — initially hidden below panels */
@@ -896,4 +939,60 @@ body {
     left: 50%;
     max-width: 130px;
   }
+}
+
+/* ─────── 12. Guestbook Styling ─────── */
+.guestbook-input, .guestbook-textarea {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid rgba(201, 168, 76, 0.25);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--brown);
+  font-family: inherit;
+  font-size: 0.95rem;
+  text-align: right;
+  margin-bottom: 12px;
+  transition: all 0.2s;
+}
+.guestbook-input:focus, .guestbook-textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+  background: white;
+  box-shadow: 0 0 8px rgba(201, 168, 76, 0.2);
+}
+.guestbook-submit-btn {
+  width: 100%;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  font-size: 1rem;
+  box-shadow: 0 4px 10px rgba(201, 168, 76, 0.25);
+}
+.guestbook-submit-btn:active {
+  transform: scale(0.98);
+}
+.wish-item {
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 14px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.85);
+  border: 1px solid rgba(201,168,76,0.15);
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  text-align: right;
+  transition: transform 0.2s;
+}
+.wish-item:hover {
+  transform: translateY(-2px);
+  border-color: rgba(201,168,76,0.3);
 }

@@ -96,6 +96,11 @@ function loadConfigFromURL() {
         if (cfg.wd) _weddingDateTime = cfg.wd;
         applyConfigToDOM(cfg);
         if (cfg.ev && cfg.ev.length) rebuildTimelineFromConfig(cfg.ev);
+        
+        // Apply theme color
+        if (cfg.th && cfg.th !== 'gold') {
+          document.body.classList.add('theme-' + cfg.th);
+        }
 
         /* Atomic counter increment */
         _db.collection('invitations').doc(invSlug).update({
@@ -143,6 +148,11 @@ function loadConfigFromURL() {
         if (cfg.wd) _weddingDateTime = cfg.wd;
         applyConfigToDOM(cfg);
         if (cfg.ev && cfg.ev.length) rebuildTimelineFromConfig(cfg.ev);
+        
+        // Apply theme color
+        if (cfg.th && cfg.th !== 'gold') {
+          document.body.classList.add('theme-' + cfg.th);
+        }
       } catch (e) {}
     }
   }
@@ -565,13 +575,178 @@ document.addEventListener('click', () => {
 }, { once: false });
 
 /* ────────────────────────────────────────────────
+   3D TILT EFFECT ON ENVELOPE
+   ──────────────────────────────────────────────── */
+function init3DTilt() {
+  const envelopeSection = document.getElementById('envelope-section');
+  const invitation = document.getElementById('invitation');
+  if (!envelopeSection || !invitation) return;
+
+  let isMouseOver = false;
+
+  function applyTilt(xVal, yVal) {
+    if (invitation.classList.contains('open')) {
+      invitation.style.transform = 'none';
+      return;
+    }
+    const xRotate = (yVal * -12).toFixed(2);
+    const yRotate = (xVal * 12).toFixed(2);
+    invitation.style.transform = `perspective(1000px) rotateX(${xRotate}deg) rotateY(${yRotate}deg)`;
+    invitation.style.transition = 'transform 0.1s ease';
+  }
+
+  envelopeSection.addEventListener('mousemove', e => {
+    isMouseOver = true;
+    const rect = envelopeSection.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const xNorm = (x / rect.width) * 2 - 1;
+    const yNorm = (y / rect.height) * 2 - 1;
+    
+    applyTilt(xNorm, yNorm);
+  });
+
+  envelopeSection.addEventListener('mouseleave', () => {
+    isMouseOver = false;
+    if (!invitation.classList.contains('open')) {
+      invitation.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+      invitation.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
+    }
+  });
+
+  window.addEventListener('deviceorientation', e => {
+    if (isMouseOver || invitation.classList.contains('open')) return;
+    
+    let beta = e.beta;
+    let gamma = e.gamma;
+    
+    if (beta === null || gamma === null) return;
+    
+    const targetBeta = 45;
+    let bDiff = (beta - targetBeta) / 25;
+    let gDiff = gamma / 20;
+    
+    bDiff = Math.max(-1, Math.min(1, bDiff));
+    gDiff = Math.max(-1, Math.min(1, gDiff));
+    
+    applyTilt(gDiff, bDiff);
+  }, true);
+}
+
+/* ────────────────────────────────────────────────
+   GUESTBOOK / WISHES SYSTEM
+   ──────────────────────────────────────────────── */
+window.submitWish = function() {
+  const nameInput = document.getElementById('gb-name');
+  const messageInput = document.getElementById('gb-message');
+  if (!nameInput || !messageInput) return;
+
+  const name = nameInput.value.trim();
+  const msg = messageInput.value.trim();
+  if (!name || !msg) {
+    alert('الرجاء كتابة الاسم والتهنئة 🌹');
+    return;
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const invSlug = params.get('inv');
+
+  if (!invSlug) {
+    // Local preview fallback
+    const localWish = { name, message: msg, timestamp: new Date().toISOString() };
+    allWishes.unshift(localWish);
+    renderWishesScroller();
+    nameInput.value = '';
+    messageInput.value = '';
+    alert('تم إرسال تهنئتك بنجاح (معاينة محلية) ✨');
+    return;
+  }
+
+  initFirebase();
+  _db.collection('invitations').doc(invSlug).update({
+    wishes: firebase.firestore.FieldValue.arrayUnion({
+      name: name,
+      message: msg,
+      timestamp: new Date().toISOString()
+    })
+  })
+  .then(() => {
+    nameInput.value = '';
+    messageInput.value = '';
+    alert('شكراً لك! تم إرسال تهنئتك بنجاح للعروسين ✨');
+    loadAllWishes();
+  })
+  .catch(err => {
+    console.error('Failed to submit wish:', err);
+    alert('عذراً، حدث خطأ أثناء إرسال التهنئة. الرجاء المحاولة مرة أخرى.');
+  });
+};
+
+let allWishes = [];
+let wishesInterval = null;
+
+function loadAllWishes() {
+  initFirebase();
+  _db.collection('invitations').get()
+    .then(snapshot => {
+      let wishes = [];
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        if (doc.id !== 'settings' && data.wishes && Array.isArray(data.wishes)) {
+          data.wishes.forEach(w => {
+            wishes.push(w);
+          });
+        }
+      });
+
+      // Sort by date descending
+      wishes.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      allWishes = wishes;
+      renderWishesScroller();
+    })
+    .catch(err => console.error('Failed to load wishes:', err));
+}
+
+function renderWishesScroller() {
+  const scroller = document.getElementById('wishes-scroller');
+  if (!scroller) return;
+
+  if (allWishes.length === 0) {
+    scroller.innerHTML = `<div style="padding: 20px; font-style: italic; color: var(--brown-light); text-align: center;">كن أول من يكتب تهنئة للعروسين 🌹</div>`;
+    return;
+  }
+
+  scroller.innerHTML = allWishes.map(w => `
+    <div class="wish-item">
+      <div style="font-weight: bold; color: var(--brown); font-size: 0.95rem; margin-bottom: 4px;">👤 ${w.name}</div>
+      <div style="color: var(--brown-mid); font-size: 0.85rem; line-height: 1.35; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">"${w.message}"</div>
+    </div>
+  `).join('');
+
+  clearInterval(wishesInterval);
+  if (allWishes.length <= 1) return;
+
+  let index = 0;
+  wishesInterval = setInterval(() => {
+    index = (index + 1) % allWishes.length;
+    scroller.style.top = `-${index * 132}px`;
+  }, 4000);
+}
+
+/* ────────────────────────────────────────────────
    BOOTSTRAP — runs once DOM is ready
-──────────────────────────────────────────────── */
+   ──────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Read URL config and apply to DOM (names, dates, events)
   loadConfigFromURL();
 
   // 2. Init timeline reveal for default (non-config) items
   initTimelineReveal();
-});
 
+  // 3. Init 3D Tilt Effect on envelope
+  init3DTilt();
+
+  // 4. Load Guestbook wishes
+  loadAllWishes();
+});

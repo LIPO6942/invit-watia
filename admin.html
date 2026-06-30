@@ -129,6 +129,23 @@
           <div class="field"><label>Prénom en français</label><input id="brideFr" type="text" value="Mariam" dir="ltr"></div>
         </div>
       </div>
+      <div class="card">
+        <div class="card-title">🎨 ثيم الألوان (Theme)</div>
+        <div style="display:flex;gap:12px;margin-top:10px">
+          <div class="theme-card selected" data-theme="gold" onclick="selectTheme('gold')" style="flex:1;text-align:center;padding:12px;border:2px solid var(--gold);border-radius:8px;cursor:pointer;background:rgba(0,0,0,0.3)">
+            <div style="font-size:1.5rem">👑</div>
+            <div style="font-size:0.85rem;margin-top:4px;color:white;font-weight:700">ذهبي كلاسيكي</div>
+          </div>
+          <div class="theme-card" data-theme="pink" onclick="selectTheme('pink')" style="flex:1;text-align:center;padding:12px;border:1px solid var(--border);border-radius:8px;cursor:pointer;background:rgba(0,0,0,0.3)">
+            <div style="font-size:1.5rem">🌸</div>
+            <div style="font-size:0.85rem;margin-top:4px;color:white;font-weight:700">وردي بودرة</div>
+          </div>
+          <div class="theme-card" data-theme="emerald" onclick="selectTheme('emerald')" style="flex:1;text-align:center;padding:12px;border:1px solid var(--border);border-radius:8px;cursor:pointer;background:rgba(0,0,0,0.3)">
+            <div style="font-size:1.5rem">🍃</div>
+            <div style="font-size:0.85rem;margin-top:4px;color:white;font-weight:700">أخضر زمردي</div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- ▸ PAGE 2 — Families -->
@@ -267,6 +284,23 @@ const INVITATION_FILE = 'index.html'; // relative path
 let selectedPack   = 100;
 let _shortUrl      = '';
 let _longUrl       = '';
+window._selectedTheme = 'gold';
+
+function selectTheme(name) {
+  window._selectedTheme = name;
+  document.querySelectorAll('.theme-card').forEach(card => {
+    if (card.dataset.theme === name) {
+      card.classList.add('selected');
+      card.style.borderColor = 'var(--gold)';
+      card.style.borderWidth = '2px';
+    } else {
+      card.classList.remove('selected');
+      card.style.borderColor = 'var(--border)';
+      card.style.borderWidth = '1px';
+    }
+  });
+  saveAll();
+}
 
 // ── Helpers: Unicode-safe base64 (kept for local fallback preview) ──
 function toB64(str) {
@@ -368,6 +402,7 @@ function buildConfig() {
   // Use COMPACT short keys to minimize URL length
   return {
     v:  1,                   // version
+    th: window._selectedTheme || 'gold', // theme
     ga: val('groomAr'),
     gf2:val('groomFr'),
     gf: val('groomFather'),
@@ -432,6 +467,22 @@ function applyConfigToFields(c) {
   set('brideMother',       c.bm  || '');
   set('weddingDate',       c.wd  || '');
   set('weddingDateDisplay',c.wdd || '');
+  
+  if (c.th) {
+    window._selectedTheme = c.th;
+    document.querySelectorAll('.theme-card').forEach(card => {
+      if (card.dataset.theme === c.th) {
+        card.classList.add('selected');
+        card.style.borderColor = 'var(--gold)';
+        card.style.borderWidth = '2px';
+      } else {
+        card.classList.remove('selected');
+        card.style.borderColor = 'var(--border)';
+        card.style.borderWidth = '1px';
+      }
+    });
+  }
+
   if (c.ev) {
     window._adminEvents = c.ev.map(e => ({
       nameAr:   e.n, date: e.d, time: e.t, ampm: e.a,
@@ -644,7 +695,8 @@ async function renderLinksHistory() {
         id: doc.id,
         ps: data.pack || 100,
         guestName: data.guestName || 'عام',
-        created: data.created ? (data.created.toDate ? data.created.toDate().toISOString() : new Date(data.created).toISOString()) : new Date().toISOString()
+        created: data.created ? (data.created.toDate ? data.created.toDate().toISOString() : new Date(data.created).toISOString()) : new Date().toISOString(),
+        wishes: data.wishes || []
       });
     });
 
@@ -671,15 +723,33 @@ async function renderLinksHistory() {
 
     c.innerHTML = hist.map(h => {
       const url = `${base}?inv=${h.id}`;
+      
+      let wishesHTML = '';
+      if (h.wishes && h.wishes.length > 0) {
+        wishesHTML = `
+        <details style="margin-top:10px;background:rgba(255,255,255,0.04);border-radius:6px;padding:8px 12px;border:1px solid rgba(255,255,255,0.05)">
+          <summary style="font-size:0.75rem;color:var(--gold-light);cursor:pointer;user-select:none">💬 عرض التهاني (${h.wishes.length}) ▾</summary>
+          <div style="margin-top:6px;font-size:0.78rem;color:var(--text-muted);display:flex;flex-direction:column;gap:8px">
+            ${h.wishes.map(w => `
+              <div style="border-bottom:1px solid rgba(255,255,255,0.05);padding-bottom:6px">
+                <strong>${w.name}:</strong> "${w.message}"
+                <span style="font-size:0.65rem;display:block;color:rgba(255,255,255,0.3);margin-top:2px">📅 ${new Date(w.timestamp).toLocaleString('ar-TN')}</span>
+              </div>
+            `).join('')}
+          </div>
+        </details>`;
+      }
+
       return `
       <div class="link-history-item" id="lhi-${h.id}">
-        <div class="lh-info">
+        <div class="lh-info" style="width:100%">
           <div class="lh-pack" style="font-weight:700;color:var(--gold-light)">👤 الضيف: ${h.guestName}</div>
           <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px">معرّف الرابط: <span style="font-family:monospace;color:var(--gold)">${h.id}</span> · باقة: ${h.ps} مشاركة</div>
           <div id="ctr-${h.id}" style="margin:6px 0;font-size:0.8rem;color:var(--text-muted)">⏳ جاري تحميل الرصيد...</div>
           <div class="lh-date" style="font-size:0.7rem;color:rgba(255,255,255,0.4)">📅 ${new Date(h.created).toLocaleString('ar-TN')}</div>
+          ${wishesHTML}
         </div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;margin-top:8px">
+        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;margin-top:8px;width:100%">
           <button class="btn btn-outline" style="padding:4px 8px;font-size:0.72rem" onclick="quickCopy('${url}')">📋 نسخ</button>
           <button class="btn btn-ghost"   style="padding:4px 8px;font-size:0.72rem" onclick="shareHistLink('${url}')">💬 واتساب</button>
           <button class="btn btn-ghost"   style="padding:4px 8px;font-size:0.72rem;color:var(--gold)" onclick="updateLinkConfig('${h.id}')" title="تحديث هذه الدعوة بالبيانات الحالية للنموذج">🔄 تحديث</button>

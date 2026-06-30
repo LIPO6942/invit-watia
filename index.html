@@ -212,6 +212,26 @@
           </div>
         </section>
 
+        <!-- ── GUESTBOOK SECTION ── -->
+        <section class="w-section" id="guestbook-section" style="padding: 40px 24px; text-align: center; border-top: 1px solid rgba(201,168,76,0.15); background: rgba(255,248,240,0.45)">
+          <div class="section-title font-amiri" style="font-size: 2rem; color: var(--gold); margin-bottom: 8px">دفتر التهاني</div>
+          <div class="section-subtitle font-amiri" style="color: var(--brown-mid); margin-bottom: 24px">شاركونا فرحتنا بكلمة طيبة للعروسين</div>
+          
+          <!-- Submit Wish form -->
+          <div class="guestbook-form" style="max-width: 360px; margin: 0 auto; background: rgba(255,255,255,0.7); padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid rgba(201,168,76,0.2)">
+            <input type="text" id="gb-name" class="guestbook-input" placeholder="اسمك الكريم" required autocomplete="name">
+            <textarea id="gb-message" class="guestbook-textarea" placeholder="أكتب تهنئتك هنا..." rows="3" required></textarea>
+            <button class="guestbook-submit-btn" onclick="submitWish()">إرسال التهنئة ✨</button>
+          </div>
+
+          <!-- List of Wishes -->
+          <div id="wishes-carousel-container" style="margin-top: 30px; max-width: 360px; margin-left: auto; margin-right: auto; position: relative; overflow: hidden; height: 130px;">
+            <div id="wishes-scroller" style="position: absolute; width: 100%; top: 0; left: 0; transition: top 0.5s ease-in-out;">
+              <!-- Wishes items will slide here -->
+            </div>
+          </div>
+        </section>
+
         <!-- ── CLOSING ── -->
         <section id="closing-section">
           <div class="closing-shimmer"></div>
