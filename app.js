@@ -220,13 +220,55 @@ function loadConfigFromURL() {
 /**
  * Rebuilds the #timeline div from the ev[] array in config.
  */
+function getTimelineIcon(eventName) {
+  const name = (eventName || '').toLowerCase();
+  
+  if (name.includes('عقد') || name.includes('💍') || name.includes('mariage') || name.includes('alliance') || name.includes('signature') || name.includes('ceremony')) {
+    return `<svg class="timeline-custom-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="26" cy="38" r="14" />
+      <circle cx="42" cy="28" r="14" />
+      <path d="M42,10 C41,8 39,8 38,9 C37,10 37,12 39,14 L42,17 L45,14 C47,12 47,10 46,9 C45,8 43,8 42,10 Z" fill="#2c2c2c" stroke="#2c2c2c" stroke-width="1" />
+    </svg>`;
+  }
+  
+  if (name.includes('استقبال') || name.includes('ضيوف') || name.includes('reception') || name.includes('cocktail') || name.includes('سهرة') || name.includes('party') || name.includes('🏡') || name.includes('dinner') || name.includes('عشاء') || name.includes('مأدبة')) {
+    return `<svg class="timeline-custom-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M16,14 L48,14 L32,38 Z" />
+      <line x1="32" y1="38" x2="32" y2="54" />
+      <line x1="20" y1="54" x2="44" y2="54" />
+      <circle cx="48" cy="14" r="6" fill="none" />
+      <line x1="48" y1="8" x2="48" y2="20" />
+      <line x1="42" y1="14" x2="54" y2="14" />
+      <line x1="21" y1="22" x2="43" y2="22" />
+    </svg>`;
+  }
+  
+  if (name.includes('تصوير') || name.includes('جلسة') || name.includes('photo') || name.includes('camera') || name.includes('📷')) {
+    return `<svg class="timeline-custom-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="10" y="20" width="44" height="30" rx="4" />
+      <path d="M22,20 L24,14 L40,14 L42,20" />
+      <circle cx="48" cy="26" r="2" fill="currentColor" />
+      <circle cx="32" cy="35" r="10" />
+      <circle cx="32" cy="35" r="5" />
+    </svg>`;
+  }
+  
+  // Fallback calendar
+  return `<svg class="timeline-custom-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="12" y="14" width="40" height="40" rx="4" />
+    <line x1="12" y1="24" x2="52" y2="24" />
+    <line x1="22" y1="10" x2="22" y2="18" />
+    <line x1="42" y1="10" x2="42" y2="18" />
+  </svg>`;
+}
+
 function rebuildTimelineFromConfig(events) {
   const timeline = document.getElementById('timeline');
   if (!timeline) return;
   const pinIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`;
   timeline.innerHTML = events.map((ev, i) => {
     const isEven  = i % 2 === 0;
-    const iconSVG = `<svg class="tl-icon-svg" viewBox="0 0 60 60"><circle cx="30" cy="30" r="28" fill="none" stroke="url(#g1)" stroke-width="1.5"/><text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" font-size="26" fill="#c9a84c">${ev.e||'🎉'}</text></svg>`;
+    const iconHTML = getTimelineIcon(ev.n);
     const infoHTML = `
       <span class="tl-date">${ev.d||''}</span>
       <div class="tl-event font-amiri">${ev.n||''}</div>
@@ -238,9 +280,9 @@ function rebuildTimelineFromConfig(events) {
            data-location="${ev.l||''}"
            data-lat="${ev.la||''}"
            data-lng="${ev.lo||""}">
-        <div class="tl-left-cell">${isEven ? infoHTML : iconSVG}</div>
+        <div class="tl-left-cell">${isEven ? infoHTML : iconHTML}</div>
         <div class="tl-dot-wrapper"><div class="tl-dot"></div></div>
-        <div class="tl-right-cell">${isEven ? iconSVG : infoHTML}</div>
+        <div class="tl-right-cell">${isEven ? iconHTML : infoHTML}</div>
       </div>`;
   }).join('');
   // Re-attach observers after rebuild

@@ -234,16 +234,15 @@ body:not(.env-open) {
   height: 108px;
   cursor: pointer;
   border-radius: 50%;
-  /* Rich dark wax base so multiply blend shows seal correctly */
-  background: radial-gradient(circle at 38% 32%,
-    #8b5c18 0%, #6b3f0c 40%, #4a2805 70%, #2e1803 100%);
-  border: 3px solid #c9a84c;
+  /* Rich gold wax background */
+  background: radial-gradient(circle at 38% 32%, #fffaf0 0%, #f6e3b5 45%, #d1aa4e 85%, #876011 100%);
+  border: 3.5px solid #c9a84c;
   box-shadow:
-    0 10px 30px rgba(30,10,0,0.65),
-    inset 0 3px 10px rgba(255,210,80,0.25),
-    inset 0 -4px 10px rgba(0,0,0,0.45),
-    0 0 0 5px rgba(201,168,76,0.30),
-    0 0 0 8px rgba(201,168,76,0.12);
+    0 10px 30px rgba(74,44,10,0.45),
+    inset 0 3px 8px rgba(255,255,255,0.7),
+    inset 0 -3px 8px rgba(0,0,0,0.2),
+    0 0 0 5px rgba(201,168,76,0.2),
+    0 0 0 8px rgba(201,168,76,0.08);
   animation: sealPulse 2.8s ease-in-out infinite;
   position: relative;
   z-index: 2;
@@ -259,9 +258,8 @@ body:not(.env-open) {
   height: 100%;
   object-fit: cover;
   display: block;
-  /* multiply removes white, keeps dark-colored wax design on dark bg */
-  mix-blend-mode: multiply;
-  filter: contrast(1.1) brightness(1.05);
+  /* SVG filter removes pure black backgrounds */
+  filter: url(#remove-black-mask);
 }
 
 
@@ -935,6 +933,16 @@ body:not(.env-open) {
 .timeline-item.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Asymmetrical columns on mobile screens to allow long addresses to lay out cleanly without aggressive word wrapping */
+@media (max-width: 480px) {
+  .timeline-item {
+    grid-template-columns: 1.5fr 30px 0.5fr !important;
+  }
+  .timeline-item:nth-child(even) {
+    grid-template-columns: 0.5fr 30px 1.5fr !important;
+  }
 }
 
 /* Vertical connecting line */
@@ -1652,6 +1660,17 @@ body.env-open .animated-divider {
   to {
     background-position: 200% center;
   }
+}
+
+.timeline-custom-icon {
+  width: clamp(38px, 11vw, 48px);
+  height: clamp(38px, 11vw, 48px);
+  color: #2c2c2c;
+  stroke-width: 1.5px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05));
+  display: block;
+  margin: 6px auto;
+  align-self: center;
 }
 
 
