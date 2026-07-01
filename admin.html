@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -1035,59 +1035,7 @@ function generateClientPassword(id) {
   showToast('🎲 تم توليد كلمة مرور جديدة! اضغط حفظ للتأكيد');
 }
 
-function quickCopy(url) { navigator.clipboard.writeText(url).then(() => showToast('📋 تم النسخ!')); }ابط الدعوة العام ▾</summary>'
-            + '<div style="font-family:monospace;font-size:0.69rem;color:#aaa;word-break:break-all;margin:6px 0">' + invUrl + '</div>'
-            + '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">'
-              + '<button class="btn btn-outline" style="padding:4px 8px;font-size:0.72rem" onclick="quickCopy(\'' + invUrl + '\')">📋 نسخ</button>'
-              + '<button class="btn btn-outline" style="padding:4px 8px;font-size:0.72rem;border-color:#3498db;color:#3498db" onclick="quickCopy(\'' + invUrl + '&view=groom\')">🤵 رابط العريس</button>'
-              + '<button class="btn btn-outline" style="padding:4px 8px;font-size:0.72rem;border-color:#e74c3c;color:#e74c3c" onclick="quickCopy(\'' + invUrl + '&view=bride\')">👰 رابط العروسة</button>'
-              + '<button class="btn btn-ghost" style="padding:4px 8px;font-size:0.72rem" onclick="shareHistLink(\'' + invUrl + '\')">💬 واتساب</button>'
-            + '</div>'
-          + '</details>'
-          + wishesHTML
-          // Admin actions
-          + '<div style="display:flex;gap:6px;justify-content:flex-end;padding-top:6px;border-top:1px solid rgba(255,255,255,0.05)">'
-            + '<button class="btn btn-ghost" style="padding:4px 8px;font-size:0.72rem;color:var(--gold)" onclick="updateLinkConfig(\'' + h.id + '\')">🔄 تحديث الدعوة</button>'
-            + '<button class="btn btn-ghost" style="padding:4px 8px;font-size:0.72rem;color:#e74c3c" onclick="deleteLink(\'' + h.id + '\')">🗑️ حذف</button>'
-          + '</div>'
-        + '</div>'
-      + '</div>';
-    }).join('');
-
-    hist.forEach(h => {
-      watchInvitation(h.id, data => updateCounter(h.id, data));
-    });
-
-  } catch (err) {
-    console.error('Error fetching invitations:', err);
-    c.innerHTML = '<div style="color:#e74c3c;font-size:0.82rem;text-align:center;padding:20px">❌ فشل تحميل الروابط من السيرفر</div>';
-  }
-}
-
-function updateCounter(slug, data) {
-  const el = document.getElementById('ctr-' + slug);
-  if (!el) return;
-  const used      = data.count || 0;
-  const pack      = data.pack  || 100;
-  const remaining = Math.max(0, pack - used);
-  const pct       = Math.min(100, Math.round((used / pack) * 100));
-  const color     = remaining === 0 ? '#e74c3c' : remaining < pack * 0.2 ? '#f39c12' : '#2ecc71';
-  el.innerHTML = `
-    <div>
-      👁 فُتح: <strong>${used}</strong> / ${pack} &nbsp;|&nbsp; متبقي: <strong style="color:${color}">${remaining}</strong>
-      <div style="height:5px;background:rgba(255,255,255,0.08);border-radius:3px;margin-top:4px;overflow:hidden">
-        <div style="width:${pct}%;height:5px;background:${color};border-radius:3px;transition:width 0.6s ease"></div>
-      </div>
-    </div>`;
-}
-
-function shareHistLink(url) {
-  const msg = encodeURIComponent('🌹 دعوة زفاف\n\n' + url);
-  window.open('https://wa.me/?text=' + msg, '_blank');
-}
-
-function quickCopy(url) { navigator.clipboard.writeText(url).then(() => showToast('📋 تم النسخ!')); }
-
+function quickCopy(url) { navigator.clipboard.writeText(url).then(() => showToast('\u{1F4CB} \u062A\u0645 \u0627\u0644\u0646\u0633\u062E!')); }
 async function updateLinkConfig(id) {
   if (!confirm(`هل أنت متأكد من تحديث تفاصيل الدعوة الخاصة بالرابط (${id}) بالبيانات الحالية للنموذج؟`)) return;
   try {
