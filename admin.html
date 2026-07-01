@@ -146,6 +146,43 @@
           </div>
         </div>
       </div>
+
+      <!-- ▸ Music Selection Card -->
+      <div class="card">
+        <div class="card-title">🎵 موسيقى الدعوة (Musique d'Ouverture)</div>
+        <div style="display:flex;gap:10px;margin-top:12px">
+
+          <!-- Option 1: Wedding March -->
+          <div id="mo-wedding_march" onclick="selectMusic('wedding_march')"
+               style="flex:1;padding:14px 10px;border:2px solid var(--gold);border-radius:10px;cursor:pointer;background:rgba(0,0,0,0.3);text-align:center;transition:all 0.2s">
+            <div style="font-size:1.6rem">🎻</div>
+            <div style="font-size:0.8rem;margin-top:6px;color:white;font-weight:700">Wedding March</div>
+            <div style="font-size:0.66rem;color:var(--text-muted);margin-top:2px">كلاسيكي غربي</div>
+            <button onclick="event.stopPropagation();previewMusic('wedding_march')"
+              style="margin-top:8px;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);color:var(--gold);border-radius:6px;padding:4px 10px;font-size:0.72rem;cursor:pointer;font-family:'Amiri',serif">
+              ▶ استماع
+            </button>
+            <audio id="preview-wedding_march" src="assets/wedding_march.mp3" preload="none"></audio>
+          </div>
+
+          <!-- Option 2: Ziad Gharsa -->
+          <div id="mo-ziad_gharsa" onclick="selectMusic('ziad_gharsa')"
+               style="flex:1;padding:14px 10px;border:1px solid var(--border);border-radius:10px;cursor:pointer;background:rgba(0,0,0,0.3);text-align:center;transition:all 0.2s">
+            <div style="font-size:1.6rem">🌙</div>
+            <div style="font-size:0.8rem;margin-top:6px;color:white;font-weight:700">إنزاد النبي وفرحنا بيه</div>
+            <div style="font-size:0.66rem;color:var(--text-muted);margin-top:2px">زياد غرسة</div>
+            <button onclick="event.stopPropagation();previewMusic('ziad_gharsa')"
+              style="margin-top:8px;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);color:var(--gold);border-radius:6px;padding:4px 10px;font-size:0.72rem;cursor:pointer;font-family:'Amiri',serif">
+              ▶ استماع
+            </button>
+            <audio id="preview-ziad_gharsa" src="assets/ziad_gharsa.mp3" preload="none"></audio>
+          </div>
+
+        </div>
+        <div style="font-size:0.72rem;color:#2ecc71;margin-top:8px;text-align:center">
+          ✅ الملف جاهز — <code style="color:var(--gold)">ziad_gharsa.mp3</code> محمل وجاهز للاستخدام فوراً
+        </div>
+      </div>
       <div class="card">
         <div class="card-title">✉️ تصميم ظرف الرسالة (L'enveloppe)</div>
         <div class="form-row" style="margin-top:10px">
@@ -243,6 +280,19 @@
         </div>
       </div>
 
+      <!-- Couple Password for guests.html -->
+      <div class="card" style="border-color:rgba(201,168,76,0.35);background:rgba(201,168,76,0.04)">
+        <div class="card-title">💌 كلمة مرور قائمة المدعوين (للعروسين)</div>
+        <div class="field" style="margin-top:10px">
+          <label>كلمة المرور التي سيستخدمها العروسان للدخول إلى صفحة إدارة قائمة مدعويهم:</label>
+          <input id="couplePwdInput" type="text" placeholder="مثال: mariage2026" dir="ltr"
+            style="font-size:0.95rem; width:100%; border:1px solid rgba(201,168,76,0.4); padding:10px; border-radius:6px; background:rgba(0,0,0,0.2); color:white; font-family:monospace;">
+          <small style="color:var(--text-muted); display:block; margin-top:6px; font-size:0.76rem">
+            ⓘ شارك هذه الكلمة مع العروسين ليتمكنوا من إضافة أسماء مدعويهم الـ 150+ وتوليد روابط شخصية لكل واحد منهم عبر WhatsApp.
+          </small>
+        </div>
+      </div>
+
       <div class="card">
         <div class="card-title">📦 اختر الباقة</div>
         <div class="pack-selector">
@@ -260,7 +310,7 @@
         <div class="card-title">🎉 الرابط جاهز!</div>
 
         <!-- Invitation URL -->
-        <div class="link-section-label">🟢 رابط الدعوة (جاهز للمشاركة)</div>
+        <div class="link-section-label">🟢 رابط الدعوة العام (للمشاركة العادية)</div>
         <div class="short-link-url" id="shortUrl" style="font-size:0.78rem">جاري التوليد…</div>
 
         <!-- Long URL (secondary, hidden by default) -->
@@ -268,6 +318,17 @@
           <summary style="font-size:0.75rem;color:var(--text-muted);cursor:pointer;padding:4px 0">عرض الرابط الكامل ▾</summary>
           <div class="link-url" id="generatedUrl" style="margin-top:6px"></div>
         </details>
+
+        <!-- Guests Manager Link -->
+        <div style="background:rgba(201,168,76,0.07);border:1px solid rgba(201,168,76,0.25);border-radius:10px;padding:12px 14px;margin-bottom:12px">
+          <div class="link-section-label" style="margin-bottom:6px">💌 رابط إدارة المدعوين (للعروسين فقط)</div>
+          <div class="short-link-url" id="guestsUrl" style="font-size:0.72rem;color:#c9a84c;background:rgba(201,168,76,0.07);border-color:rgba(201,168,76,0.3)">جاري التوليد…</div>
+          <div style="font-size:0.72rem;color:var(--text-muted);margin-top:6px">🔑 كلمة المرور: <span id="guestsPwdDisplay" style="color:#c9a84c;font-family:monospace;font-weight:700"></span></div>
+          <div style="display:flex;gap:8px;margin-top:10px">
+            <button class="btn btn-outline" style="padding:4px 10px;font-size:0.76rem;border-color:#c9a84c;color:#c9a84c" onclick="copyGuestsLink()">📋 نسخ رابط الإدارة</button>
+            <button class="btn btn-ghost"   style="padding:4px 10px;font-size:0.76rem" onclick="openGuestsLink()">🔗 فتح</button>
+          </div>
+        </div>
 
         <div class="link-actions">
           <button class="btn btn-primary" onclick="copyShortLink()">📋 نسخ الرابط</button>
@@ -332,6 +393,38 @@ function selectTheme(name) {
   saveAll();
 }
 
+/* ── Music selector ── */
+window._selectedMusic = 'wedding_march';
+let _previewAudio = null;
+
+function selectMusic(name, doSave = true) {
+  window._selectedMusic = name;
+  ['wedding_march', 'ziad_gharsa'].forEach(m => {
+    const el = document.getElementById('mo-' + m);
+    if (!el) return;
+    if (m === name) {
+      el.style.borderColor = 'var(--gold)';
+      el.style.borderWidth = '2px';
+    } else {
+      el.style.borderColor = 'var(--border)';
+      el.style.borderWidth = '1px';
+    }
+  });
+  if (doSave) saveAll();
+}
+
+function previewMusic(name) {
+  // Stop any currently playing preview
+  if (_previewAudio) { _previewAudio.pause(); _previewAudio.currentTime = 0; }
+  const audio = document.getElementById('preview-' + name);
+  if (!audio) return;
+  if (_previewAudio === audio) { _previewAudio = null; return; } // toggle off
+  audio.currentTime = 0;
+  audio.play().catch(() => showToast('⚠️ لم يتم العثور على الملف الصوتي في assets/'));
+  _previewAudio = audio;
+  setTimeout(() => { if (_previewAudio === audio) { audio.pause(); _previewAudio = null; } }, 10000);
+}
+
 // ── Helpers: Unicode-safe base64 (kept for local fallback preview) ──
 function toB64(str) {
   return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/gi,
@@ -371,14 +464,16 @@ function buildInvSlug(groomFr, brideFr) {
 }
 
 // ── Firebase Firestore operations ──
-async function saveInvitationToFirebase(slug, cfg, pack, guestName) {
+async function saveInvitationToFirebase(slug, cfg, pack, guestName, couplePwd) {
   initFirebase();
   await _db.collection('invitations').doc(slug).set({
-    config:  cfg,
-    count:   0,
-    pack:    pack,
-    guestName: guestName || 'عام',
-    created: firebase.firestore.FieldValue.serverTimestamp()
+    config:        cfg,
+    count:         0,
+    pack:          pack,
+    guestName:     guestName || 'عام',
+    couplePassword: couplePwd || '',
+    guests:        [],
+    created:       firebase.firestore.FieldValue.serverTimestamp()
   });
 }
 
@@ -433,6 +528,7 @@ function buildConfig() {
   return {
     v:  1,                   // version
     th: window._selectedTheme || 'gold', // theme
+    mu: window._selectedMusic || 'wedding_march', // music
     ep: val('envPattern'),   // envelope pattern
     es: val('envSeal'),      // envelope seal
     la: val('invLanguage'),  // invitation language
@@ -518,6 +614,8 @@ function applyConfigToFields(c) {
       }
     });
   }
+
+  if (c.mu) selectMusic(c.mu, false); // restore music without triggering saveAll
 
   if (c.ev) {
     window._adminEvents = c.ev.map(e => ({
@@ -652,12 +750,13 @@ async function generateLink() {
   const cfg = buildConfig();
   cfg.ps = selectedPack;
 
-  const guestName = val('guestNameInput');
+  const guestName  = val('guestNameInput');
+  const couplePwd  = val('couplePwdInput');
 
   // Build unique personalized slug
-  const baseSlug = buildInvSlug(val('groomFr'), val('brideFr'));
+  const baseSlug   = buildInvSlug(val('groomFr'), val('brideFr'));
   const randSuffix = Math.random().toString(36).substring(2, 6);
-  const invSlug = `${baseSlug}-${randSuffix}`;
+  const invSlug    = `${baseSlug}-${randSuffix}`;
   cfg.id = invSlug;
 
   // Build base URL
@@ -680,15 +779,22 @@ async function generateLink() {
   shortUrlEl.textContent = '⏳ جاري الحفظ على Firebase...';
 
   try {
-    await saveInvitationToFirebase(invSlug, cfg, selectedPack, guestName);
+    await saveInvitationToFirebase(invSlug, cfg, selectedPack, guestName, couplePwd);
 
-    const inviteUrl = `${base}?inv=${invSlug}`;
+    const inviteUrl  = `${base}?inv=${invSlug}`;
+    const guestsBase = base.replace('index.html', 'guests.html').replace(INVITATION_FILE, 'guests.html');
+    const guestsLink = `${guestsBase}?inv=${invSlug}`;
     _longUrl = _shortUrl = inviteUrl;
+    _guestsUrl = guestsLink;
 
-    document.getElementById('generatedUrl').textContent = inviteUrl;
-    document.getElementById('linkIdDisplay').textContent = invSlug;
-    document.getElementById('packDisplay').textContent   = selectedPack;
+    document.getElementById('generatedUrl').textContent  = inviteUrl;
+    document.getElementById('linkIdDisplay').textContent  = invSlug;
+    document.getElementById('packDisplay').textContent    = selectedPack;
     shortUrlEl.textContent = inviteUrl;
+
+    // Guests manager link
+    document.getElementById('guestsUrl').textContent         = guestsLink;
+    document.getElementById('guestsPwdDisplay').textContent  = couplePwd || '(لم يتم تعيينها)';
 
     // Reset guest name field for next guest
     const gInput = document.getElementById('guestNameInput');
@@ -705,10 +811,11 @@ async function generateLink() {
 }
 
 // ── Link actions ──
-function copyShortLink() {
-  navigator.clipboard.writeText(_shortUrl).then(() => showToast('📋 تم نسخ الرابط!'));
-}
-function shareWhatsApp() {
+let _guestsUrl = '';
+function copyShortLink()  { navigator.clipboard.writeText(_shortUrl).then(() => showToast('📋 تم نسخ الرابط!')); }
+function copyGuestsLink() { navigator.clipboard.writeText(_guestsUrl).then(() => showToast('📋 تم نسخ رابط الإدارة!')); }
+function openGuestsLink() { if (_guestsUrl) window.open(_guestsUrl, '_blank'); }
+function shareWhatsApp()  {
   const msg = encodeURIComponent('🌹 دعوة زفاف\n\n' + _shortUrl);
   window.open('https://wa.me/?text=' + msg, '_blank');
 }

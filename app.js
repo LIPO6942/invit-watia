@@ -131,12 +131,15 @@ function loadConfigFromURL() {
           console.warn('[InvitApp] Invitation not found:', invSlug);
           return;
         }
-        const data  = doc.data();
-        const cfg   = data.config;
-        const count = data.count || 0;
-        const pack  = data.pack  || 9999;
+        const data     = doc.data();
+        const cfg      = data.config;
+        const count    = data.count || 0;
+        const pack     = data.pack  || 9999;
 
-        if (count >= pack) {
+        /* Guest links (with ?guest=) get unlimited views — no pack check, no count increment */
+        const hasGuestLink = !!params.get('guest');
+
+        if (!hasGuestLink && count >= pack) {
           showPackExpired();
           return;
         }
@@ -147,6 +150,7 @@ function loadConfigFromURL() {
         /* Apply config */
         if (cfg.wd) _weddingDateTime = cfg.wd;
         applyConfigToDOM(cfg);
+        applyMusicFromConfig(cfg);
         if (cfg.ev && cfg.ev.length) rebuildTimelineFromConfig(cfg.ev);
         
         // Apply theme color
@@ -155,10 +159,12 @@ function loadConfigFromURL() {
         }
         applyEnvelopeDesign(cfg);
 
-        /* Atomic counter increment */
-        _db.collection('invitations').doc(invSlug).update({
-          count: firebase.firestore.FieldValue.increment(1)
-        }).catch(e => console.warn('[InvitApp] Counter increment failed:', e));
+        /* Atomic counter increment — only for generic (non-guest-specific) links */
+        if (!hasGuestLink) {
+          _db.collection('invitations').doc(invSlug).update({
+            count: firebase.firestore.FieldValue.increment(1)
+          }).catch(e => console.warn('[InvitApp] Counter increment failed:', e));
+        }
       })
       .catch(err => console.warn('[InvitApp] Firebase fetch failed:', err));
 
@@ -887,6 +893,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 4. Load Guestbook wishes
   loadAllWishes();
+
+  // 5. Apply nominative guest name if present in URL
+  readAndApplyGuestParam();
 });
 
 /* ────────────────────────────────────────────────
@@ -1004,6 +1013,68 @@ const TRANSLATIONS = {
     closing_tagline: 'Nous sommes honorés de partager ce moment avec vous',
   }
 };
+
+/* ────────────────────────────────────────────────
+   GUEST NOMINATIVE BANNER
+   Reads ?guest= and ?gt= from URL and shows the
+   personalised salutation on the envelope face.
+──────────────────────────────────────────────── */
+function readAndApplyGuestParam() {
+  const params    = new URLSearchParams(window.location.search);
+  const guestRaw  = params.get('guest');
+  if (!guestRaw) return;                         // no guest param → nothing to show
+
+  const guestName = decodeURIComponent(guestRaw.replace(/\+/g, ' '));
+  const guestType = params.get('gt') || 'ar_couple';
+
+  let label = '';
+  let isLtr = false;
+  switch (guestType) {
+    case 'ar_couple': label = `\u0625\u0644\u0649 \u0627\u0644\u0633\u064a\u062f ${guestName} \u0648\u062d\u0631\u0645\u0647`; break;
+    case 'ar_man':    label = `\u0625\u0644\u0649 \u0627\u0644\u0633\u064a\u062f ${guestName}`;                              break;
+    case 'ar_woman':  label = `\u0625\u0644\u0649 \u0627\u0644\u0633\u064a\u062f\u0629 ${guestName}`;                     break;
+    case 'fr_couple': label = `Monsieur et Madame ${guestName}`; isLtr = true; break;
+    case 'fr_man':    label = `Monsieur ${guestName}`;           isLtr = true; break;
+    case 'fr_woman':  label = `Madame ${guestName}`;             isLtr = true; break;
+    default:          label = `\u0625\u0644\u0649 \u0627\u0644\u0633\u064a\u062f ${guestName} \u0648\u062d\u0631\u0645\u0647`;
+  }
+
+  const banner  = document.getElementById('guestNameBanner');
+  const labelEl = document.getElementById('guestBannerLabel');
+  if (!banner || !labelEl) return;
+
+  labelEl.textContent = label;
+  banner.style.display = 'flex';
+  if (isLtr) banner.classList.add('ltr');
+
+  // Also update browser tab title to include the guest name
+  if (guestName) {
+    const currentTitle = document.title;
+    document.title = `${label} — ${currentTitle}`;
+  }
+}
+
+/* ────────────────────────────────────────────────
+   MUSIC FROM CONFIG
+   Reads cfg.mu and switches the <audio> src accordingly.
+   Supported keys: 'wedding_march' | 'ziad_gharsa'
+──────────────────────────────────────────────── */
+function applyMusicFromConfig(cfg) {
+  if (!cfg || !cfg.mu) return;
+  const MUSIC_MAP = {
+    'wedding_march': 'assets/wedding_march.mp3',
+    'ziad_gharsa':   'assets/ziad_gharsa.mp3',
+  };
+  const src = MUSIC_MAP[cfg.mu];
+  if (!src) return;
+  const audio = document.getElementById('wedding-audio');
+  if (!audio) return;
+  if (audio.getAttribute('src') === src) return; // already correct, nothing to do
+  const wasPlaying = !audio.paused;
+  audio.src = src;
+  audio.load();
+  if (wasPlaying) audio.play().catch(() => {});
+}
 
 function applyLanguage(lang) {
   const dict = TRANSLATIONS[lang] || TRANSLATIONS.ar;

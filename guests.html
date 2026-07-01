@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>قائمة المدعوين 💌</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0602;--bg2:#130e04;--card:rgba(255,248,220,0.04);--card-h:rgba(255,248,220,0.07);--border:rgba(201,168,76,0.2);--border-h:rgba(201,168,76,0.45);--gold:#c9a84c;--gold-l:#e8cc7a;--text:#f5e6c0;--muted:#a08868;--danger:#e74c3c;--success:#2ecc71;--blue:#3498db;--wapp:#25D366}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-tap-highlight-color:transparent}
+body{font-family:'Amiri',serif;background:var(--bg);color:var(--text);min-height:100dvh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 40% at 50% 0%,rgba(201,168,76,0.06) 0%,transparent 70%);pointer-events:none;z-index:0}
+#login-screen{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:24px;position:relative;z-index:1}
+.login-card{background:rgba(255,248,220,0.04);border:1px solid var(--border);border-radius:24px;padding:44px 32px 36px;width:100%;max-width:380px;text-align:center;backdrop-filter:blur(12px);box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 0 1px rgba(201,168,76,0.08);animation:fadeInUp 0.6s ease both}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.login-icon{font-size:3.2rem;margin-bottom:16px}
+.login-title{font-size:1.7rem;color:var(--gold);font-weight:700;margin-bottom:5px}
+.login-sub{font-size:0.88rem;color:var(--muted);margin-bottom:24px;line-height:1.5}
+.ornament{text-align:center;color:rgba(201,168,76,0.3);font-size:0.7rem;letter-spacing:6px;margin:6px 0 18px}
+.login-input{width:100%;background:rgba(0,0,0,0.35);border:1px solid var(--border);border-radius:12px;padding:13px 18px;color:var(--text);font-size:1.1rem;margin-bottom:14px;outline:none;text-align:center;letter-spacing:5px;font-family:monospace;transition:border-color 0.2s}
+.login-input:focus{border-color:var(--gold)}
+.login-btn{width:100%;background:linear-gradient(135deg,#c9a84c 0%,#e8cc7a 50%,#c9a84c 100%);color:#1a1000;border:none;border-radius:12px;padding:14px;font-size:1.05rem;font-weight:700;font-family:'Amiri',serif;cursor:pointer;transition:opacity 0.2s,transform 0.1s}
+.login-btn:hover{opacity:0.92}.login-btn:active{transform:scale(0.98)}
+.login-error{color:var(--danger);font-size:0.85rem;margin-top:10px;min-height:20px}
+#main-app{max-width:660px;margin:0 auto;padding-bottom:80px;position:relative;z-index:1}
+.app-header{background:rgba(10,6,2,0.92);border-bottom:1px solid var(--border);padding:16px 18px 14px;text-align:center;position:sticky;top:0;z-index:20;backdrop-filter:blur(14px)}
+.header-couple{font-size:1.35rem;color:var(--gold);font-weight:700}
+.header-sub{font-size:0.78rem;color:var(--muted);margin-top:2px}
+.stats-row{display:flex;gap:10px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+.stat-pill{background:rgba(201,168,76,0.08);border:1px solid var(--border);border-radius:20px;padding:3px 14px;font-size:0.78rem;color:var(--gold-l)}
+.stat-pill strong{color:var(--gold)}
+.logout-btn{position:fixed;top:12px;left:12px;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1);color:var(--muted);border-radius:8px;padding:5px 10px;font-size:0.74rem;font-family:'Amiri',serif;cursor:pointer;z-index:30}
+.section{margin:14px 12px 0;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px}
+.section-title{font-size:1rem;color:var(--gold);font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.section-count{font-size:0.74rem;color:var(--muted);font-weight:400;margin-right:auto}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:0.78rem;color:var(--muted);margin-bottom:5px}
+.f-input{width:100%;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:0.97rem;font-family:'Amiri',serif;outline:none;transition:border-color 0.2s}
+.f-input:focus{border-color:var(--gold)}
+.formula-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.f-btn{background:rgba(0,0,0,0.2);border:1px solid var(--border);border-radius:9px;padding:8px 10px;color:var(--muted);font-size:0.76rem;font-family:'Amiri',serif;cursor:pointer;text-align:center;transition:all 0.18s;line-height:1.3}
+.f-btn:hover{border-color:var(--border-h);color:var(--gold-l)}.f-btn.active{border-color:var(--gold);background:rgba(201,168,76,0.12);color:var(--gold-l)}
+.btn-primary{width:100%;background:linear-gradient(135deg,#c9a84c 0%,#e8cc7a 50%,#c9a84c 100%);color:#1a1000;border:none;border-radius:10px;padding:12px;font-size:0.97rem;font-weight:700;font-family:'Amiri',serif;cursor:pointer;margin-top:4px;transition:opacity 0.2s,transform 0.1s}
+.btn-primary:hover{opacity:0.9}.btn-primary:active{transform:scale(0.98)}
+.btn-green{background:linear-gradient(135deg,#27ae60,#2ecc71);color:#fff}
+.search-wrap{position:relative;margin-bottom:14px}
+.search-icon{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:0.9rem;pointer-events:none}
+.search-input{width:100%;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:30px;padding:9px 38px 9px 18px;color:var(--text);font-size:0.88rem;font-family:'Amiri',serif;outline:none;transition:border-color 0.2s}
+.search-input:focus{border-color:var(--gold)}
+.guest-list{display:flex;flex-direction:column;gap:8px}
+.guest-card{background:rgba(0,0,0,0.25);border:1px solid rgba(201,168,76,0.15);border-radius:13px;padding:12px 14px;display:flex;align-items:center;gap:10px;transition:border-color 0.2s,background 0.2s;animation:cardIn 0.25s ease both}
+@keyframes cardIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.guest-card:hover{border-color:rgba(201,168,76,0.35);background:rgba(255,248,220,0.03)}
+.guest-num{width:26px;height:26px;background:rgba(201,168,76,0.08);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.72rem;color:var(--gold);flex-shrink:0;font-family:monospace}
+.guest-info{flex:1;min-width:0}
+.guest-name{font-size:0.97rem;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2}
+.formula-badge{display:inline-block;font-size:0.66rem;padding:2px 8px;border-radius:10px;margin-top:3px;white-space:nowrap}
+.b-arc{background:rgba(201,168,76,0.14);color:#c9a84c}.b-arm{background:rgba(52,152,219,0.14);color:#3498db}.b-arw{background:rgba(231,76,60,0.14);color:#e74c3c}.b-frc{background:rgba(46,204,113,0.14);color:#2ecc71}.b-frm{background:rgba(52,152,219,0.14);color:#5dade2}.b-frw{background:rgba(231,76,60,0.14);color:#e88e86}
+.guest-actions{display:flex;gap:6px;flex-shrink:0}
+.btn-icon{width:34px;height:34px;border-radius:8px;border:1px solid var(--border);background:rgba(0,0,0,0.2);color:var(--muted);font-size:0.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.18s}
+.btn-icon:hover{border-color:var(--gold);color:var(--gold)}.btn-icon.wapp:hover{border-color:var(--wapp);color:var(--wapp)}.btn-icon.danger:hover{border-color:var(--danger);color:var(--danger)}
+.empty-state{text-align:center;padding:36px 20px;color:var(--muted);font-size:0.88rem}
+.empty-icon{font-size:2.4rem;margin-bottom:10px}
+.bulk-textarea{width:100%;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:0.88rem;font-family:'Amiri',serif;outline:none;resize:vertical;min-height:100px;line-height:1.6}
+.bulk-textarea:focus{border-color:var(--gold)}
+details>summary{list-style:none;cursor:pointer;color:var(--gold-l);font-size:0.84rem;user-select:none;display:flex;align-items:center;gap:6px}
+details>summary::-webkit-details-marker{display:none}
+details[open]>summary{margin-bottom:14px}
+.chevron{transition:transform 0.2s;margin-right:auto}
+details[open] .chevron{transform:rotate(180deg)}
+.help-box{background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.18);border-radius:10px;padding:11px 14px;font-size:0.78rem;color:var(--muted);line-height:1.6;margin-bottom:14px}
+.help-box strong{color:var(--gold-l)}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(10px);background:rgba(20,14,4,0.97);border:1px solid var(--border);color:var(--text);padding:10px 22px;border-radius:30px;font-size:0.88rem;opacity:0;transition:all 0.28s cubic-bezier(0.34,1.56,0.64,1);z-index:9999;white-space:nowrap;pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,0.4)}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-icon">💌</div>
+    <div class="login-title">قائمة المدعوين</div>
+    <div class="ornament">✦ ✦ ✦</div>
+    <div class="login-sub" id="login-sub">صفحة مخصصة للعروسين<br>لإدارة دعوات ضيوفهم</div>
+    <input id="pwd-input" class="login-input" type="password" placeholder="••••••" dir="ltr" autocomplete="current-password">
+    <button class="login-btn" onclick="doLogin()">دخول ✨</button>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+
+<div id="main-app" style="display:none">
+  <button class="logout-btn" onclick="doLogout()">🚪 خروج</button>
+  <div class="app-header">
+    <div class="header-couple" id="header-couple">💍 حفل الزفاف</div>
+    <div class="header-sub">إدارة قائمة المدعوين الخاصة بكم</div>
+    <div class="stats-row">
+      <div class="stat-pill">👥 المدعوين: <strong id="stat-total">0</strong></div>
+      <div class="stat-pill">📦 الباقة: <strong id="stat-links">0/∞</strong></div>
+    </div>
+    <div id="pack-full-warning" style="display:none;margin-top:8px;background:rgba(231,76,60,0.12);border:1px solid rgba(231,76,60,0.35);border-radius:8px;padding:7px 14px;font-size:0.76rem;color:#e74c3c;line-height:1.4">
+      ⛔ لقد استهلكتم الحد الأقصى من باقتكم — لإضافة المزيد، تواصلوا مع المنظم لترقية الباقة
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">➕ إضافة مدعو جديد</div>
+    <div class="field">
+      <label>اسم المدعو أو العائلة</label>
+      <input id="add-name" class="f-input" type="text" placeholder="مثال: أحمد بن علي" autocomplete="off">
+    </div>
+    <div class="field">
+      <label>صيغة التوجيه على الدعوة</label>
+      <div class="formula-grid" id="add-formula-grid"></div>
+    </div>
+    <button class="btn-primary" onclick="addGuest()">➕ إضافة وتوليد الرابط</button>
+  </div>
+
+  <div class="section">
+    <details id="bulk-details">
+      <summary>
+        <span>📥 استيراد عدة أسماء دفعة واحدة</span>
+        <span class="chevron">▾</span>
+      </summary>
+      <div class="help-box">
+        <strong>كيف يعمل:</strong> الصق قائمة الأسماء (اسم واحد في كل سطر)، اختر الصيغة المناسبة، ثم اضغط استيراد. سيتم إنشاء رابط شخصي لكل اسم تلقائياً.
+      </div>
+      <div class="field">
+        <label>قائمة الأسماء (اسم في كل سطر)</label>
+        <textarea id="bulk-textarea" class="bulk-textarea" placeholder="أحمد بن علي&#10;خالد العمري&#10;محمد الرياحي&#10;سمير التونسي&#10;..."></textarea>
+      </div>
+      <div class="field">
+        <label>الصيغة الافتراضية لجميع الأسماء</label>
+        <div class="formula-grid" id="bulk-formula-grid"></div>
+      </div>
+      <button class="btn-primary btn-green" onclick="bulkImport()">📥 استيراد الكل وتوليد الروابط</button>
+    </details>
+  </div>
+
+  <div class="section">
+    <div class="section-title">
+      📋 قائمة المدعوين
+      <span class="section-count" id="guest-count-label"></span>
+    </div>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input id="search-input" class="search-input" type="text" placeholder="ابحث عن اسم..." oninput="filterGuests()" autocomplete="off">
+    </div>
+    <div class="guest-list" id="guest-list"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+'use strict';
+const FIREBASE_CONFIG={apiKey:"AIzaSyDiX0BwIT9wQKnlNHk0ADLgtI5eOUwF-1E",authDomain:"invit-mar.firebaseapp.com",projectId:"invit-mar",storageBucket:"invit-mar.firebasestorage.app",messagingSenderId:"654872438284",appId:"1:654872438284:web:c11d6f3cdff82bf35ff029"};
+let _fbApp=null,_db=null;
+function initFirebase(){if(_fbApp)return;_fbApp=firebase.initializeApp(FIREBASE_CONFIG);_db=firebase.firestore()}
+let _slug='',_invData=null,_guests=[],_addFormula='ar_couple',_bulkFormula='ar_couple',_filterQ='';
+const FORMULAS=[
+  {value:'ar_couple',label:'إلى السيد ... وحرمه', badge:'b-arc',emoji:'👨‍👩‍👧'},
+  {value:'ar_man',   label:'إلى السيد ...',         badge:'b-arm',emoji:'👔'},
+  {value:'ar_woman', label:'إلى السيدة ...',        badge:'b-arw',emoji:'👗'},
+  {value:'fr_couple',label:'M. et Mme ...',          badge:'b-frc',emoji:'💑'},
+  {value:'fr_man',   label:'Monsieur ...',            badge:'b-frm',emoji:'🤵'},
+  {value:'fr_woman', label:'Madame ...',              badge:'b-frw',emoji:'👰'},
+];
+function formatLabel(name,type){
+  switch(type){
+    case'ar_couple':return`إلى السيد ${name} وحرمه`;
+    case'ar_man':   return`إلى السيد ${name}`;
+    case'ar_woman': return`إلى السيدة ${name}`;
+    case'fr_couple':return`Monsieur et Madame ${name}`;
+    case'fr_man':   return`Monsieur ${name}`;
+    case'fr_woman': return`Madame ${name}`;
+    default:        return`إلى السيد ${name} وحرمه`;
+  }
+}
+function buildGuestLink(name,type){
+  const base=window.location.href.split('?')[0].replace('guests.html','index.html');
+  return`${base}?inv=${encodeURIComponent(_slug)}&guest=${encodeURIComponent(name)}&gt=${type}`;
+}
+window.addEventListener('DOMContentLoaded',()=>{
+  const params=new URLSearchParams(window.location.search);
+  _slug=params.get('inv')||'';
+  if(!_slug){
+    document.getElementById('login-sub').innerHTML='⚠️ رابط غير صالح<br>تواصل مع المنظم للحصول على الرابط الصحيح';
+    document.getElementById('pwd-input').disabled=true;
+    document.querySelector('.login-btn').disabled=true;
+    return;
+  }
+  document.getElementById('pwd-input').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+  renderFormulaGrid('add-formula-grid','add');
+  renderFormulaGrid('bulk-formula-grid','bulk');
+});
+function renderFormulaGrid(containerId,mode){
+  const grid=document.getElementById(containerId);
+  if(!grid)return;
+  const active=mode==='bulk'?_bulkFormula:_addFormula;
+  grid.innerHTML=FORMULAS.map(f=>`<button class="f-btn ${f.value===active?'active':''}" onclick="selectFormula('${f.value}','${mode}',this)">${f.emoji} ${f.label}</button>`).join('');
+}
+function selectFormula(value,mode,btn){
+  if(mode==='bulk'){_bulkFormula=value;document.querySelectorAll('#bulk-formula-grid .f-btn').forEach(b=>b.classList.remove('active'))}
+  else{_addFormula=value;document.querySelectorAll('#add-formula-grid .f-btn').forEach(b=>b.classList.remove('active'))}
+  btn.classList.add('active');
+}
+async function doLogin(){
+  const pwd=document.getElementById('pwd-input').value.trim();
+  const errEl=document.getElementById('login-error');
+  errEl.textContent='';
+  if(!pwd){errEl.textContent='⚠️ أدخل كلمة المرور';return}
+  try{
+    initFirebase();
+    const doc=await _db.collection('invitations').doc(_slug).get();
+    if(!doc.exists){errEl.textContent='❌ الدعوة غير موجودة — تحقق من الرابط';return}
+    _invData=doc.data();
+    const correctPwd=(_invData.couplePassword||'').trim();
+    if(!correctPwd){errEl.textContent='⚠️ لم يتم تعيين كلمة مرور — تواصل مع المنظم';return}
+    if(pwd!==correctPwd){errEl.textContent='❌ كلمة المرور غير صحيحة';document.getElementById('pwd-input').value='';return}
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('main-app').style.display='block';
+    initApp();
+  }catch(err){console.error(err);errEl.textContent='❌ خطأ في الاتصال — تحقق من الإنترنت'}
+}
+function doLogout(){location.reload()}
+let _pack=9999;
+function initApp(){
+  const cfg=_invData.config||{};
+  const groom=cfg.gf2||cfg.ga||'العريس';
+  const bride=cfg.bf2||cfg.ba||'العروسة';
+  document.getElementById('header-couple').textContent=`💍 ${groom} & ${bride}`;
+  document.title=`قائمة مدعوي ${groom} & ${bride}`;
+  _pack=_invData.pack||9999;
+  _guests=Array.isArray(_invData.guests)?[..._invData.guests]:[];
+  renderGuestList();
+  updateStats();
+  checkPackUI();
+}
+function updateStats(){
+  const t=_guests.length;
+  const packLabel=_pack>=9999?'∞':_pack;
+  document.getElementById('stat-total').textContent=t;
+  document.getElementById('stat-links').textContent=t+'/'+packLabel;
+  document.getElementById('guest-count-label').textContent='('+t+' / '+packLabel+' مدعو)';
+}
+function checkPackUI(){
+  const full=_pack<9999&&_guests.length>=_pack;
+  const addBtn=document.querySelector('.btn-primary:not(.btn-green)');
+  const bulkBtn=document.querySelector('.btn-primary.btn-green');
+  if(addBtn){addBtn.disabled=full;addBtn.style.opacity=full?'0.45':'1';}
+  if(bulkBtn){bulkBtn.disabled=full;bulkBtn.style.opacity=full?'0.45':'1';}
+  const warn=document.getElementById('pack-full-warning');
+  if(warn)warn.style.display=full?'block':'none';
+}
+function addGuest(){
+  const nameEl=document.getElementById('add-name');
+  const name=nameEl.value.trim();
+  if(!name){showToast('⚠️ أدخل اسم المدعو');return}
+  if(_pack<9999&&_guests.length>=_pack){showToast('⛔ الباقة ممتلئة — الحد الأقصى '+_pack+' مدعو');return}
+  const guest={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),name,type:_addFormula,createdAt:new Date().toISOString()};
+  _guests.push(guest);
+  nameEl.value='';
+  nameEl.focus();
+  saveGuests().then(()=>{
+    renderGuestList();updateStats();checkPackUI();showToast('✅ تمت إضافة '+name);
+    setTimeout(()=>{document.getElementById('guest-list')?.lastElementChild?.scrollIntoView({behavior:'smooth',block:'nearest'})},150);
+  }).catch(()=>{_guests.pop();renderGuestList();updateStats()});
+}
+function bulkImport(){
+  const ta=document.getElementById('bulk-textarea');
+  const raw=ta.value.trim();
+  if(!raw){showToast('⚠️ الصق الأسماء في الحقل أولاً');return}
+  let names=raw.split('\n').map(n=>n.trim()).filter(n=>n.length>0);
+  if(!names.length){showToast('⚠️ لا توجد أسماء صالحة');return}
+  if(_pack<9999){
+    const available=_pack-_guests.length;
+    if(available<=0){showToast('⛔ الباقة ممتلئة — الحد الأقصى '+_pack+' مدعو');return}
+    if(names.length>available){
+      const skipped=names.length-available;
+      names=names.slice(0,available);
+      setTimeout(()=>showToast('⚠️ تم استيراد '+available+' فقط — '+skipped+' تم تجاهلهم (الباقة امتلأت)'),3000);
+    }
+  }
+  const now=Date.now();
+  const newG=names.map((name,i)=>({id:(now+i).toString(36)+Math.random().toString(36).slice(2,5),name,type:_bulkFormula,createdAt:new Date().toISOString()}));
+  _guests=[..._guests,...newG];
+  saveGuests().then(()=>{
+    ta.value='';
+    document.getElementById('bulk-details').open=false;
+    renderGuestList();updateStats();checkPackUI();showToast('✅ تمت إضافة '+names.length+' مدعو');
+  }).catch(()=>{_guests.splice(_guests.length-newG.length,newG.length);renderGuestList();updateStats()});
+}
+function deleteGuest(id){
+  if(!confirm('هل تريد حذف هذا المدعو نهائياً؟'))return;
+  const prev=[..._guests];
+  _guests=_guests.filter(g=>g.id!==id);
+  renderGuestList();updateStats();
+  saveGuests().then(()=>{checkPackUI();showToast('🗑️ تم الحذف')}).catch(()=>{_guests=prev;renderGuestList();updateStats();showToast('❌ فشل الحذف')});
+}
+async function saveGuests(){
+  initFirebase();
+  await _db.collection('invitations').doc(_slug).update({guests:_guests.map(g=>({id:g.id,name:g.name,type:g.type,createdAt:g.createdAt}))});
+}
+function filterGuests(){_filterQ=document.getElementById('search-input').value.trim().toLowerCase();renderGuestList()}
+function renderGuestList(){
+  const list=document.getElementById('guest-list');
+  if(!list)return;
+  const filtered=_filterQ?_guests.filter(g=>g.name.toLowerCase().includes(_filterQ)||formatLabel(g.name,g.type).toLowerCase().includes(_filterQ)):_guests;
+  if(!filtered.length){
+    list.innerHTML=`<div class="empty-state"><div class="empty-icon">${_filterQ?'🔍':'👥'}</div><div>${_filterQ?'لا توجد نتائج مطابقة':'لا يوجد مدعوون بعد<br>أضف الأسماء من الأعلى'}</div></div>`;
+    return;
+  }
+  list.innerHTML=filtered.map((g,idx)=>{
+    const f=FORMULAS.find(f=>f.value===g.type)||FORMULAS[0];
+    return`<div class="guest-card">
+      <div class="guest-num">${idx+1}</div>
+      <div class="guest-info">
+        <div class="guest-name">${escHtml(g.name)}</div>
+        <span class="formula-badge ${f.badge}">${f.emoji} ${f.label}</span>
+      </div>
+      <div class="guest-actions">
+        <button class="btn-icon" title="نسخ الرابط" onclick="copyLink('${g.id}')">📋</button>
+        <button class="btn-icon wapp" title="مشاركة واتساب" onclick="shareWA('${g.id}')">💬</button>
+        <button class="btn-icon danger" title="حذف" onclick="deleteGuest('${g.id}')">🗑️</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function copyLink(id){
+  const g=_guests.find(g=>g.id===id);
+  if(!g)return;
+  navigator.clipboard.writeText(buildGuestLink(g.name,g.type)).then(()=>showToast('📋 تم نسخ الرابط الخاص بـ '+g.name));
+}
+function shareWA(id){
+  const g=_guests.find(g=>g.id===id);
+  if(!g)return;
+  const link=buildGuestLink(g.name,g.type);
+  const label=formatLabel(g.name,g.type);
+  const cfg=(_invData&&_invData.config)||{};
+  const groom=cfg.gf2||cfg.ga||'';
+  const bride=cfg.bf2||cfg.ba||'';
+  const isAr=g.type.startsWith('ar');
+  const msg=isAr
+    ?`🌹 دعوة زفاف خاصة بكم\n\n${label}،\n\nيسعدنا دعوتكم لحضور حفل زفاف\n💍 ${groom} & ${bride}\n\nتفضلوا بفتح دعوتكم الخاصة:\n${link}`
+    :`🌹 Invitation de Mariage Personnalisée\n\n${label},\n\nNous vous invitons au mariage de\n💍 ${groom} & ${bride}\n\nOuvrez votre invitation:\n${link}`;
+  window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+}
+let _toastTimer=null;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  if(!t)return;
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer=setTimeout(()=>t.classList.remove('show'),2600);
+}
+</script>
+</body>
+</html>
