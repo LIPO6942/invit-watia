@@ -86,10 +86,14 @@ function checkRoleView() {
   const view = params.get('view');
   if (view === 'groom' || view === 'bride') {
     _currentRole = view;
+
+    // Show the private mailbox button
     const mbToggle = document.getElementById('mailbox-toggle');
-    if (mbToggle) {
-      mbToggle.style.display = 'flex';
-    }
+    if (mbToggle) mbToggle.style.display = 'flex';
+
+    // Hide the guestbook — the couple cannot send wishes to themselves
+    const gbSection = document.getElementById('guestbook-section');
+    if (gbSection) gbSection.style.display = 'none';
   }
 }
 
