@@ -891,17 +891,34 @@ document.addEventListener('DOMContentLoaded', () => {
 function applyEnvelopeDesign(cfg) {
   if (!cfg) return;
 
-  // ── Motif (ep: 'floral' | 'vintage') ──
-  const pattern = cfg.ep || 'floral';
-  const showFloral  = pattern === 'floral';
-  const showVintage = pattern === 'vintage';
+  // ── Motif (ep: 'floral' | 'vintage' | 'minimalist' | 'nature') ──
+  const pattern     = cfg.ep || 'floral';
+  const showFloral     = pattern === 'floral';
+  const showVintage    = pattern === 'vintage';
+  const showMinimalist = pattern === 'minimalist';
+  const showNature     = pattern === 'nature';
 
   document.querySelectorAll('.panel-branches').forEach(el => {
     el.style.display = showFloral ? '' : 'none';
   });
   document.querySelectorAll('.panel-vintage').forEach(el => {
-    // Vintage SVGs have display:none inline style — toggle it properly
     el.style.display = showVintage ? 'block' : 'none';
+  });
+  document.querySelectorAll('.panel-minimalist').forEach(el => {
+    el.style.display = showMinimalist ? 'block' : 'none';
+  });
+  document.querySelectorAll('.panel-nature').forEach(el => {
+    el.style.display = showNature ? 'block' : 'none';
+  });
+
+  // Apply nature green panel background when nature theme is active
+  const panels = document.querySelectorAll('.env-panel');
+  panels.forEach(p => {
+    if (showNature) {
+      p.classList.add('panel-nature-theme');
+    } else {
+      p.classList.remove('panel-nature-theme');
+    }
   });
 
   // ── Seal symbol (es: 'heart' | 'rings' | 'monogram' | 'bismillah') ──

@@ -1673,5 +1673,34 @@ body.env-open .animated-divider {
   align-self: center;
 }
 
+/* ── Nature / Botanical Summer Theme Panel Background ── */
+.env-panel.panel-nature-theme.left-panel {
+  background:
+    repeating-linear-gradient(
+      -42deg,
+      transparent 0px, transparent 3px,
+      rgba(0,0,0,0.012) 3px, rgba(0,0,0,0.012) 4px
+    ),
+    linear-gradient(160deg, #f4faf0 0%, #e8f5e2 40%, #dcefd4 80%, #eaf5e5 100%);
+  border-right: 1.5px solid rgba(90,140,70,0.35);
+  box-shadow:
+    inset -4px 0 12px rgba(60,100,40,0.07),
+    inset 0 0 40px rgba(90,140,70,0.04);
+}
+
+.env-panel.panel-nature-theme.right-panel {
+  background:
+    repeating-linear-gradient(
+      42deg,
+      transparent 0px, transparent 3px,
+      rgba(0,0,0,0.012) 3px, rgba(0,0,0,0.012) 4px
+    ),
+    linear-gradient(200deg, #f4faf0 0%, #e8f5e2 40%, #dcefd4 80%, #eaf5e5 100%);
+  border-left: 1.5px solid rgba(90,140,70,0.35);
+  box-shadow:
+    inset 4px 0 12px rgba(60,100,40,0.07),
+    inset 0 0 40px rgba(90,140,70,0.04);
+}
+
 
 
