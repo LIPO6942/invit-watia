@@ -1793,3 +1793,50 @@ body.env-open .animated-divider {
   from { opacity: 0; transform: translateX(-50%) translateY(12px); }
   to   { opacity: 1; transform: translateX(-50%) translateY(0);   }
 }
+
+/* ── Guestbook Suggestions System ── */
+.suggestions-scroller {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 2px 8px 2px;
+  margin-bottom: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Hide scrollbar Firefox */
+}
+.suggestions-scroller::-webkit-scrollbar {
+  display: none; /* Hide scrollbar Chrome/Safari */
+}
+.suggestion-pill {
+  flex-shrink: 0;
+  background: rgba(201, 168, 76, 0.08);
+  border: 1px solid rgba(201, 168, 76, 0.25);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 0.74rem;
+  color: #4a3418;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Amiri', serif;
+  max-width: 280px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  user-select: none;
+}
+.suggestion-pill:hover, .suggestion-pill:active {
+  background: #f5e6c0;
+  border-color: #c9a84c;
+  color: #1a1000;
+  transform: translateY(-1px);
+}
+/* Adjust layout for LTR (French) */
+.lang-fr .suggestion-pill {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.72rem;
+}
+.lang-fr #gb-sug-label {
+  text-align: left !important;
+}

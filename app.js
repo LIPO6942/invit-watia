@@ -986,6 +986,7 @@ const TRANSLATIONS = {
     gb_name_placeholder: 'اسمك الكريم',
     gb_msg_placeholder: 'أكتب تهنئتك هنا...',
     gb_submit: 'إرسال التهنئة ✨',
+    gb_sug_label: '💡 اقتراحات جاهزة للتهنئة:',
     closing_tagline: 'يسعدنا مشاركتكم هذه الفرحة',
   },
   fr: {
@@ -1010,6 +1011,7 @@ const TRANSLATIONS = {
     gb_name_placeholder: 'Votre Nom',
     gb_msg_placeholder: 'Écrivez votre message ici...',
     gb_submit: 'Envoyer les félicitations ✨',
+    gb_sug_label: '💡 Formules de vœux suggérées :',
     closing_tagline: 'Nous sommes honorés de partager ce moment avec vous',
   }
 };
@@ -1056,6 +1058,12 @@ function readAndApplyGuestParam() {
     const fullSalutation = isLtr ? `${title} ${name}` : `${title} ${name}`;
     document.title = `${fullSalutation} — ${currentTitle}`;
   }
+
+  // Pre-fill the guestbook form name field
+  const gbNameInput = document.getElementById('gb-name');
+  if (gbNameInput) {
+    gbNameInput.value = name;
+  }
 }
 
 /* ────────────────────────────────────────────────
@@ -1079,6 +1087,41 @@ function applyMusicFromConfig(cfg) {
   audio.load();
   if (wasPlaying) audio.play().catch(() => {});
 }
+
+const SUGGESTIONS = {
+  ar: [
+    "ألف مبروك للعروسين الجميلين! أتمنى لكما حياة مليئة بالحب والسعادة والهناء 💖",
+    "بارك الله لكما وبارك عليكما وجمع بينكما في خير. زواج سعيد وعمر مديد بالرفاه والبنين 💍",
+    "فرحتنا كبيرة بكما اليوم! تمنياتنا لكما برحلة زوجية سعيدة مليئة بالتفاهم والمودة والرحمة ✨",
+    "أحر التهاني وأجمل التبريكات بمناسبة هذا الزواج الميمون. دامت بيوتكم عامرة بالأفراح والمسرات 🌹",
+    "بكل الحب والود نهنئكما بزفافكما السعيد. أتمنى لكما مستقبلاً مشرقاً وحياة مشتركة مليئة بالبركة 💑"
+  ],
+  fr: [
+    "Toutes nos félicitations pour votre mariage ! Nous vous souhaitons une vie remplie d'amour et de bonheur. 💖",
+    "Que ce jour unique soit le début d'une merveilleuse aventure pleine de joie, de complicité et de tendresse. 💍",
+    "Meilleurs vœux de bonheur pour ce nouveau chapitre de votre vie. Que votre amour grandisse jour après jour. ✨",
+    "Félicitations aux magnifiques mariés ! Que votre foyer soit béni et toujours rempli d'harmonie et de paix. 🌹",
+    "Avec tout notre amour, nous vous souhaitons une vie commune merveilleuse, parsemée de rires et de beaux projets. 💑"
+  ]
+};
+
+function renderSuggestions(lang) {
+  const container = document.getElementById('gb-suggestions-list');
+  if (!container) return;
+  const list = SUGGESTIONS[lang] || SUGGESTIONS.ar;
+  container.innerHTML = list.map(text => {
+    const escaped = text.replace(/'/g, "\\'");
+    return `<div class="suggestion-pill" onclick="selectSuggestion('${escaped}')" title="${text}">${text}</div>`;
+  }).join('');
+}
+
+window.selectSuggestion = function(text) {
+  const textarea = document.getElementById('gb-message');
+  if (textarea) {
+    textarea.value = text;
+    textarea.focus();
+  }
+};
 
 function applyLanguage(lang) {
   const dict = TRANSLATIONS[lang] || TRANSLATIONS.ar;
@@ -1120,5 +1163,8 @@ function applyLanguage(lang) {
       ? 'Cliquez pour ouvrir l\'invitation ✦ Cliquez pour ouvrir ✦'
       : 'اضغط لفتح الدعوة ✦ اضغط لفتح الدعوة ✦';
   }
+
+  // Render suggestion pills
+  renderSuggestions(lang);
 }
 
