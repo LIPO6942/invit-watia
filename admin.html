@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -981,14 +981,21 @@ async function renderLinksHistory() {
 function updateCounter(slug, data) {
   const el = document.getElementById('ctr-' + slug);
   if (!el) return;
-  const used      = data.count || 0;
-  const pack      = data.pack  || 100;
-  const remaining = Math.max(0, pack - used);
-  const pct       = Math.min(100, Math.round((used / pack) * 100));
-  const color     = remaining === 0 ? '#e74c3c' : remaining < pack * 0.2 ? '#f39c12' : '#2ecc71';
+  const guestsCount = Array.isArray(data.guests) ? data.guests.length : 0;
+  const views       = data.count || 0;
+  const pack        = data.pack  || 100;
+  const remaining   = Math.max(0, pack - guestsCount);
+  const pct         = Math.min(100, Math.round((guestsCount / pack) * 100));
+  const color       = remaining === 0 ? '#e74c3c' : remaining < pack * 0.2 ? '#f39c12' : '#2ecc71';
   el.innerHTML = `
-    <div>
-      👁 فُفتح: <strong>${used}</strong> / ${pack} &nbsp;|&nbsp; متبقي: <strong style="color:${color}">${remaining}</strong>
+    <div style="font-size:0.78rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span>👥 المدعوين: <strong>${guestsCount}</strong> / ${pack}</span>
+        <span style="font-size:0.72rem; color:var(--text-muted);">👁 الزيارات العامة: ${views}</span>
+      </div>
+      <div style="margin-top:2px;">
+        متبقي بالباقة: <strong style="color:${color}">${remaining}</strong>
+      </div>
       <div style="height:5px;background:rgba(255,255,255,0.08);border-radius:3px;margin-top:4px;overflow:hidden">
         <div style="width:${pct}%;height:5px;background:${color};border-radius:3px;transition:width 0.6s ease"></div>
       </div>
