@@ -1709,23 +1709,28 @@ body.env-open .animated-divider {
 ═══════════════════════════════════════════════ */
 .guest-name-banner {
   position: absolute;
-  bottom: 165px;          /* sits beautifully above the wax seal */
+  bottom: 160px;          /* sits beautifully above the wax seal */
   left: 50%;
   transform: translateX(-50%);
   z-index: 15;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 300px;
+  width: 250px;           /* slightly reduced width for a delicate look */
   background: rgba(247, 240, 222, 0.55);   /* semi-transparent warm cream matching envelope */
   border: 1px solid rgba(201, 168, 76, 0.4); /* soft gold border */
   box-shadow: 
     inset 0 0 12px rgba(201, 168, 76, 0.1),
     0 4px 20px rgba(0, 0, 0, 0.05);
-  border-radius: 12px;     /* soft card shape */
-  padding: 12px 20px;
+  border-radius: 10px;     /* soft card shape */
+  padding: 8px 16px;       /* reduced padding */
   backdrop-filter: blur(3px);
   animation: guestBannerFadeIn 1.4s cubic-bezier(0.16, 1, 0.3, 1) both 0.5s;
+}
+
+/* Hide nominative card completely when invitation is opened */
+.invitation.open .guest-name-banner {
+  display: none !important;
 }
 
 .guest-card-inner {
