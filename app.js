@@ -1027,30 +1027,34 @@ function readAndApplyGuestParam() {
   const guestName = decodeURIComponent(guestRaw.replace(/\+/g, ' '));
   const guestType = params.get('gt') || 'ar_couple';
 
-  let label = '';
+  let title = '';
+  let name = guestName;
   let isLtr = false;
   switch (guestType) {
-    case 'ar_couple': label = `\u0625\u0644\u0649 \u0627\u0644\u0633\u064a\u062f ${guestName} \u0648\u062d\u0631\u0645\u0647`; break;
-    case 'ar_man':    label = `\u0625\u0644\u0649 \u0627\u0644\u0633\u064a\u062f ${guestName}`;                              break;
-    case 'ar_woman':  label = `\u0625\u0644\u0649 \u0627\u0644\u0633\u064a\u062f\u0629 ${guestName}`;                     break;
-    case 'fr_couple': label = `Monsieur et Madame ${guestName}`; isLtr = true; break;
-    case 'fr_man':    label = `Monsieur ${guestName}`;           isLtr = true; break;
-    case 'fr_woman':  label = `Madame ${guestName}`;             isLtr = true; break;
-    default:          label = `\u0625\u0644\u0649 \u0627\u0644\u0633\u064a\u062f ${guestName} \u0648\u062d\u0631\u0645\u0647`;
+    case 'ar_couple': title = 'إلى السيد'; name = `${guestName} وحرمه`; break;
+    case 'ar_man':    title = 'إلى السيد'; name = guestName; break;
+    case 'ar_woman':  title = 'إلى السيدة'; name = guestName; break;
+    case 'fr_couple': title = 'Monsieur & Madame'; name = guestName; isLtr = true; break;
+    case 'fr_man':    title = 'Monsieur'; name = guestName; isLtr = true; break;
+    case 'fr_woman':  title = 'Madame'; name = guestName; isLtr = true; break;
+    default:          title = 'إلى السيد'; name = `${guestName} وحرمه`;
   }
 
   const banner  = document.getElementById('guestNameBanner');
+  const titleEl = document.getElementById('guestCardTitle');
   const labelEl = document.getElementById('guestBannerLabel');
-  if (!banner || !labelEl) return;
+  if (!banner) return;
 
-  labelEl.textContent = label;
+  if (titleEl) titleEl.textContent = title;
+  if (labelEl) labelEl.textContent = name;
   banner.style.display = 'flex';
   if (isLtr) banner.classList.add('ltr');
 
   // Also update browser tab title to include the guest name
   if (guestName) {
     const currentTitle = document.title;
-    document.title = `${label} — ${currentTitle}`;
+    const fullSalutation = isLtr ? `${title} ${name}` : `${title} ${name}`;
+    document.title = `${fullSalutation} — ${currentTitle}`;
   }
 }
 
