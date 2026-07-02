@@ -1716,14 +1716,15 @@ body.env-open .animated-divider {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 290px;
-  background: #fdfbf7;   /* warm paper/cream card color */
-  border: 1px solid rgba(201, 168, 76, 0.45);
+  width: 300px;
+  background: rgba(247, 240, 222, 0.55);   /* semi-transparent warm cream matching envelope */
+  border: 1px solid rgba(201, 168, 76, 0.4); /* soft gold border */
   box-shadow: 
-    0 8px 24px rgba(0, 0, 0, 0.15),
-    0 1px 3px rgba(201, 168, 76, 0.2);
-  border-radius: 8px;     /* card shape */
-  padding: 12px 18px;
+    inset 0 0 12px rgba(201, 168, 76, 0.1),
+    0 4px 20px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;     /* soft card shape */
+  padding: 12px 20px;
+  backdrop-filter: blur(3px);
   animation: guestBannerFadeIn 1.4s cubic-bezier(0.16, 1, 0.3, 1) both 0.5s;
 }
 
@@ -1736,31 +1737,31 @@ body.env-open .animated-divider {
 
 .guest-card-deco {
   font-size: 0.65rem;
-  color: var(--gold);
-  opacity: 0.5;
-  letter-spacing: 2px;
-  margin: 2px 0;
+  color: #c9a84c;
+  opacity: 0.6;
+  letter-spacing: 3px;
+  margin: 1px 0;
 }
 
 .guest-card-title {
   font-family: 'Amiri', serif;
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  opacity: 0.85;
+  font-size: 0.85rem;
+  color: #8a6000;          /* deep gold/brown accent */
+  opacity: 0.9;
   margin-bottom: 2px;
   letter-spacing: 0.3px;
 }
 
 .guest-card-name {
   font-family: 'Aref Ruqaa Ink', 'Amiri', serif;
-  font-size: 1.6rem;      /* prominent handwritten name */
+  font-size: 1.75rem;      /* prominent handwritten name */
   font-weight: 700;
-  color: #2c2518;          /* dark ink signature color */
+  color: #5d471b;          /* beautiful deep gold-brown calligraphic ink */
   text-align: center;
   word-break: break-word;
   line-height: 1.35;
   padding: 2px 0;
-  text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.1);
+  text-shadow: 0.5px 0.5px 1px rgba(255, 255, 255, 0.6);
 }
 
 /* LTR / French adjustments */
@@ -1771,14 +1772,14 @@ body.env-open .animated-divider {
 .guest-name-banner.ltr .guest-card-title {
   font-family: 'Playfair Display', serif;
   font-style: italic;
-  font-size: 0.76rem;
+  font-size: 0.8rem;
   letter-spacing: 0.5px;
 }
 
 .guest-name-banner.ltr .guest-card-name {
   font-family: 'Dancing Script', cursive;
-  font-size: 1.9rem;      /* Elegant hand-written script */
-  color: #1a2a3a;          /* deep navy ink color */
+  font-size: 2.0rem;      /* Elegant hand-written script */
+  color: #4a3418;          /* deep warm brown calligraphic ink */
   font-weight: 700;
   line-height: 1.25;
 }
