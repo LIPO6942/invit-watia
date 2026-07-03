@@ -142,8 +142,8 @@ function loadConfigFromURL() {
         const count    = data.count || 0;
         const pack     = data.pack  || 9999;
 
-        /* Guest links (with ?guest=) get unlimited views — no pack check, no count increment */
-        const hasGuestLink = !!params.get('guest');
+        /* Guest links (with ?guest= or ?gid=) get unlimited views — no pack check, no count increment */
+        const hasGuestLink = !!(params.get('guest') || params.get('gid'));
 
         if (!hasGuestLink && count >= pack) {
           showPackExpired();
@@ -1024,17 +1024,13 @@ const TRANSLATIONS = {
 
 /* ────────────────────────────────────────────────
    GUEST NOMINATIVE BANNER
-   Reads ?guest= and ?gt= from URL and shows the
-   personalised salutation on the envelope face.
+   Supports two modes:
+   • New short URL: ?inv=slug&gid=XXXX  → Firestore lookup by guest id
+   • Legacy URL:    ?guest=NAME&gt=TYPE → direct application (backward compat)
 ──────────────────────────────────────────────── */
-function readAndApplyGuestParam() {
-  const params    = new URLSearchParams(window.location.search);
-  const guestRaw  = params.get('guest');
-  if (!guestRaw) return;                         // no guest param → nothing to show
 
-  const guestName = decodeURIComponent(guestRaw.replace(/\+/g, ' '));
-  const guestType = params.get('gt') || 'ar_couple';
-
+/** Apply banner data once name + type are resolved */
+function _applyGuestBanner(guestName, guestType) {
   let title = '';
   let name = guestName;
   let isLtr = false;
@@ -1050,7 +1046,7 @@ function readAndApplyGuestParam() {
     case 'fr_woman':           title = 'Madame'; name = guestName; isLtr = true; break;
     case 'fr_friend_m':        title = 'Pour mon Ami'; name = guestName; isLtr = true; break;
     case 'fr_friend_f':        title = 'Pour mon amie'; name = guestName; isLtr = true; break;
-    default:                   title = 'إلى السيد'; name = `${guestName} وحرمه}`;
+    default:                   title = 'إلى السيد'; name = `${guestName} وحرمه`;
   }
 
   const banner  = document.getElementById('guestNameBanner');
@@ -1063,17 +1059,40 @@ function readAndApplyGuestParam() {
   banner.style.display = 'flex';
   if (isLtr) banner.classList.add('ltr');
 
-  // Also update browser tab title to include the guest name
-  if (guestName) {
-    const currentTitle = document.title;
-    const fullSalutation = isLtr ? `${title} ${name}` : `${title} ${name}`;
-    document.title = `${fullSalutation} — ${currentTitle}`;
-  }
+  // Update browser tab title
+  const fullSalutation = `${title} ${name}`;
+  document.title = `${fullSalutation} — ${document.title}`;
 
-  // Pre-fill the guestbook form name field
+  // Pre-fill guestbook name field
   const gbNameInput = document.getElementById('gb-name');
-  if (gbNameInput) {
-    gbNameInput.value = name;
+  if (gbNameInput) gbNameInput.value = name;
+}
+
+function readAndApplyGuestParam() {
+  const params   = new URLSearchParams(window.location.search);
+  const gidRaw   = params.get('gid');    // new short-link format
+  const guestRaw = params.get('guest');  // legacy format
+
+  if (gidRaw) {
+    /* ── New short link: resolve guest by id from Firestore ── */
+    const invSlug = params.get('inv');
+    if (!invSlug) return;
+    initFirebase();
+    _db.collection('invitations').doc(invSlug).get()
+      .then(doc => {
+        if (!doc.exists) return;
+        const guests = doc.data().guests || [];
+        const guest  = guests.find(g => g.id === gidRaw);
+        if (!guest) return;
+        _applyGuestBanner(guest.name, guest.type || 'ar_couple');
+      })
+      .catch(e => console.warn('[InvitApp] gid lookup failed:', e));
+
+  } else if (guestRaw) {
+    /* ── Legacy long link: guest name + type in URL ── */
+    const guestName = decodeURIComponent(guestRaw.replace(/\+/g, ' '));
+    const guestType = params.get('gt') || 'ar_couple';
+    _applyGuestBanner(guestName, guestType);
   }
 }
 

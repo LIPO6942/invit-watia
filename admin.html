@@ -299,9 +299,9 @@
       <div class="card">
         <div class="card-title">📦 اختر الباقة</div>
         <div class="pack-selector">
-          <div class="pack-card" data-pack="50"  onclick="selectPack(this)"><div class="pack-num">50</div><div class="pack-label">مشاركة</div><div class="pack-price">باقة صغيرة</div></div>
-          <div class="pack-card selected" data-pack="100" onclick="selectPack(this)"><div class="pack-num">100</div><div class="pack-label">مشاركة</div><div class="pack-price">⭐ الأكثر شيوعاً</div></div>
-          <div class="pack-card" data-pack="150" onclick="selectPack(this)"><div class="pack-num">150</div><div class="pack-label">مشاركة</div><div class="pack-price">باقة كبيرة</div></div>
+          <div class="pack-card" data-pack="30"  onclick="selectPack(this)"><div class="pack-num">30</div><div class="pack-label">مشاركة</div><div class="pack-price">باقة صغيرة</div></div>
+          <div class="pack-card selected" data-pack="60" onclick="selectPack(this)"><div class="pack-num">60</div><div class="pack-label">مشاركة</div><div class="pack-price">⭐ الأكثر شيوعاً</div></div>
+          <div class="pack-card" data-pack="100" onclick="selectPack(this)"><div class="pack-num">100</div><div class="pack-label">مشاركة</div><div class="pack-price">باقة كبيرة</div></div>
         </div>
         <button class="btn btn-primary" style="width:100%" id="generateBtn" onclick="generateLink()">
           ✨ إنشاء الرابط
@@ -391,7 +391,7 @@
 const ADMIN_PASSWORD = 'admin2026';
 const INVITATION_FILE = 'index.html'; // relative path
 
-let selectedPack   = 100;
+let selectedPack   = 60;
 let _shortUrl      = '';
 let _longUrl       = '';
 window._selectedTheme = 'gold';

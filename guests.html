@@ -191,9 +191,9 @@ function formatLabel(name,type){
     default:                  return`إلى السيد ${name} وحرمه`;
   }
 }
-function buildGuestLink(name,type){
+function buildGuestLink(guestId){
   const base=window.location.href.split('?')[0].replace('guests.html','index.html');
-  return`${base}?inv=${encodeURIComponent(_slug)}&guest=${encodeURIComponent(name)}&gt=${type}`;
+  return`${base}?inv=${encodeURIComponent(_slug)}&gid=${encodeURIComponent(guestId)}`;
 }
 window.addEventListener('DOMContentLoaded',()=>{
   const params=new URLSearchParams(window.location.search);
@@ -345,20 +345,23 @@ function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(
 function copyLink(id){
   const g=_guests.find(g=>g.id===id);
   if(!g)return;
-  navigator.clipboard.writeText(buildGuestLink(g.name,g.type)).then(()=>showToast('📋 تم نسخ الرابط الخاص بـ '+g.name));
+  navigator.clipboard.writeText(buildGuestLink(g.id)).then(()=>showToast('📋 تم نسخ الرابط الخاص بـ '+g.name));
 }
 function shareWA(id){
   const g=_guests.find(g=>g.id===id);
   if(!g)return;
-  const link=buildGuestLink(g.name,g.type);
+  const link=buildGuestLink(g.id);
   const label=formatLabel(g.name,g.type);
   const cfg=(_invData&&_invData.config)||{};
   const groom=cfg.gf2||cfg.ga||'';
   const bride=cfg.bf2||cfg.ba||'';
   const isAr=g.type.startsWith('ar');
+  const intro=isAr
+    ?`دعوة خاصة بـ ${g.name} ♥️`
+    :`Invitation pour ${g.name} ♥️`;
   const msg=isAr
-    ?`🌹 دعوة زفاف خاصة بكم\n\n${label}،\n\nيسعدنا دعوتكم لحضور حفل زفاف\n💍 ${groom} & ${bride}\n\nتفضلوا بفتح دعوتكم الخاصة:\n${link}`
-    :`🌹 Invitation de Mariage Personnalisée\n\n${label},\n\nNous vous invitons au mariage de\n💍 ${groom} & ${bride}\n\nOuvrez votre invitation:\n${link}`;
+    ?`🌹 ${intro}\n\n${label},\n\nيسعدنا دعوتكم لحضور حفل زفاف\n💍 ${groom} & ${bride}\n\nتفضلوا بفتح دعوتكم الخاصة:\n${link}`
+    :`🌹 ${intro}\n\n${label},\n\nNous vous invitons au mariage de\n💍 ${groom} & ${bride}\n\nOuvrez votre invitation:\n${link}`;
   window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
 }
 let _toastTimer=null;
