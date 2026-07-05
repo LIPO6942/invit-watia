@@ -179,7 +179,11 @@ body:not(.env-open) {
       rgba(0,0,0,0.018) 3px, rgba(0,0,0,0.018) 4px
     ),
     linear-gradient(200deg, #fefcf5 0%, #f8eeda 45%, #ede0c4 80%, #f5e9d2 100%);
+  /* Overlap left-panel slightly & cast a 3D shadow onto it */
+  width: calc(50% + 4px);
+  z-index: 11;
   box-shadow:
+    -6px 0 16px rgba(0,0,0,0.30),
     inset 4px 0 12px rgba(0,0,0,0.10),
     inset 0 0 40px rgba(201,168,76,0.04);
 }
@@ -234,15 +238,10 @@ body:not(.env-open) {
   height: 135px;
   cursor: pointer;
   border-radius: 50%;
-  /* Rich gold wax background */
-  background: radial-gradient(circle at 38% 32%, #fffaf0 0%, #f6e3b5 45%, #d1aa4e 85%, #876011 100%);
-  border: 3.5px solid #c9a84c;
-  box-shadow:
-    0 10px 30px rgba(74,44,10,0.45),
-    inset 0 3px 8px rgba(255,255,255,0.7),
-    inset 0 -3px 8px rgba(0,0,0,0.2),
-    0 0 0 5px rgba(201,168,76,0.2),
-    0 0 0 8px rgba(201,168,76,0.08);
+  /* Transparent container to let the 3D PNG render natively */
+  background: transparent;
+  border: none;
+  box-shadow: 0 10px 25px rgba(45, 25, 5, 0.45);
   animation: sealPulse 2.8s ease-in-out infinite;
   position: relative;
   z-index: 2;
@@ -1353,6 +1352,8 @@ body.lang-fr .timeline-item:nth-child(even) .tl-right-cell {
   object-fit: cover;
   mix-blend-mode: multiply;
   opacity: 0.95;
+  filter: drop-shadow(-0.5px -0.5px 0.5px rgba(255, 255, 255, 0.8)) 
+          drop-shadow(0.5px 1px 0.5px rgba(60, 40, 10, 0.55));
 }
 
 /* ── RESTORED INTRO OVERLAY & GRADIENT ── */
