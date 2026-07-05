@@ -157,6 +157,15 @@ function loadConfigFromURL() {
         if (cfg.th && cfg.th !== 'gold') {
           document.body.classList.add('theme-' + cfg.th);
         }
+        
+        // Apply saved Day/Night mode preference
+        const savedMode = localStorage.getItem('invitThemeMode');
+        if (savedMode === 'night') {
+          document.body.classList.add('night-mode');
+        } else {
+          document.body.classList.remove('night-mode');
+        }
+
         applyEnvelopeDesign(cfg);
 
         /* Atomic counter increment — only for generic (non-guest-specific) links */
@@ -934,6 +943,13 @@ function applyEnvelopeDesign(cfg) {
     }
   });
 
+  // ── Hall Photo Background (hp) ──
+  const hallPhoto = cfg.hp || 'luxury_wedding_hall';
+  const heroBg = document.querySelector('.hero-bg-parallax');
+  if (heroBg) {
+    heroBg.style.backgroundImage = `url('assets/${hallPhoto}.png')`;
+  }
+
   // ── Seal symbol (es: 'heart' | 'rings' | 'monogram' | 'bismillah') ──
   const seal = cfg.es || 'heart';
   const sealImg = document.getElementById('seal-3d-img');
@@ -944,12 +960,30 @@ function applyEnvelopeDesign(cfg) {
       sealImg.src = 'assets/monogram_wax_seal_bg.png';
       if (sealMonoText) {
         sealMonoText.style.display = 'flex';
-        const isFr = cfg.la === 'fr';
-        const groomName = isFr ? (cfg.gf2 || cfg.ga) : cfg.ga;
-        const brideName = isFr ? (cfg.bf2 || cfg.ba) : cfg.ba;
-        const g = (groomName || '').trim().charAt(0).toUpperCase();
-        const b = (brideName || '').trim().charAt(0).toUpperCase();
-        sealMonoText.textContent = g && b ? `${g} & ${b}` : 'M & M';
+        let initials = '';
+        if (cfg.si) {
+          initials = cfg.si;
+        } else {
+          const isFr = cfg.la === 'fr';
+          const groomName = isFr ? (cfg.gf2 || cfg.ga) : cfg.ga;
+          const brideName = isFr ? (cfg.bf2 || cfg.ba) : cfg.ba;
+          const g = (groomName || '').trim().charAt(0).toUpperCase();
+          const b = (brideName || '').trim().charAt(0).toUpperCase();
+          initials = g && b ? `${g} & ${b}` : 'M & M';
+        }
+        sealMonoText.textContent = initials;
+
+        // Dynamically adjust font-family & size for 3D look
+        const hasLatin = /[a-zA-Z]/.test(initials);
+        if (hasLatin) {
+          sealMonoText.style.fontFamily = "'Playfair Display', serif";
+          sealMonoText.style.fontSize = "1.5rem";
+          sealMonoText.style.fontWeight = "800";
+        } else {
+          sealMonoText.style.fontFamily = "'Amiri', serif";
+          sealMonoText.style.fontSize = "1.7rem";
+          sealMonoText.style.fontWeight = "700";
+        }
       }
     } else {
       sealImg.src = `assets/${seal}_wax_seal.png`;
@@ -957,6 +991,11 @@ function applyEnvelopeDesign(cfg) {
         sealMonoText.style.display = 'none';
       }
     }
+  }
+
+  // Sync Day/Night mode icon
+  if (typeof initDayNightModeIcon === 'function') {
+    initDayNightModeIcon();
   }
 }
 
@@ -1167,4 +1206,41 @@ function applyLanguage(lang) {
   // Render suggestion pills
   renderSuggestions(lang);
 }
+
+/* ────────────────────────────────────────────────
+   Day/Night Theme mode helper & toggle
+   ──────────────────────────────────────────────── */
+function initDayNightModeIcon() {
+  const isNight = document.body.classList.contains('night-mode');
+  const sunIcon = document.querySelector('.sun-icon');
+  const moonIcon = document.querySelector('.moon-icon');
+  if (sunIcon && moonIcon) {
+    if (isNight) {
+      sunIcon.style.display = 'block';
+      moonIcon.style.display = 'none';
+    } else {
+      sunIcon.style.display = 'none';
+      moonIcon.style.display = 'block';
+    }
+  }
+}
+
+window.toggleDayNightMode = function() {
+  const body = document.body;
+  const isNight = body.classList.toggle('night-mode');
+  const sunIcon = document.querySelector('.sun-icon');
+  const moonIcon = document.querySelector('.moon-icon');
+  
+  if (sunIcon && moonIcon) {
+    if (isNight) {
+      sunIcon.style.display = 'block';
+      moonIcon.style.display = 'none';
+      localStorage.setItem('invitThemeMode', 'night');
+    } else {
+      sunIcon.style.display = 'none';
+      moonIcon.style.display = 'block';
+      localStorage.setItem('invitThemeMode', 'day');
+    }
+  }
+};
 

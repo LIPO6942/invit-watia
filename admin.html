@@ -212,6 +212,30 @@
             </select>
           </div>
         </div>
+        <div class="form-row" id="sealInitialsField" style="margin-top: 15px; display: none;">
+          <div class="field">
+            <label>الأحرف الأولى المخصصة للختم (Initiales du sceau)</label>
+            <input id="envSealInitials" type="text" placeholder="مثال: M & M ou م & س">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📸 خلفية قاعة الأفراح (Image de la salle de fête)</div>
+        <div class="photo-selector" style="display:flex; gap:12px; margin-top:10px;">
+          <div class="photo-card selected" data-photo="luxury_wedding_hall" onclick="selectHallPhoto('luxury_wedding_hall')">
+            <img src="assets/luxury_wedding_hall.png" alt="Luxury Hall">
+            <div class="photo-card-label">قاعة فاخرة (Option 1)</div>
+          </div>
+          <div class="photo-card" data-photo="hall_royal" onclick="selectHallPhoto('hall_royal')">
+            <img src="assets/hall_royal.png" alt="Royal Entrance">
+            <div class="photo-card-label">مدخل ملكي (Option 2)</div>
+          </div>
+          <div class="photo-card" data-photo="hall_classic" onclick="selectHallPhoto('hall_classic')">
+            <img src="assets/hall_classic.png" alt="Classic Entrance">
+            <div class="photo-card-label">مدخل كلاسيكي (Option 3)</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -412,6 +436,20 @@ function selectTheme(name) {
   saveAll();
 }
 
+/* ── Hall Photo Selector ── */
+window._selectedHallPhoto = 'luxury_wedding_hall';
+function selectHallPhoto(name, doSave = true) {
+  window._selectedHallPhoto = name;
+  document.querySelectorAll('.photo-card').forEach(card => {
+    if (card.dataset.photo === name) {
+      card.classList.add('selected');
+    } else {
+      card.classList.remove('selected');
+    }
+  });
+  if (doSave) saveAll();
+}
+
 /* ── Music selector ── */
 window._selectedMusic = 'wedding_march';
 let _previewAudio = null;
@@ -539,6 +577,15 @@ function initAdmin() {
   loadSaved();
   renderEvents();
   renderLinksHistory();
+
+  // Seal change listener
+  const sealSelect = document.getElementById('envSeal');
+  if (sealSelect) {
+    sealSelect.addEventListener('change', function() {
+      const isMonogram = this.value === 'monogram';
+      document.getElementById('sealInitialsField').style.display = isMonogram ? 'flex' : 'none';
+    });
+  }
 }
 
 // ── Save / Load ──
@@ -550,6 +597,8 @@ function buildConfig() {
     mu: window._selectedMusic || 'wedding_march', // music
     ep: val('envPattern'),   // envelope pattern
     es: val('envSeal'),      // envelope seal
+    si: val('envSealInitials'), // seal initials
+    hp: window._selectedHallPhoto || 'luxury_wedding_hall', // hall photo
     la: val('invLanguage'),  // invitation language
     ga: val('groomAr'),
     gf2:val('groomFr'),
@@ -617,6 +666,21 @@ function applyConfigToFields(c) {
   set('weddingDateDisplay',c.wdd || '');
   set('envPattern',        c.ep  || 'floral');
   set('envSeal',           c.es  || 'heart');
+  set('envSealInitials',   c.si  || '');
+  
+  // Toggle initials field visibility dynamically
+  const initialsField = document.getElementById('sealInitialsField');
+  if (initialsField) {
+    initialsField.style.display = (c.es === 'monogram') ? 'flex' : 'none';
+  }
+  
+  // Apply hall photo
+  if (c.hp) {
+    selectHallPhoto(c.hp);
+  } else {
+    selectHallPhoto('luxury_wedding_hall');
+  }
+
   set('invLanguage',       c.la  || 'ar');
   
   if (c.th) {

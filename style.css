@@ -258,8 +258,8 @@ body:not(.env-open) {
   height: 100%;
   object-fit: cover;
   display: block;
-  /* SVG filter removes pure black backgrounds */
-  filter: url(#remove-black-mask);
+  /* GPU acceleration */
+  transform: translateZ(0);
 }
 
 
@@ -269,11 +269,17 @@ body:not(.env-open) {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: #fff8e7;
-  text-shadow: 0 2px 5px rgba(74,44,10,0.8), 0 0 10px rgba(201,168,76,0.4);
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #dfc27d; /* Soft premium gold */
+  text-shadow: 
+    -1px -1px 1px rgba(255, 255, 255, 0.45), /* top-left bevel highlight */
+    1px 1px 1px rgba(0, 0, 0, 0.8),          /* bottom-right bevel shadow */
+    1px 2px 3px rgba(0, 0, 0, 0.6),          /* depth shadow */
+    0 0 4px rgba(223, 194, 125, 0.4);        /* gold glow */
   padding-bottom: 2px;
+  letter-spacing: 0.5px;
+  line-height: 1;
 }
 
 
@@ -528,6 +534,9 @@ body:not(.env-open) {
   background-position: center;
   animation: kenBurns 22s ease-in-out infinite alternate;
   z-index: 0;
+  will-change: transform;
+  transition: filter 0.6s ease;
+  filter: brightness(1.1) contrast(1.05) saturate(1.05);
 }
 
 @keyframes kenBurns {
@@ -549,6 +558,7 @@ body:not(.env-open) {
   top: -10%;
   animation: petalFall linear infinite;
   opacity: 0;
+  will-change: transform, opacity;
 }
 
 @keyframes petalFall {
@@ -739,6 +749,7 @@ body:not(.env-open) {
   position: absolute;
   animation: petalFall linear infinite;
   opacity: 0;
+  will-change: transform, opacity;
 }
 
 .countdown-content {
@@ -1083,6 +1094,26 @@ body:not(.env-open) {
   filter: drop-shadow(0 4px 8px rgba(74,44,10,0.25));
 }
 
+.closing-thanks {
+  text-align: center;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.closing-thanks-ar {
+  font-size: clamp(1.1rem, 4.5vw, 1.4rem);
+  color: var(--brown-mid);
+  font-weight: 500;
+}
+.closing-thanks-fr {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(0.9rem, 4vw, 1.1rem);
+  color: var(--brown-mid);
+  opacity: 0.85;
+  font-style: italic;
+}
+
 @keyframes heartbeat {
   0%,100% { transform: scale(1); }
   30%      { transform: scale(1.18); }
@@ -1328,11 +1359,12 @@ body.lang-fr .timeline-item:nth-child(even) .tl-right-cell {
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(28,14,4,0.68) 0%,
-    rgba(28,14,4,0.40) 45%,
-    rgba(28,14,4,0.70) 100%
+    rgba(28,14,4,0.48) 0%,
+    rgba(28,14,4,0.22) 45%,
+    rgba(28,14,4,0.58) 100%
   );
   z-index: 1;
+  transition: background 0.6s ease;
 }
 
 /* ── CUSTOM REGENERATED BACKGROUND ── */
@@ -1344,6 +1376,9 @@ body.lang-fr .timeline-item:nth-child(even) .tl-right-cell {
   background-position: center;
   animation: kenBurns 22s ease-in-out infinite alternate;
   z-index: 0;
+  will-change: transform;
+  transition: filter 0.6s ease;
+  filter: brightness(1.1) contrast(1.05) saturate(1.05);
 }
 
 /* ── ACCELERATION & MOBILE OPTIMIZATIONS ── */
@@ -1839,4 +1874,58 @@ body.env-open .animated-divider {
 }
 .lang-fr #gb-sug-label {
   text-align: left !important;
+}
+
+/* ── DAY/NIGHT TOGGLE BUTTON & NIGHT MODE OVERRIDES ── */
+.day-night-btn {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(10, 6, 2, 0.82);
+  border: 1px solid rgba(201, 168, 76, 0.4);
+  color: var(--gold);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-20px);
+  transition: opacity 0.5s ease, visibility 0.5s ease, transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+body.env-open .day-night-btn {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+.day-night-btn:active {
+  transform: scale(0.92);
+}
+.day-night-btn svg {
+  stroke: var(--gold);
+  fill: none;
+  transition: transform 0.3s;
+}
+.day-night-btn:hover svg {
+  transform: rotate(20deg);
+}
+
+/* Night Mode Overrides */
+body.night-mode .hero-bg-parallax {
+  filter: brightness(0.48) contrast(0.95) saturate(0.85);
+}
+body.night-mode #intro::after {
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 5, 2, 0.85) 0%,
+    rgba(10, 5, 2, 0.68) 45%,
+    rgba(10, 5, 2, 0.92) 100%
+  );
 }
