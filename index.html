@@ -442,18 +442,18 @@
 
       <div class="seal" id="seal" onclick="openEnvelopeNow()">
         <!-- 3D Wax Seal Image (dynamically swapped by JS) -->
-        <img id="seal-3d-img" src="assets/heart_wax_seal.png" alt="Seal" style="opacity: 0; transition: opacity 0.3s ease;">
+        <img id="seal-3d-img" src="assets/heart_wax_seal.png" alt="Seal" style="opacity: 0; transition: opacity 0.3s ease; mix-blend-mode: multiply; width: 100%; height: 100%; object-fit: cover;">
         
         <!-- Monogram overlay text (displayed only when monogram is selected) -->
         <div id="seal-3d-monogram-text" class="font-amiri" style="display:none;">M &amp; M</div>
       </div>
-      <!-- Curved text SVG around the seal -->
-      <svg class="seal-text-svg" viewBox="0 0 200 200">
+      <!-- Curved text SVG around the seal — 280x280 to clear 135px seal radius -->
+      <svg class="seal-text-svg" viewBox="0 0 280 280">
         <defs>
-          <!-- Circle at radius 86 from center (100,100) — renders at ~95px on screen (well outside 48px seal edge) -->
-          <path id="sealCirclePath" d="M100,100 m-86,0 a86,86 0 1,1 172,0 a86,86 0 1,1 -172,0"/>
+          <!-- Radius 108 inside 280 viewBox → orbit sits ~16px outside the 135px seal -->
+          <path id="sealCirclePath" d="M140,140 m-108,0 a108,108 0 1,1 216,0 a108,108 0 1,1 -216,0"/>
         </defs>
-        <text fill="#c9a84c" font-family="'Amiri', serif" font-size="11.5" font-weight="700" letter-spacing="1.5">
+        <text fill="#c9a84c" font-family="'Amiri', serif" font-size="13" font-weight="700" letter-spacing="2">
           <textPath href="#sealCirclePath" startOffset="50%" text-anchor="middle">
             اضغط لفتح الدعوة ✦ اضغط لفتح الدعوة ✦
           </textPath>
