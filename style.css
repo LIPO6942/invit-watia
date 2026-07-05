@@ -1351,9 +1351,30 @@ body.lang-fr .timeline-item:nth-child(even) .tl-right-cell {
   height: 100%;
   object-fit: cover;
   mix-blend-mode: multiply;
-  opacity: 0.95;
+  opacity: 1;
   filter: drop-shadow(-0.5px -0.5px 0.5px rgba(255, 255, 255, 0.8)) 
-          drop-shadow(0.5px 1px 0.5px rgba(60, 40, 10, 0.55));
+          drop-shadow(0.5px 1px 0.5px rgba(60, 40, 10, 0.55))
+          contrast(1.15) brightness(1.05);
+}
+
+/* ── Minimalist Motif Image styling ── */
+.panel-minimalist {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  mix-blend-mode: multiply;
+  opacity: 1;
+  filter: contrast(1.2) brightness(1.08);
+}
+
+/* ── Nature Motif Image styling ── */
+.panel-nature {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  mix-blend-mode: multiply;
+  opacity: 1;
+  filter: contrast(1.15) brightness(1.05);
 }
 
 /* ── RESTORED INTRO OVERLAY & GRADIENT ── */
