@@ -1352,8 +1352,8 @@ body.lang-fr .timeline-item:nth-child(even) .tl-right-cell {
   object-fit: cover;
   mix-blend-mode: multiply;
   opacity: 0.95;
-  filter: drop-shadow(-0.5px -0.5px 0.5px rgba(255, 255, 255, 0.8)) 
-          drop-shadow(0.5px 1px 0.5px rgba(60, 40, 10, 0.55));
+  filter: drop-shadow(-1px -1px 0.5px rgba(255, 255, 255, 0.95)) 
+          drop-shadow(1.5px 1.5px 1.2px rgba(50, 30, 10, 0.8));
 }
 
 /* ── RESTORED INTRO OVERLAY & GRADIENT ── */

@@ -1041,6 +1041,7 @@ function applyEnvelopeDesign(cfg) {
         sealMonoText.style.display = 'none';
       }
     }
+    sealImg.style.opacity = '1';
   }
 
   // Sync Day/Night mode icon
