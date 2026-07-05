@@ -365,8 +365,8 @@ body:not(.env-open) {
 }
 
 @keyframes rotateSealText {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+  from { transform: rotate3d(0, 0, 1, 0deg); }
+  to   { transform: rotate3d(0, 0, 1, 360deg); }
 }
 
 /* ─────── 3b. New Envelope Face Decorations ─────── */
@@ -438,13 +438,13 @@ body:not(.env-open) {
 .env-banner-groom, .env-banner-bride {
   background: linear-gradient(
     105deg,
-    #aa7a1c 0%,
-    #c9930c 20%,
-    #f5e17a 40%,
-    #fff9c4 50%,
-    #f5e17a 60%,
-    #c9930c 80%,
-    #aa7a1c 100%
+    #7a4e08 0%,
+    #c9930c 25%,
+    #f0c84a 50%,
+    #fffef5 65%,
+    #f0c84a 80%,
+    #c9930c 90%,
+    #7a4e08 100%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;
@@ -632,10 +632,10 @@ body:not(.env-open) {
 }
 
 @keyframes petalFall {
-  0%   { transform: translateY(0) rotate(0deg) translateX(0);   opacity: 0; }
+  0%   { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0; }
   8%   { opacity: 0.85; }
   92%  { opacity: 0.85; }
-  100% { transform: translateY(115vh) rotate(540deg) translateX(50px); opacity: 0; }
+  100% { transform: translate3d(50px, 115vh, 0) rotate(540deg); opacity: 0; }
 }
 
 .intro-overlay {
