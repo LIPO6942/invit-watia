@@ -916,6 +916,8 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ────────────────────────────────────────────────
    ENVELOPE DESIGN — applies motif & seal from config
    ──────────────────────────────────────────────── */
+let _sealApplied = false; // Flag to prevent seal from being changed multiple times
+
 function applyEnvelopeDesign(cfg) {
   if (!cfg) return;
 
@@ -957,91 +959,95 @@ function applyEnvelopeDesign(cfg) {
   }
 
   // ── Seal symbol (es: 'heart' | 'rings' | 'monogram' | 'bismillah') ──
-  const seal = cfg.es || 'heart';
-  const sealImg = document.getElementById('seal-3d-img');
-  const sealMonoText = document.getElementById('seal-3d-monogram-text');
+  // Only apply seal once to prevent it from changing after initial load
+  if (!_sealApplied) {
+    const seal = cfg.es || 'heart';
+    const sealImg = document.getElementById('seal-3d-img');
+    const sealMonoText = document.getElementById('seal-3d-monogram-text');
 
-  if (sealImg) {
-    if (seal === 'monogram') {
-      sealImg.src = 'assets/monogram_wax_seal_bg.png';
-      if (sealMonoText) {
-        sealMonoText.style.display = 'flex';
-        let initials = '';
-        if (cfg.si) {
-          initials = cfg.si;
-        } else {
-          const isFr = cfg.la === 'fr';
-          const groomName = isFr ? (cfg.gf2 || cfg.ga) : cfg.ga;
-          const brideName = isFr ? (cfg.bf2 || cfg.ba) : cfg.ba;
-          const g = (groomName || '').trim().charAt(0).toUpperCase();
-          const b = (brideName || '').trim().charAt(0).toUpperCase();
-          initials = g && b ? `${g} & ${b}` : 'M & M';
-        }
-
-        // Dynamically adjust font-family for 3D look
-        const hasLatin = /[a-zA-Z]/.test(initials);
-        if (hasLatin) {
-          sealMonoText.style.fontFamily = "'Playfair Display', serif";
-          sealMonoText.style.fontSize = "1.5rem";
-        } else {
-          sealMonoText.style.fontFamily = "'Amiri', serif";
-          sealMonoText.style.fontSize = "1.75rem";
-        }
-
-        // Parse and render initials with individual spans for perfect centering
-        sealMonoText.innerHTML = '';
-        
-        let parts = [];
-        if (initials.includes('&')) {
-          parts = initials.split('&').map(p => p.trim());
-          if (parts.length === 2) {
-            parts = [parts[0], '&', parts[1]];
-          }
-        } else if (initials.includes('و')) {
-          parts = initials.split('و').map(p => p.trim());
-          if (parts.length === 2) {
-            parts = [parts[0], 'و', parts[1]];
-          }
-        }
-        
-        if (parts.length === 3) {
-          const span1 = document.createElement('span');
-          span1.textContent = parts[0];
-          span1.className = 'mono-letter';
-          
-          const spanConnector = document.createElement('span');
-          spanConnector.textContent = parts[1];
-          spanConnector.className = 'mono-connector';
-          
-          const span2 = document.createElement('span');
-          span2.textContent = parts[2];
-          span2.className = 'mono-letter';
-          
-          // Arabic is RTL, Latin is LTR. Row-reverse ensures correct order
-          if (!hasLatin) {
-            sealMonoText.style.flexDirection = 'row-reverse';
+    if (sealImg) {
+      if (seal === 'monogram') {
+        sealImg.src = 'assets/monogram_wax_seal_bg.png';
+        if (sealMonoText) {
+          sealMonoText.style.display = 'flex';
+          let initials = '';
+          if (cfg.si) {
+            initials = cfg.si;
           } else {
-            sealMonoText.style.flexDirection = 'row';
+            const isFr = cfg.la === 'fr';
+            const groomName = isFr ? (cfg.gf2 || cfg.ga) : cfg.ga;
+            const brideName = isFr ? (cfg.bf2 || cfg.ba) : cfg.ba;
+            const g = (groomName || '').trim().charAt(0).toUpperCase();
+            const b = (brideName || '').trim().charAt(0).toUpperCase();
+            initials = g && b ? `${g} & ${b}` : 'M & M';
+          }
+
+          // Dynamically adjust font-family for 3D look
+          const hasLatin = /[a-zA-Z]/.test(initials);
+          if (hasLatin) {
+            sealMonoText.style.fontFamily = "'Playfair Display', serif";
+            sealMonoText.style.fontSize = "1.5rem";
+          } else {
+            sealMonoText.style.fontFamily = "'Amiri', serif";
+            sealMonoText.style.fontSize = "1.75rem";
+          }
+
+          // Parse and render initials with individual spans for perfect centering
+          sealMonoText.innerHTML = '';
+          
+          let parts = [];
+          if (initials.includes('&')) {
+            parts = initials.split('&').map(p => p.trim());
+            if (parts.length === 2) {
+              parts = [parts[0], '&', parts[1]];
+            }
+          } else if (initials.includes('و')) {
+            parts = initials.split('و').map(p => p.trim());
+            if (parts.length === 2) {
+              parts = [parts[0], 'و', parts[1]];
+            }
           }
           
-          sealMonoText.appendChild(span1);
-          sealMonoText.appendChild(spanConnector);
-          sealMonoText.appendChild(span2);
-        } else {
-          const singleSpan = document.createElement('span');
-          singleSpan.textContent = initials;
-          singleSpan.className = 'mono-letter';
-          sealMonoText.style.flexDirection = 'row';
-          sealMonoText.appendChild(singleSpan);
+          if (parts.length === 3) {
+            const span1 = document.createElement('span');
+            span1.textContent = parts[0];
+            span1.className = 'mono-letter';
+            
+            const spanConnector = document.createElement('span');
+            spanConnector.textContent = parts[1];
+            spanConnector.className = 'mono-connector';
+            
+            const span2 = document.createElement('span');
+            span2.textContent = parts[2];
+            span2.className = 'mono-letter';
+            
+            // Arabic is RTL, Latin is LTR. Row-reverse ensures correct order
+            if (!hasLatin) {
+              sealMonoText.style.flexDirection = 'row-reverse';
+            } else {
+              sealMonoText.style.flexDirection = 'row';
+            }
+            
+            sealMonoText.appendChild(span1);
+            sealMonoText.appendChild(spanConnector);
+            sealMonoText.appendChild(span2);
+          } else {
+            const singleSpan = document.createElement('span');
+            singleSpan.textContent = initials;
+            singleSpan.className = 'mono-letter';
+            sealMonoText.style.flexDirection = 'row';
+            sealMonoText.appendChild(singleSpan);
+          }
         }
-      }
-    } else {
-      sealImg.src = `assets/${seal}_wax_seal.png`;
-      if (sealMonoText) {
-        sealMonoText.style.display = 'none';
+      } else {
+        sealImg.src = `assets/${seal}_wax_seal.png`;
+        if (sealMonoText) {
+          sealMonoText.style.display = 'none';
+        }
       }
     }
     sealImg.style.opacity = '1';
+    _sealApplied = true; // Mark seal as applied to prevent future changes
   }
 
   // Sync Day/Night mode icon

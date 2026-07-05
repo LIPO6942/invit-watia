@@ -235,9 +235,13 @@
             <img src="assets/hall_classic.png" alt="Classic Entrance">
             <div class="photo-card-label">مدخل كلاسيكي (Option 3)</div>
           </div>
-          <div class="photo-card" data-photo="hall_outdoor" onclick="selectHallPhoto('hall_outdoor')">
-            <img src="assets/hall_outdoor.png" alt="Outdoor Sea">
-            <div class="photo-card-label">زفاف خارجي (Option 4)</div>
+          <div class="photo-card" data-photo="outdoor_seaside_wedding" onclick="selectHallPhoto('outdoor_seaside_wedding')">
+            <img src="assets/outdoor_seaside_wedding.png" alt="Outdoor Seaside Wedding">
+            <div class="photo-card-label">زفاف فرنسي على البحر (Option 4)</div>
+          </div>
+          <div class="photo-card" data-photo="outdoor_french_wedding" onclick="selectHallPhoto('outdoor_french_wedding')">
+            <img src="assets/outdoor_french_wedding.png" alt="Outdoor French Wedding">
+            <div class="photo-card-label">زفاف ريفي فرنسي (Option 5)</div>
           </div>
         </div>
       </div>
@@ -525,17 +529,33 @@ function buildInvSlug(groomFr, brideFr) {
 }
 
 // ── Firebase Firestore operations ──
-async function saveInvitationToFirebase(slug, cfg, pack, guestName, couplePwd) {
+async function saveInvitationToFirebase(slug, cfg, pack, guestName, couplePwd, isUpdate = false) {
   initFirebase();
-  await _db.collection('invitations').doc(slug).set({
-    config:        cfg,
-    count:         0,
-    pack:          pack,
-    guestName:     guestName || 'عام',
-    couplePassword: couplePwd || '',
-    guests:        [],
-    created:       firebase.firestore.FieldValue.serverTimestamp()
-  });
+  const docRef = _db.collection('invitations').doc(slug);
+  const doc = await docRef.get();
+  
+  if (isUpdate && doc.exists) {
+    // Update existing invitation - preserve count, guests, and created timestamp
+    const existingData = doc.data();
+    await docRef.update({
+      config: cfg,
+      pack: pack,
+      guestName: guestName || existingData.guestName || 'عام',
+      couplePassword: couplePwd || existingData.couplePassword || '',
+      updated: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  } else {
+    // Create new invitation
+    await docRef.set({
+      config:        cfg,
+      count:         0,
+      pack:          pack,
+      guestName:     guestName || 'عام',
+      couplePassword: couplePwd || '',
+      guests:        [],
+      created:       firebase.firestore.FieldValue.serverTimestamp()
+    });
+  }
 }
 
 // Real-time counter watcher (returns unsubscribe function)
@@ -840,11 +860,21 @@ async function generateLink() {
   const guestName  = val('guestNameInput');
   const couplePwd  = val('couplePwdInput');
 
-  // Build unique personalized slug
-  const baseSlug   = buildInvSlug(val('groomFr'), val('brideFr'));
-  const randSuffix = Math.random().toString(36).substring(2, 6);
-  const invSlug    = `${baseSlug}-${randSuffix}`;
-  cfg.id = invSlug;
+  // Check if we're updating an existing invitation
+  const existingSlug = window._currentEditingSlug;
+  
+  let invSlug;
+  if (existingSlug) {
+    // Update existing invitation
+    invSlug = existingSlug;
+    cfg.id = invSlug;
+  } else {
+    // Create new invitation
+    const baseSlug   = buildInvSlug(val('groomFr'), val('brideFr'));
+    const randSuffix = Math.random().toString(36).substring(2, 6);
+    invSlug = `${baseSlug}-${randSuffix}`;
+    cfg.id = invSlug;
+  }
 
   // Build base URL
   const prodUrl = val('prodUrlInput');
@@ -873,7 +903,7 @@ async function generateLink() {
   shortUrlEl.textContent = '⏳ جاري الحفظ على Firebase...';
 
   try {
-    await saveInvitationToFirebase(invSlug, cfg, selectedPack, guestName, finalPwd);
+    await saveInvitationToFirebase(invSlug, cfg, selectedPack, guestName, finalPwd, !!existingSlug);
 
     const inviteUrl  = `${base}?inv=${invSlug}`;
     const guestsBase = base.replace('index.html', 'guests.html').replace(INVITATION_FILE, 'guests.html');
@@ -894,8 +924,12 @@ async function generateLink() {
     const gInput = document.getElementById('guestNameInput');
     if (gInput) gInput.value = '';
 
+    // Clear editing state
+    window._currentEditingSlug = null;
+    document.getElementById('generateBtn').textContent = '✨ إنشاء الرابط';
+
     await renderLinksHistory();
-    showToast('🎉 تم إنشاء الرابط!');
+    showToast(existingSlug ? '✅ تم تحديث الدعوة!' : '🎉 تم إنشاء الرابط!');
 
   } catch(e) {
     console.error('Firebase save failed:', e);
@@ -1062,12 +1096,45 @@ function updateCounter(slug, data) {
         <span style="font-size:0.72rem; color:var(--text-muted);">👁 الزيارات العامة: ${views}</span>
       </div>
       <div style="margin-top:2px;">
-        متبقي بالباقة: <strong style="color:${color}">${remaining}</strong>
-      </div>
-      <div style="height:5px;background:rgba(255,255,255,0.08);border-radius:3px;margin-top:4px;overflow:hidden">
-        <div style="width:${pct}%;height:5px;background:${color};border-radius:3px;transition:width 0.6s ease"></div>
+        <div style="background:rgba(255,255,255,0.08);border-radius:20px;height:5px;overflow:hidden">
+          <div style="width:${pct}%;height:100%;background:${color};border-radius:20px"></div>
+        </div>
+        <div style="font-size:0.7rem;color:${color};margin-top:2px">${remaining} متبقي</div>
       </div>
     </div>`;
+}
+
+// ── Update existing invitation config ──
+async function updateLinkConfig(slug) {
+  try {
+    initFirebase();
+    const doc = await _db.collection('invitations').doc(slug).get();
+    if (!doc.exists) {
+      showToast('❌ الدعوة غير موجودة');
+      return;
+    }
+    
+    const data = doc.data();
+    const cfg = data.config;
+    
+    // Load config into form fields
+    applyConfigToFields(cfg);
+    
+    // Set editing state
+    window._currentEditingSlug = slug;
+    
+    // Update button text
+    document.getElementById('generateBtn').textContent = '✅ تحديث الدعوة';
+    
+    // Switch to the couple page to show the loaded config
+    showPage('page-couple');
+    
+    showToast('✅ تم تحميل إعدادات الدعوة - يمكنك الآن تعديلها وحفظ التغييرات');
+    
+  } catch (err) {
+    console.error('Error loading invitation config:', err);
+    showToast('❌ فشل تحميل الإعدادات');
+  }
 }
 
 function shareHistLink(url) {
