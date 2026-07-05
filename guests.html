@@ -163,27 +163,37 @@ let _fbApp=null,_db=null;
 function initFirebase(){if(_fbApp)return;_fbApp=firebase.initializeApp(FIREBASE_CONFIG);_db=firebase.firestore()}
 let _slug='',_invData=null,_guests=[],_addFormula='ar_couple',_bulkFormula='ar_couple',_filterQ='';
 const FORMULAS=[
-  {value:'ar_couple',label:'إلى السيد ... وحرمه', badge:'b-arc',emoji:'👨‍👩‍👧'},
-  {value:'ar_man',   label:'إلى السيد ...',         badge:'b-arm',emoji:'👔'},
-  {value:'ar_woman', label:'إلى السيدة ...',        badge:'b-arw',emoji:'👗'},
-  {value:'fr_couple',label:'M. et Mme ...',          badge:'b-frc',emoji:'💑'},
-  {value:'fr_man',   label:'Monsieur ...',            badge:'b-frm',emoji:'🤵'},
-  {value:'fr_woman', label:'Madame ...',              badge:'b-frw',emoji:'👰'},
+  {value:'ar_couple',          label:'إلى السيد ... وحرمه',           badge:'b-arc', emoji:'👨‍👩‍👧'},
+  {value:'ar_couple_children', label:'إلى السيد ... وحرمه وأبنائه', badge:'b-arcc',emoji:'👨‍👩‍👦‍👦'},
+  {value:'ar_man',             label:'إلى السيد ...',              badge:'b-arm', emoji:'👔'},
+  {value:'ar_woman',           label:'إلى السيدة ...',             badge:'b-arw', emoji:'👗'},
+  {value:'ar_friend_m',        label:'إلى عْشيري ...',            badge:'b-afm', emoji:'🤝'},
+  {value:'ar_friend_f',        label:'إلى عْشيرتي ...',           badge:'b-aff', emoji:'👩‍🤝‍👩'},
+  {value:'fr_couple',          label:'M. et Mme ...',            badge:'b-frc', emoji:'💑'},
+  {value:'fr_man',             label:'Monsieur ...',              badge:'b-frm', emoji:'🤵'},
+  {value:'fr_woman',           label:'Madame ...',                badge:'b-frw', emoji:'👰'},
+  {value:'fr_friend_m',        label:'Pour mon Ami ...',          badge:'b-ffm', emoji:'👨‍🤝‍👨'},
+  {value:'fr_friend_f',        label:'Pour mon amie ...',         badge:'b-fff', emoji:'👩‍🤝‍👩'},
 ];
 function formatLabel(name,type){
   switch(type){
-    case'ar_couple':return`إلى السيد ${name} وحرمه`;
-    case'ar_man':   return`إلى السيد ${name}`;
-    case'ar_woman': return`إلى السيدة ${name}`;
-    case'fr_couple':return`Monsieur et Madame ${name}`;
-    case'fr_man':   return`Monsieur ${name}`;
-    case'fr_woman': return`Madame ${name}`;
-    default:        return`إلى السيد ${name} وحرمه`;
+    case'ar_couple':          return`إلى السيد ${name} وحرمه`;
+    case'ar_couple_children': return`إلى السيد ${name} وحرمه وأبنائه`;
+    case'ar_man':             return`إلى السيد ${name}`;
+    case'ar_woman':           return`إلى السيدة ${name}`;
+    case'ar_friend_m':        return`إلى عْشيري ${name}`;
+    case'ar_friend_f':        return`إلى عْشيرتي ${name}`;
+    case'fr_couple':          return`Monsieur et Madame ${name}`;
+    case'fr_man':             return`Monsieur ${name}`;
+    case'fr_woman':           return`Madame ${name}`;
+    case'fr_friend_m':        return`Pour mon Ami ${name}`;
+    case'fr_friend_f':        return`Pour mon amie ${name}`;
+    default:                  return`إلى السيد ${name} وحرمه`;
   }
 }
-function buildGuestLink(name,type){
+function buildGuestLink(guestId){
   const base=window.location.href.split('?')[0].replace('guests.html','index.html');
-  return`${base}?inv=${encodeURIComponent(_slug)}&guest=${encodeURIComponent(name)}&gt=${type}`;
+  return`${base}?inv=${encodeURIComponent(_slug)}&gid=${encodeURIComponent(guestId)}`;
 }
 window.addEventListener('DOMContentLoaded',()=>{
   const params=new URLSearchParams(window.location.search);
@@ -335,20 +345,23 @@ function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(
 function copyLink(id){
   const g=_guests.find(g=>g.id===id);
   if(!g)return;
-  navigator.clipboard.writeText(buildGuestLink(g.name,g.type)).then(()=>showToast('📋 تم نسخ الرابط الخاص بـ '+g.name));
+  navigator.clipboard.writeText(buildGuestLink(g.id)).then(()=>showToast('📋 تم نسخ الرابط الخاص بـ '+g.name));
 }
 function shareWA(id){
   const g=_guests.find(g=>g.id===id);
   if(!g)return;
-  const link=buildGuestLink(g.name,g.type);
+  const link=buildGuestLink(g.id);
   const label=formatLabel(g.name,g.type);
   const cfg=(_invData&&_invData.config)||{};
   const groom=cfg.gf2||cfg.ga||'';
   const bride=cfg.bf2||cfg.ba||'';
   const isAr=g.type.startsWith('ar');
+  const intro=isAr
+    ?`دعوة خاصة بـ ${g.name} ♥️`
+    :`Invitation pour ${g.name} ♥️`;
   const msg=isAr
-    ?`🌹 دعوة زفاف خاصة بكم\n\n${label}،\n\nيسعدنا دعوتكم لحضور حفل زفاف\n💍 ${groom} & ${bride}\n\nتفضلوا بفتح دعوتكم الخاصة:\n${link}`
-    :`🌹 Invitation de Mariage Personnalisée\n\n${label},\n\nNous vous invitons au mariage de\n💍 ${groom} & ${bride}\n\nOuvrez votre invitation:\n${link}`;
+    ?`🌹 ${intro}\n\n${label},\n\nيسعدنا دعوتكم لحضور حفل زفاف\n💍 ${groom} & ${bride}\n\nتفضلوا بفتح دعوتكم الخاصة:\n${link}`
+    :`🌹 ${intro}\n\n${label},\n\nNous vous invitons au mariage de\n💍 ${groom} & ${bride}\n\nOuvrez votre invitation:\n${link}`;
   window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
 }
 let _toastTimer=null;

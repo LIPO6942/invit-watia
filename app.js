@@ -94,6 +94,12 @@ function checkRoleView() {
     // Hide the guestbook — the couple cannot send wishes to themselves
     const gbSection = document.getElementById('guestbook-section');
     if (gbSection) gbSection.style.display = 'none';
+
+    // Show the dedicated bride/groom inscription on the envelope
+    const roleLabel = document.getElementById('role-inscription-banner');
+    if (roleLabel) roleLabel.style.display = 'flex';
+    // Text will be set after language is applied in applyLanguage()
+    window._pendingRoleView = view;
   }
 }
 
@@ -136,8 +142,8 @@ function loadConfigFromURL() {
         const count    = data.count || 0;
         const pack     = data.pack  || 9999;
 
-        /* Guest links (with ?guest=) get unlimited views — no pack check, no count increment */
-        const hasGuestLink = !!params.get('guest');
+        /* Guest links (with ?guest= or ?gid=) get unlimited views — no pack check, no count increment */
+        const hasGuestLink = !!(params.get('guest') || params.get('gid'));
 
         if (!hasGuestLink && count >= pack) {
           showPackExpired();
@@ -1057,28 +1063,29 @@ const TRANSLATIONS = {
 
 /* ────────────────────────────────────────────────
    GUEST NOMINATIVE BANNER
-   Reads ?guest= and ?gt= from URL and shows the
-   personalised salutation on the envelope face.
+   Supports two modes:
+   • New short URL: ?inv=slug&gid=XXXX  → Firestore lookup by guest id
+   • Legacy URL:    ?guest=NAME&gt=TYPE → direct application (backward compat)
 ──────────────────────────────────────────────── */
-function readAndApplyGuestParam() {
-  const params    = new URLSearchParams(window.location.search);
-  const guestRaw  = params.get('guest');
-  if (!guestRaw) return;                         // no guest param → nothing to show
 
-  const guestName = decodeURIComponent(guestRaw.replace(/\+/g, ' '));
-  const guestType = params.get('gt') || 'ar_couple';
-
+/** Apply banner data once name + type are resolved */
+function _applyGuestBanner(guestName, guestType) {
   let title = '';
   let name = guestName;
   let isLtr = false;
   switch (guestType) {
-    case 'ar_couple': title = 'إلى السيد'; name = `${guestName} وحرمه`; break;
-    case 'ar_man':    title = 'إلى السيد'; name = guestName; break;
-    case 'ar_woman':  title = 'إلى السيدة'; name = guestName; break;
-    case 'fr_couple': title = 'Monsieur & Madame'; name = guestName; isLtr = true; break;
-    case 'fr_man':    title = 'Monsieur'; name = guestName; isLtr = true; break;
-    case 'fr_woman':  title = 'Madame'; name = guestName; isLtr = true; break;
-    default:          title = 'إلى السيد'; name = `${guestName} وحرمه`;
+    case 'ar_couple':          title = 'إلى السيد'; name = `${guestName} وحرمه`; break;
+    case 'ar_couple_children': title = 'إلى السيد'; name = `${guestName} وحرمه وأبنائه`; break;
+    case 'ar_man':             title = 'إلى السيد'; name = guestName; break;
+    case 'ar_woman':           title = 'إلى السيدة'; name = guestName; break;
+    case 'ar_friend_m':        title = 'إلى عْشيري'; name = guestName; break;
+    case 'ar_friend_f':        title = 'إلى عْشيرتي'; name = guestName; break;
+    case 'fr_couple':          title = 'Monsieur & Madame'; name = guestName; isLtr = true; break;
+    case 'fr_man':             title = 'Monsieur'; name = guestName; isLtr = true; break;
+    case 'fr_woman':           title = 'Madame'; name = guestName; isLtr = true; break;
+    case 'fr_friend_m':        title = 'Pour mon Ami'; name = guestName; isLtr = true; break;
+    case 'fr_friend_f':        title = 'Pour mon amie'; name = guestName; isLtr = true; break;
+    default:                   title = 'إلى السيد'; name = `${guestName} وحرمه`;
   }
 
   const banner  = document.getElementById('guestNameBanner');
@@ -1091,17 +1098,40 @@ function readAndApplyGuestParam() {
   banner.style.display = 'flex';
   if (isLtr) banner.classList.add('ltr');
 
-  // Also update browser tab title to include the guest name
-  if (guestName) {
-    const currentTitle = document.title;
-    const fullSalutation = isLtr ? `${title} ${name}` : `${title} ${name}`;
-    document.title = `${fullSalutation} — ${currentTitle}`;
-  }
+  // Update browser tab title
+  const fullSalutation = `${title} ${name}`;
+  document.title = `${fullSalutation} — ${document.title}`;
 
-  // Pre-fill the guestbook form name field
+  // Pre-fill guestbook name field
   const gbNameInput = document.getElementById('gb-name');
-  if (gbNameInput) {
-    gbNameInput.value = name;
+  if (gbNameInput) gbNameInput.value = name;
+}
+
+function readAndApplyGuestParam() {
+  const params   = new URLSearchParams(window.location.search);
+  const gidRaw   = params.get('gid');    // new short-link format
+  const guestRaw = params.get('guest');  // legacy format
+
+  if (gidRaw) {
+    /* ── New short link: resolve guest by id from Firestore ── */
+    const invSlug = params.get('inv');
+    if (!invSlug) return;
+    initFirebase();
+    _db.collection('invitations').doc(invSlug).get()
+      .then(doc => {
+        if (!doc.exists) return;
+        const guests = doc.data().guests || [];
+        const guest  = guests.find(g => g.id === gidRaw);
+        if (!guest) return;
+        _applyGuestBanner(guest.name, guest.type || 'ar_couple');
+      })
+      .catch(e => console.warn('[InvitApp] gid lookup failed:', e));
+
+  } else if (guestRaw) {
+    /* ── Legacy long link: guest name + type in URL ── */
+    const guestName = decodeURIComponent(guestRaw.replace(/\+/g, ' '));
+    const guestType = params.get('gt') || 'ar_couple';
+    _applyGuestBanner(guestName, guestType);
   }
 }
 
@@ -1205,6 +1235,30 @@ function applyLanguage(lang) {
 
   // Render suggestion pills
   renderSuggestions(lang);
+
+  // Apply dedicated role inscription for groom/bride private view
+  if (window._pendingRoleView) {
+    const roleLabel  = document.getElementById('role-inscription-banner');
+    const roleTitleEl = document.getElementById('role-inscription-title');
+    const roleSubEl   = document.getElementById('role-inscription-sub');
+    if (roleLabel && roleTitleEl && roleSubEl) {
+      const isGroom = window._pendingRoleView === 'groom';
+      if (isFr) {
+        roleLabel.classList.add('ltr');
+        roleTitleEl.textContent = 'Invitation souvenir';
+        roleSubEl.textContent = isGroom
+          ? 'Pour le marié'
+          : 'Pour la mariée';
+      } else {
+        roleLabel.classList.remove('ltr');
+        roleTitleEl.textContent = 'دعوة خاصة';
+        roleSubEl.textContent = isGroom
+          ? 'بالعريس للتذكار'
+          : 'بالعروسة للتذكار';
+      }
+      roleLabel.style.display = 'flex';
+    }
+  }
 }
 
 /* ────────────────────────────────────────────────
