@@ -269,17 +269,34 @@ body:not(.env-open) {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.7rem;
-  font-weight: 800;
-  color: #dfc27d; /* Soft premium gold */
-  text-shadow: 
-    -1px -1px 1px rgba(255, 255, 255, 0.45), /* top-left bevel highlight */
-    1px 1px 1px rgba(0, 0, 0, 0.8),          /* bottom-right bevel shadow */
-    1px 2px 3px rgba(0, 0, 0, 0.6),          /* depth shadow */
-    0 0 4px rgba(223, 194, 125, 0.4);        /* gold glow */
-  padding-bottom: 2px;
-  letter-spacing: 0.5px;
+  gap: 4px;
+  /* Centering adjustment inside the wax seal */
+  padding-bottom: 4px;
   line-height: 1;
+  user-select: none;
+}
+
+#seal-3d-monogram-text .mono-letter {
+  color: #fce8b3; /* Lighter bright gold for highlights */
+  font-weight: 900;
+  /* Multi-layered shadows to give high definition 3D/embossed effect like rings/heart */
+  text-shadow: 
+    -1px -1px 0px rgba(255, 255, 255, 0.7), /* sharp top-left bevel highlight */
+    -1px -1px 1px rgba(255, 255, 255, 0.4),
+    1px 1px 0px rgba(50, 30, 5, 0.95),      /* sharp bottom-right bevel shadow */
+    1px 1.5px 1.5px rgba(40, 20, 5, 0.9),    /* depth extrusion */
+    2px 2px 3px rgba(0, 0, 0, 0.75);         /* ambient drop shadow */
+}
+
+#seal-3d-monogram-text .mono-connector {
+  font-size: 0.8em;
+  color: #d1ab5a; /* Slightly darker gold/bronze */
+  opacity: 0.95;
+  text-shadow: 
+    -1px -1px 0px rgba(255, 255, 255, 0.4),
+    1px 1px 0px rgba(50, 30, 5, 0.9),
+    1.5px 1.5px 2px rgba(0, 0, 0, 0.7);
+  margin: 0 1px;
 }
 
 
@@ -1371,7 +1388,7 @@ body.lang-fr .timeline-item:nth-child(even) .tl-right-cell {
 .hero-bg-parallax {
   position: absolute;
   inset: -10%;
-  background-image: url('assets/luxury_wedding_hall.png') !important;
+  background-image: url('assets/luxury_wedding_hall.png');
   background-size: cover;
   background-position: center;
   animation: kenBurns 22s ease-in-out infinite alternate;

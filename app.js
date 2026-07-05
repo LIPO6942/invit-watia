@@ -977,18 +977,62 @@ function applyEnvelopeDesign(cfg) {
           const b = (brideName || '').trim().charAt(0).toUpperCase();
           initials = g && b ? `${g} & ${b}` : 'M & M';
         }
-        sealMonoText.textContent = initials;
 
-        // Dynamically adjust font-family & size for 3D look
+        // Dynamically adjust font-family for 3D look
         const hasLatin = /[a-zA-Z]/.test(initials);
         if (hasLatin) {
           sealMonoText.style.fontFamily = "'Playfair Display', serif";
           sealMonoText.style.fontSize = "1.5rem";
-          sealMonoText.style.fontWeight = "800";
         } else {
           sealMonoText.style.fontFamily = "'Amiri', serif";
-          sealMonoText.style.fontSize = "1.7rem";
-          sealMonoText.style.fontWeight = "700";
+          sealMonoText.style.fontSize = "1.75rem";
+        }
+
+        // Parse and render initials with individual spans for perfect centering
+        sealMonoText.innerHTML = '';
+        
+        let parts = [];
+        if (initials.includes('&')) {
+          parts = initials.split('&').map(p => p.trim());
+          if (parts.length === 2) {
+            parts = [parts[0], '&', parts[1]];
+          }
+        } else if (initials.includes('و')) {
+          parts = initials.split('و').map(p => p.trim());
+          if (parts.length === 2) {
+            parts = [parts[0], 'و', parts[1]];
+          }
+        }
+        
+        if (parts.length === 3) {
+          const span1 = document.createElement('span');
+          span1.textContent = parts[0];
+          span1.className = 'mono-letter';
+          
+          const spanConnector = document.createElement('span');
+          spanConnector.textContent = parts[1];
+          spanConnector.className = 'mono-connector';
+          
+          const span2 = document.createElement('span');
+          span2.textContent = parts[2];
+          span2.className = 'mono-letter';
+          
+          // Arabic is RTL, Latin is LTR. Row-reverse ensures correct order
+          if (!hasLatin) {
+            sealMonoText.style.flexDirection = 'row-reverse';
+          } else {
+            sealMonoText.style.flexDirection = 'row';
+          }
+          
+          sealMonoText.appendChild(span1);
+          sealMonoText.appendChild(spanConnector);
+          sealMonoText.appendChild(span2);
+        } else {
+          const singleSpan = document.createElement('span');
+          singleSpan.textContent = initials;
+          singleSpan.className = 'mono-letter';
+          sealMonoText.style.flexDirection = 'row';
+          sealMonoText.appendChild(singleSpan);
         }
       }
     } else {
