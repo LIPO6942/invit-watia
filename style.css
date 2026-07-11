@@ -672,6 +672,12 @@ body:not(.env-open) {
   font-weight: 500;
 }
 
+.invite-guest-name {
+  color: #f7d070; /* elegant light gold to highlight the guest name */
+  font-weight: 700;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.85);
+}
+
 /* Families two-column grid */
 .families-row {
   display: flex;
@@ -1067,8 +1073,8 @@ body:not(.env-open) {
 .tl-left-cell  { text-align: left;  align-items: flex-start; }
 
 /* For RTL, odd items have text on left, icon on right — swap as needed */
-.timeline-item:nth-child(even) .tl-left-cell { order: 3; text-align: right; align-items: flex-end; }
-.timeline-item:nth-child(even) .tl-right-cell { order: 1; text-align: left; align-items: flex-start; }
+.timeline-item:nth-child(even) .tl-left-cell { text-align: right; align-items: flex-end; }
+.timeline-item:nth-child(even) .tl-right-cell { text-align: left; align-items: flex-start; }
 
 .tl-date {
   font-size: 0.7rem;

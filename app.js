@@ -18,6 +18,8 @@
 let _weddingDateTime = '2026-07-12T15:30:00';
 let _currentRole = null; // 'groom' | 'bride' or null
 let _roleWishes = [];
+let _resolvedGuestName = null;
+let _resolvedGuestType = null;
 
 /* ──────────────────────────────────────────────
    Firebase config (shared with admin.html)
@@ -1121,6 +1123,9 @@ const TRANSLATIONS = {
 
 /** Apply banner data once name + type are resolved */
 function _applyGuestBanner(guestName, guestType) {
+  _resolvedGuestName = guestName;
+  _resolvedGuestType = guestType;
+
   let title = '';
   let name = guestName;
   let isLtr = false;
@@ -1156,6 +1161,49 @@ function _applyGuestBanner(guestName, guestType) {
   // Pre-fill guestbook name field
   const gbNameInput = document.getElementById('gb-name');
   if (gbNameInput) gbNameInput.value = name;
+
+  // Update personalized invitation description text
+  _updatePersonalizedInviteDesc();
+}
+
+/** Updates the invitation description text dynamically for personalized guests */
+function _updatePersonalizedInviteDesc() {
+  if (!_resolvedGuestName) return;
+  const inviteDescEl = document.querySelector('[data-tr="invite_desc"]');
+  if (!inviteDescEl) return;
+
+  const guestName = _resolvedGuestName;
+  const guestType = _resolvedGuestType || 'ar_couple';
+  
+  let title = '';
+  let name = guestName;
+  switch (guestType) {
+    case 'ar_couple':          title = 'إلى السيد'; name = `${guestName} وحرمه`; break;
+    case 'ar_couple_children': title = 'إلى السيد'; name = `${guestName} وحرمه وأبنائه`; break;
+    case 'ar_man':             title = 'إلى السيد'; name = guestName; break;
+    case 'ar_woman':           title = 'إلى السيدة'; name = guestName; break;
+    case 'ar_friend_m':        title = 'إلى عْشيري'; name = guestName; break;
+    case 'ar_friend_f':        title = 'إلى عْشيرتي'; name = guestName; break;
+    case 'fr_couple':          title = 'Monsieur & Madame'; name = guestName; break;
+    case 'fr_man':             title = 'Monsieur'; name = guestName; break;
+    case 'fr_woman':           title = 'Madame'; name = guestName; break;
+    case 'fr_friend_m':        title = 'Pour mon Ami'; name = guestName; break;
+    case 'fr_friend_f':        title = 'Pour mon amie'; name = guestName; break;
+    default:                   title = 'إلى السيد'; name = `${guestName} وحرمه`;
+  }
+
+  const isFr = document.documentElement.lang === 'fr';
+  if (isFr) {
+    let cleanTitle = title;
+    if (title.startsWith('Pour mon ')) {
+      cleanTitle = title.replace('Pour mon ', 'leur ami ').toLowerCase();
+    }
+    inviteDescEl.innerHTML = `ont l'honneur d'inviter <span class="invite-guest-name">${cleanTitle} ${name}</span> au mariage de leurs enfants`;
+  } else {
+    const cleanTitle = title.replace('إلى ', '').trim();
+    const titlePrefix = cleanTitle ? cleanTitle + ' ' : '';
+    inviteDescEl.innerHTML = `بدعوة <span class="invite-guest-name">${titlePrefix}${name}</span> لحضور زفاف نجليهما`;
+  }
 }
 
 function readAndApplyGuestParam() {
@@ -1309,6 +1357,11 @@ function applyLanguage(lang) {
       }
       roleLabel.style.display = 'flex';
     }
+  }
+
+  // If a guest was already resolved, re-apply the personalized invite description
+  if (typeof _updatePersonalizedInviteDesc === 'function') {
+    _updatePersonalizedInviteDesc();
   }
 }
 
