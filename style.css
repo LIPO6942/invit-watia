@@ -2344,7 +2344,7 @@ body.night-mode .p1-invite-text { color: #d4b87a; }
 .closing-easel-txts {
   position: absolute;
   top: 36%; 
-  left: -0.5%; /* Shifted left by another 1.5% to align it exactly inside the easel card */
+  left: -1.5%; /* Shifted left from -0.5% for perfect visual alignment */
   width: 44%;
   z-index: 2;
   display: flex;
@@ -2357,10 +2357,10 @@ body.night-mode .p1-invite-text { color: #d4b87a; }
 }
 
 .closing-easel-header {
-  font-family: 'Amiri', serif;
-  font-size: clamp(0.75rem, 3.2vw, 0.92rem);
-  font-weight: bold; /* Bold dark gold title */
-  color: #9d7324;
+  font-family: 'Aref Ruqaa Ink', 'Amiri', serif;
+  font-size: clamp(0.78rem, 3.2vw, 0.95rem);
+  font-weight: bold;
+  color: #9d7324; /* Dark gold calligraphy */
   letter-spacing: 0.5px;
   text-shadow: 0 1px 1px rgba(255,255,255,0.45);
   margin-bottom: 2px;
@@ -2401,7 +2401,7 @@ body.night-mode .p1-invite-text { color: #d4b87a; }
   }
   .closing-easel-txts {
     top: 36%;
-    left: 0.5%; /* Shifted left by another 1.5% to align it exactly inside the easel card */
+    left: -0.5%; /* Shifted left from 0.5% for perfect visual alignment */
     width: 44%;
   }
 }
