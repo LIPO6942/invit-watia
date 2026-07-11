@@ -268,44 +268,41 @@
         <!-- ── CLOSING — Tableau personnalisé ── -->
         <section id="closing-section">
 
-          <!-- Background photo of the wedding hall (full bleed) -->
-          <div class="closing-bg-wrap">
-            <img src="assets/wedding_hall_board.png"
-                 alt="Salle de fête"
-                 class="closing-bg-img">
-            <!-- Gradient overlay for readability -->
-            <div class="closing-bg-overlay"></div>
+          <!-- Gold ornament top -->
+          <div class="closing-ornament-top">✦ ✦ ✦</div>
+
+          <div class="closing-split">
+            <!-- Left side: Thank you + Guest Name -->
+            <div class="closing-left">
+              <!-- Guest personalized address (shown if ?guest= param present) -->
+              <div class="closing-guest-address" id="closingGuestAddress" style="display:none">
+                <div class="closing-to-label font-amiri">إلى</div>
+                <div class="closing-guest-name font-amiri" id="closingGuestName">…</div>
+              </div>
+
+              <div class="closing-tagline font-amiri">يسعدنا مشاركتكم هذه الفرحة</div>
+              <div class="closing-heart">❤</div>
+
+              <div class="closing-thanks">
+                <div class="closing-thanks-ar font-amiri">نشكركم جزيل الشكر على حضوركم ومحبتكم</div>
+                <div class="closing-thanks-fr">Nous vous remercions chaleureusement<br>pour votre présence et votre affection.</div>
+              </div>
+            </div>
+
+            <!-- Right side: Easel image with overlaid couple names -->
+            <div class="closing-right">
+              <div class="closing-board-wrap">
+                <img src="assets/wedding_hall_board.png" alt="Salle de fête" class="closing-hall-img">
+                <div class="closing-board-overlay font-amiri">
+                  <div class="closing-board-groom" data-cfg="groomNameDisplay">مرتضى</div>
+                  <div class="closing-board-amp">✦</div>
+                  <div class="closing-board-bride" data-cfg="brideNameDisplay">مريم</div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <!-- Content layer on top of image -->
-          <div class="closing-content">
-
-            <div class="closing-ornament-top">✦ ✦ ✦</div>
-
-            <!-- Guest personalized address (shown if ?guest= param present) -->
-            <div class="closing-guest-address" id="closingGuestAddress" style="display:none">
-              <div class="closing-to-label font-amiri">إلى</div>
-              <div class="closing-guest-name font-amiri" id="closingGuestName">…</div>
-            </div>
-
-            <div class="closing-tagline font-amiri">يسعدنا مشاركتكم هذه الفرحة</div>
-            <div class="closing-heart">❤</div>
-
-            <div class="closing-thanks">
-              <div class="closing-thanks-ar font-amiri">نشكركم جزيل الشكر على حضوركم ومحبتكم</div>
-              <div class="closing-thanks-fr">Nous vous remercions chaleureusement<br>pour votre présence et votre affection.</div>
-            </div>
-
-            <!-- Tableau encadré : couple names as if written on the board -->
-            <div class="closing-tableau font-amiri">
-              <div class="closing-board-groom" data-cfg="groomNameDisplay">مرتضى</div>
-              <div class="closing-board-amp">✦</div>
-              <div class="closing-board-bride" data-cfg="brideNameDisplay">مريم</div>
-            </div>
-
-            <div class="closing-ornament-bottom">— ✦ —</div>
-
-          </div><!-- /closing-content -->
+          <div class="closing-ornament-bottom">— ✦ —</div>
 
         </section>
 

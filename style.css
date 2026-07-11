@@ -2179,68 +2179,53 @@ body.night-mode .p1-invite-text { color: #d4b87a; }
 
 /* ═══════════════════════════════════════════════
    CLOSING SECTION — Tableau personnalisé
-   Background image + layered content on top
+   Split layout: left = remerciement, right = salle de fête
 ═══════════════════════════════════════════════ */
 #closing-section {
-  position: relative;
-  overflow: hidden;
-  min-height: 420px;
-  display: flex;
-  flex-direction: column;
-  transition: background 0.8s ease;
-}
-
-/* ── Background photo (full bleed) ── */
-.closing-bg-wrap {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-}
-.closing-bg-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 20%;
-  display: block;
-  filter: brightness(0.58) saturate(0.70);
-  transition: filter 0.8s ease;
-}
-/* Warm gradient overlay so text stays readable */
-.closing-bg-overlay {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(to bottom,
-      rgba(20, 10, 2, 0.55) 0%,
-      rgba(10,  5, 1, 0.35) 40%,
-      rgba(10,  5, 1, 0.50) 80%,
-      rgba(20, 10, 2, 0.70) 100%);
-}
-
-/* ── Content layer (above image) ── */
-.closing-content {
-  position: relative;
-  z-index: 2;
+  background: var(--cream);
+  padding: 30px 0 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 28px 24px 24px;
-  gap: 12px;
-  text-align: center;
-  flex: 1;
+  gap: 0;
+  transition: background 0.8s ease;
+  overflow: hidden;
 }
 
-/* Gold ornaments */
 .closing-ornament-top,
 .closing-ornament-bottom {
   font-size: 0.78rem;
   color: var(--gold);
   letter-spacing: 8px;
   text-align: center;
-  padding: 4px 0;
-  opacity: 0.8;
+  padding: 6px 0;
+  opacity: 0.75;
   width: 100%;
+}
+
+/* Two-column split: left for text, right for easel board.
+   Forced direction: ltr ensures left stays left and right stays right visually. */
+.closing-split {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  min-height: 380px;
+  direction: ltr;
+}
+
+/* ─ Left column: thank you text ─ */
+.closing-left {
+  flex: 1 1 45%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 24px;
+  text-align: center;
+  gap: 14px;
+  /* Restore RTL flow inside for Arabic text reading */
+  direction: rtl;
 }
 
 /* Guest address card */
@@ -2249,46 +2234,37 @@ body.night-mode .p1-invite-text { color: #d4b87a; }
   flex-direction: column;
   align-items: center;
   gap: 3px;
-  padding: 10px 20px;
-  border: 1px solid rgba(201,168,76,0.50);
+  padding: 10px 18px;
+  border: 1px solid rgba(201,168,76,0.35);
   border-radius: 10px;
-  background: rgba(255,248,235,0.18);
-  backdrop-filter: blur(6px);
+  background: rgba(255,248,240,0.7);
   max-width: 280px;
-  width: auto;
+  width: 90%;
   animation: guestBannerFadeIn 1s ease both;
   margin: 0 auto;
-  text-align: center;
-  direction: rtl;
 }
 .closing-to-label {
-  font-size: 0.75rem;
-  color: rgba(201,168,76,0.90);
+  font-size: 0.78rem;
+  color: var(--brown-mid);
   letter-spacing: 1px;
-  text-align: center;
 }
 .closing-guest-name {
-  font-size: clamp(0.95rem, 4.5vw, 1.3rem);
+  font-size: clamp(1rem, 4.5vw, 1.3rem);
   font-weight: 700;
-  color: #fff8e8;
+  color: var(--brown);
   line-height: 1.3;
-  text-shadow: 0 1px 6px rgba(0,0,0,0.5);
-  text-align: center;
-  word-break: break-word;
 }
 
 .closing-tagline {
-  font-size: clamp(0.92rem, 3.8vw, 1.1rem);
-  color: #f5e6c0;
-  line-height: 1.55;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+  font-size: clamp(0.9rem, 3.6vw, 1.05rem);
+  color: var(--brown);
+  line-height: 1.5;
 }
 
 .closing-heart {
   font-size: 1.5rem;
-  color: #e74c3c;
+  color: #c0392b;
   animation: heartbeat 1.8s ease infinite;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
 }
 
 .closing-thanks {
@@ -2297,38 +2273,74 @@ body.night-mode .p1-invite-text { color: #d4b87a; }
   gap: 4px;
 }
 .closing-thanks-ar {
-  font-size: clamp(0.82rem, 3.2vw, 0.95rem);
-  color: #f0e2c0;
+  font-size: clamp(0.8rem, 3vw, 0.95rem);
+  color: var(--brown);
   line-height: 1.6;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
 }
 .closing-thanks-fr {
-  font-size: clamp(0.70rem, 2.6vw, 0.80rem);
-  color: rgba(240,226,192,0.75);
+  font-size: clamp(0.68rem, 2.5vw, 0.78rem);
+  color: var(--brown-mid);
   line-height: 1.55;
   font-style: italic;
 }
 
-/* ── Tableau encadré : couple names on board ── */
-.closing-tableau {
+/* ─ Right column: easel image ─ */
+.closing-right {
+  flex: 1 1 55%;
+  position: relative;
+  overflow: hidden;
+  min-height: 380px;
+  height: 100%;
+}
+
+.closing-board-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 380px;
+}
+
+/* Watercolor vignette fade on all sides of the image.
+   Blends the image beautifully with the preceding page section and column. */
+.closing-board-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    /* Fade left and right edges */
+    linear-gradient(to right, var(--cream) 0%, transparent 15%, transparent 85%, var(--cream) 100%),
+    /* Fade top and bottom edges */
+    linear-gradient(to bottom, var(--cream) 0%, transparent 15%, transparent 85%, var(--cream) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.closing-hall-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  /* Harmonise brightness and contrast */
+  filter: brightness(0.95) saturate(0.9);
+  transition: filter 0.8s ease;
+}
+
+/* Names overlaid directly inside the blank easel cardboard area.
+   Calibrated for wedding_hall_board.png v2 */
+.closing-board-overlay {
+  position: absolute;
+  top: 32%;
+  left: 4%;
+  width: 32%;
+  height: 40%;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  padding: 20px 28px;
-  background: rgba(253, 246, 224, 0.94);
-  /* Double border: inner content + outer gold frame */
-  border: 2px solid rgba(185, 140, 50, 0.60);
-  outline: 6px solid rgba(185, 140, 50, 0.15);
-  border-radius: 8px;
-  box-shadow:
-    inset 0 0 0 1px rgba(185,140,50,0.20),
-    0 8px 32px rgba(0,0,0,0.30);
-  min-width: 160px;
-  max-width: 230px;
-  /* Force centered text regardless of RTL */
-  direction: rtl;
+  gap: 3px;
+  pointer-events: none;
   text-align: center;
 }
 
@@ -2337,46 +2349,44 @@ body.night-mode .p1-invite-text { color: #d4b87a; }
   font-family: 'Aref Ruqaa Ink', 'Amiri', serif;
   font-size: clamp(1.05rem, 5vw, 1.45rem);
   font-weight: 700;
-  color: #3d1a00;
-  text-shadow: none;
-  line-height: 1.2;
-  text-align: center;
+  /* Charcoal warm grey ink directly on the whiteboard canvas */
+  color: #321c0b;
+  line-height: 1.25;
+  text-shadow: 0 1px 1px rgba(255,255,255,0.5);
   width: 100%;
   display: block;
 }
 .closing-board-amp {
-  font-size: 0.80rem;
+  font-size: 0.85rem;
   color: var(--gold);
-  opacity: 0.90;
-  display: block;
-  text-align: center;
-  margin: 2px 0;
+  opacity: 0.85;
+  margin: 1px 0;
 }
 
-/* ── Night mode ── */
-body.night-mode .closing-bg-img {
-  filter: brightness(0.40) saturate(0.55);
+/* ── Night mode overrides ── */
+body.night-mode #closing-section {
+  background: var(--cream);
 }
-body.night-mode .closing-bg-overlay {
-  background:
-    linear-gradient(to bottom,
-      rgba(4, 2, 0, 0.70) 0%,
-      rgba(4, 2, 0, 0.50) 40%,
-      rgba(4, 2, 0, 0.65) 80%,
-      rgba(4, 2, 0, 0.82) 100%);
+body.night-mode .closing-tagline,
+body.night-mode .closing-thanks-ar {
+  color: var(--gold-light);
 }
-body.night-mode .closing-tableau {
-  background: rgba(28, 17, 5, 0.90);
-  border-color: rgba(185,140,50,0.40);
+body.night-mode .closing-thanks-fr { color: #a08060; }
+body.night-mode .closing-guest-name { color: #fff8e8; }
+body.night-mode .closing-guest-address {
+  background: rgba(30,18,5,0.7);
+  border-color: rgba(201,168,76,0.3);
+}
+body.night-mode .closing-hall-img {
+  filter: brightness(0.72) saturate(0.8) contrast(0.95);
 }
 body.night-mode .closing-board-groom,
 body.night-mode .closing-board-bride {
-  color: #f5e6c0;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  color: #ebd7b3;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
 }
-body.night-mode .closing-guest-name { color: #f5e6c0; }
-body.night-mode .closing-guest-address {
-  background: rgba(255,248,235,0.10);
-  border-color: rgba(201,168,76,0.40);
+body.night-mode .closing-board-amp {
+  color: var(--gold);
 }
+
 
