@@ -368,29 +368,18 @@ window.toggleMusic = function() {
 };
 
 window.openEnvelopeNow = function() {
-  const inv  = document.getElementById('invitation');
-  const seal = document.getElementById('seal');
+  const inv = document.getElementById('invitation');
   if (!inv || inv.classList.contains('open')) return;
+  inv.classList.add('open');
+  document.body.classList.add('env-open');
 
-  // 1. Seal tap feedback — compress then pop
-  if (seal) {
-    seal.classList.add('tapping');
-    seal.addEventListener('animationend', () => seal.classList.remove('tapping'), { once: true });
-  }
+  // Play the actual wedding march MP3 song
+  startWeddingMusic();
 
-  // 2. Micro-delay so the tap animation is visible before panels fold
   setTimeout(() => {
-    inv.classList.add('open');
-    document.body.classList.add('env-open');
-
-    // Play the actual wedding march MP3 song
-    startWeddingMusic();
-
-    setTimeout(() => {
-      spawnPetals();
-      startHeartClock();
-    }, 900);
-  }, 120);
+    spawnPetals();
+    startHeartClock();
+  }, 800);
 };
 
 // Secret admin shortcut: triple-tap the closing section to go to admin
@@ -556,112 +545,151 @@ startHeartClock._started = false;
 })();
 
 /* ────────────────────────────────────────────────
-   5. COUNTDOWN TIMER — Flip Clock
+   5. COUNTDOWN TIMER — Slot Machine
    Uses _weddingDateTime (overridden by URL config)
 ──────────────────────────────────────────────── */
 (function initCountdown() {
-  function getTargetDate() {
-    return new Date(_weddingDateTime);
-  }
-
+  function getTargetDate() { return new Date(_weddingDateTime); }
   function pad(n) { return String(Math.max(0, n)).padStart(2, '0'); }
 
-  // Map each flip-card id to its last displayed value
-  const cards = {
-    d: { id: 'flip-days',  prev: null },
-    h: { id: 'flip-hours', prev: null },
-    m: { id: 'flip-mins',  prev: null },
-    s: { id: 'flip-secs',  prev: null },
+  const slots = {
+    d: document.getElementById('cd-days'),
+    h: document.getElementById('cd-hours'),
+    m: document.getElementById('cd-mins'),
+    s: document.getElementById('cd-secs'),
   };
+  const prev = { d: null, h: null, m: null, s: null };
 
   /**
-   * Animate a flip card from oldVal → newVal.
-   * Structure inside .flip-card:
-   *   .flip-top          — upper static half (shows current number)
-   *   .flip-bottom       — lower static half (shows current number)
-   *   .flip-top-anim     — upper animated flap (shows current, folds down)
-   *   .flip-bottom-anim  — lower animated flap (shows next, unfolds up)
+   * Slot-machine animation: number glides up & blurs out,
+   * then snaps to bottom and glides smoothly back to center.
+   * The text is swapped while the element is invisible (middle of keyframe).
    */
-  function flipCard(cardEl, newStr) {
-    if (!cardEl) return;
-    const topStatic    = cardEl.querySelector('.flip-top span');
-    const botStatic    = cardEl.querySelector('.flip-bottom span');
-    const topAnim      = cardEl.querySelector('.flip-top-anim');
-    const topAnimSpan  = topAnim  ? topAnim.querySelector('span')  : null;
-    const botAnim      = cardEl.querySelector('.flip-bottom-anim');
-    const botAnimSpan  = botAnim  ? botAnim.querySelector('span')  : null;
-    if (!topStatic || !botStatic || !topAnim || !botAnim) return;
-
-    // Step 1: Prepare — set the animated flap to show current value
-    const currentStr = topStatic.textContent;
-    if (currentStr === newStr) return; // nothing changed
-
-    topAnimSpan.textContent = currentStr; // top flap shows OLD value
-    botAnimSpan.textContent = newStr;     // bottom flap will reveal NEW value
-
-    // Step 2: Update static halves immediately
-    // - top static already shows old (will update after fold)
-    // - bottom static already shows new value (visible once botAnim folds away)
-    botStatic.textContent = newStr;
-
-    // Step 3: Remove classes first to reset animation
-    topAnim.classList.remove('flipping');
-    botAnim.classList.remove('flipping');
-
-    // Force reflow to restart CSS animation
-    void topAnim.offsetWidth;
-
-    // Step 4: Trigger the fold-down of top flap
-    topAnim.classList.add('flipping');
-    botAnim.classList.add('flipping');
-
-    // Step 5: After fold-down completes, update top static and hide animated flap
-    setTimeout(() => {
-      topStatic.textContent = newStr;
-      topAnim.classList.remove('flipping');
-      botAnim.classList.remove('flipping');
-    }, 600); // slightly longer than the CSS animations (0.28 + 0.26 + buffer)
+  function slotUpdate(el, newStr) {
+    if (!el || el.textContent === newStr) return;
+    // Swap text at the invisible midpoint (38% through the 0.52s animation = ~197ms)
+    setTimeout(() => { el.textContent = newStr; }, 200);
+    el.classList.remove('ticking');
+    void el.offsetWidth; // force reflow to restart
+    el.classList.add('ticking');
+    el.addEventListener('animationend', () => el.classList.remove('ticking'), { once: true });
   }
 
   function tick() {
-    const diff  = Math.max(0, getTargetDate().getTime() - Date.now());
+    const diff = Math.max(0, getTargetDate().getTime() - Date.now());
     const vals = {
       d: Math.floor(diff / 86400000),
       h: Math.floor((diff % 86400000) / 3600000),
       m: Math.floor((diff % 3600000)  / 60000),
       s: Math.floor((diff % 60000)    / 1000),
     };
-
-    Object.keys(cards).forEach(key => {
-      const c      = cards[key];
-      const newStr = pad(vals[key]);
-      if (c.prev !== newStr) {
-        const cardEl = document.getElementById(c.id);
-        flipCard(cardEl, newStr);
-        c.prev = newStr;
+    Object.keys(slots).forEach(k => {
+      const str = pad(vals[k]);
+      if (prev[k] !== str) {
+        slotUpdate(slots[k], str);
+        prev[k] = str;
       }
     });
   }
 
-  // First tick: populate without animation
+  // Init: display immediately without animation
   (function initDisplay() {
-    const diff  = Math.max(0, getTargetDate().getTime() - Date.now());
+    const diff = Math.max(0, getTargetDate().getTime() - Date.now());
     const vals = {
       d: Math.floor(diff / 86400000),
       h: Math.floor((diff % 86400000) / 3600000),
       m: Math.floor((diff % 3600000)  / 60000),
       s: Math.floor((diff % 60000)    / 1000),
     };
-    Object.keys(cards).forEach(key => {
-      const newStr = pad(vals[key]);
-      const cardEl = document.getElementById(cards[key].id);
-      if (!cardEl) return;
-      cardEl.querySelectorAll('span').forEach(s => s.textContent = newStr);
-      cards[key].prev = newStr;
+    Object.keys(slots).forEach(k => {
+      const str = pad(vals[k]);
+      if (slots[k]) slots[k].textContent = str;
+      prev[k] = str;
     });
   })();
 
   setInterval(tick, 1000);
+})();
+
+/* ────────────────────────────────────────────────
+   5b. CLOCK TICKING SOUND (Web Audio API)
+   Plays a soft mechanical tick every second only when the
+   countdown section is visible. Runs independently of the
+   background wedding music (separate AudioContext).
+──────────────────────────────────────────────── */
+(function initClockTick() {
+  const section = document.getElementById('countdown-section');
+  if (!section) return;
+
+  let tickCtx    = null; // AudioContext created on first user gesture
+  let tickTimer  = null; // setInterval handle
+  let isVisible  = false;
+
+  /** Synthesize a short mechanical click using Web Audio API */
+  function playTick() {
+    if (!tickCtx) return;
+    try {
+      // Brief band-pass filtered noise burst = clock tick
+      const bufSize = tickCtx.sampleRate * 0.025; // 25ms
+      const buffer  = tickCtx.createBuffer(1, bufSize, tickCtx.sampleRate);
+      const data    = buffer.getChannelData(0);
+      for (let i = 0; i < bufSize; i++) {
+        // White noise, decaying exponentially
+        data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufSize, 6);
+      }
+
+      const source  = tickCtx.createBufferSource();
+      source.buffer = buffer;
+
+      // Band-pass filter: 1800Hz center → crisp mechanical click
+      const bpf = tickCtx.createBiquadFilter();
+      bpf.type            = 'bandpass';
+      bpf.frequency.value = 1800;
+      bpf.Q.value         = 0.9;
+
+      // Gain: subtle — won't overpower the music
+      const gainNode = tickCtx.createGain();
+      gainNode.gain.value = 0.18;
+
+      source.connect(bpf);
+      bpf.connect(gainNode);
+      gainNode.connect(tickCtx.destination);
+      source.start();
+    } catch (e) { /* silent fail */ }
+  }
+
+  function startTicking() {
+    if (tickTimer) return;
+    // Create AudioContext only after a user gesture (autoplay policy)
+    if (!tickCtx) {
+      try { tickCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return; }
+    }
+    if (tickCtx.state === 'suspended') tickCtx.resume();
+    playTick(); // immediate first tick
+    tickTimer = setInterval(playTick, 1000);
+  }
+
+  function stopTicking() {
+    if (tickTimer) { clearInterval(tickTimer); tickTimer = null; }
+    if (tickCtx && tickCtx.state === 'running') tickCtx.suspend();
+  }
+
+  // Watch visibility of the countdown section
+  new IntersectionObserver(entries => {
+    isVisible = entries[0].isIntersecting;
+    if (isVisible) startTicking();
+    else           stopTicking();
+  }, { threshold: 0.3 }).observe(section);
+
+  // If the user hasn't interacted yet, wait for the first interaction
+  // (required by browser autoplay policy)
+  function onFirstInteraction() {
+    if (isVisible && !tickCtx) startTicking();
+    document.removeEventListener('click',      onFirstInteraction);
+    document.removeEventListener('touchstart', onFirstInteraction);
+  }
+  document.addEventListener('click',      onFirstInteraction, { once: true });
+  document.addEventListener('touchstart', onFirstInteraction, { once: true });
 })();
 
 /* ────────────────────────────────────────────────

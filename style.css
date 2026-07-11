@@ -83,8 +83,6 @@ body {
   min-height: 100dvh;
   padding: 0;
   background: radial-gradient(ellipse at 50% 40%, #6b420f 0%, #3e220a 60%, #241408 100%);
-  perspective: 1400px;
-  perspective-origin: 50% 40%;
 }
 
 .invitation {
@@ -134,7 +132,7 @@ body:not(.env-open) {
   overflow: visible;
 }
 
-/* ─────── 2. Envelope Panels (Flaps) — 3D Fold ─────── */
+/* ─────── 2. Envelope Panels (Flaps) ─────── */
 .env-panel {
   position: absolute;
   top: 0;
@@ -144,43 +142,26 @@ body:not(.env-open) {
   display: flex;
   align-items: stretch;
   overflow: hidden;
-  /* 3D fold: each panel rotates around its outer edge */
-  transition: transform 1.35s cubic-bezier(0.4, 0, 0.2, 1),
-              box-shadow 1.35s ease,
-              opacity 0.4s ease 1.1s;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
+  transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+  box-shadow:
+    4px 0 18px rgba(0,0,0,0.28),
+    inset -2px 0 6px rgba(0,0,0,0.08);
   isolation: isolate;
 }
-
-/* Sheen overlay that simulates paper catching light during fold */
-.env-panel::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 20;
-  pointer-events: none;
-  background: linear-gradient(100deg,
-    rgba(255,255,255,0) 0%,
-    rgba(255,255,255,0.18) 40%,
-    rgba(255,255,240,0.06) 60%,
-    rgba(0,0,0,0.06) 100%);
-  transition: opacity 1.35s ease;
-}
-.invitation.open .env-panel::before { opacity: 0; }
 
 /* Cardboard / heavy paper texture base */
 .left-panel {
   left: 0;
-  transform-origin: right center;
   border-right: 1.5px solid rgba(180,145,60,0.45);
   justify-content: flex-start;
   background:
+    /* fine diagonal paper grain */
     repeating-linear-gradient(
       -42deg,
       transparent 0px, transparent 3px,
       rgba(0,0,0,0.018) 3px, rgba(0,0,0,0.018) 4px
     ),
+    /* cream ivory base */
     linear-gradient(160deg, #fefcf5 0%, #f8eeda 45%, #ede0c4 80%, #f5e9d2 100%);
   box-shadow:
     inset -4px 0 12px rgba(0,0,0,0.10),
@@ -189,7 +170,6 @@ body:not(.env-open) {
 
 .right-panel {
   right: 0;
-  transform-origin: left center;
   border-left: 1.5px solid rgba(180,145,60,0.45);
   justify-content: flex-end;
   background:
@@ -199,6 +179,7 @@ body:not(.env-open) {
       rgba(0,0,0,0.018) 3px, rgba(0,0,0,0.018) 4px
     ),
     linear-gradient(200deg, #fefcf5 0%, #f8eeda 45%, #ede0c4 80%, #f5e9d2 100%);
+  /* Overlap left-panel slightly & cast a 3D shadow onto it */
   width: calc(50% + 4px);
   z-index: 11;
   box-shadow:
@@ -228,26 +209,8 @@ body:not(.env-open) {
   left: 0;
 }
 
-/* 3D fold open: rotate around hinge edge, panel fades as it goes behind */
-.invitation.open .left-panel  {
-  transform: rotateY(112deg);
-  opacity: 0;
-  box-shadow: none;
-}
-.invitation.open .right-panel {
-  transform: rotateY(-112deg);
-  opacity: 0;
-  box-shadow: none;
-}
-
-/* Seal tap feedback */
-@keyframes sealTap {
-  0%   { transform: scale(1); }
-  30%  { transform: scale(0.91); }
-  65%  { transform: scale(1.06); }
-  100% { transform: scale(1); }
-}
-.seal.tapping { animation: sealTap 0.38s ease forwards; }
+.invitation.open .left-panel  { transform: translateX(-101%); }
+.invitation.open .right-panel { transform: translateX(101%); }
 
 /* ─────── 3. Seal ─────── */
 .seal-wrapper {
@@ -911,130 +874,60 @@ body:not(.env-open) {
 .cd-box {
   width: 100%;
   aspect-ratio: 3/4;
-  background: transparent;
-  border-radius: 12px;
+  background: rgba(255,255,255,0.96);
+  border-radius: 14px;
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
-  overflow: visible;
+  box-shadow:
+    0 6px 20px rgba(0,0,0,0.13),
+    0 1px 0 rgba(255,255,255,0.9) inset,
+    0 -1px 0 rgba(0,0,0,0.06) inset;
   border: none;
-}
-
-/* ── Flip Clock ── */
-.flip-card {
   position: relative;
-  width: 100%;
-  height: 100%;
-  perspective: 320px;
-  border-radius: 12px;
-  overflow: visible;
+  overflow: hidden;
 }
 
-/* Static top half (shows current value upper half) */
-.flip-top,
-/* Static bottom half (shows current value lower half) */
-.flip-bottom {
+/* ── Slot Machine Countdown ── */
+/* Gold divider line at center of each box */
+.cd-box::after {
+  content: '';
   position: absolute;
-  left: 0; right: 0;
-  width: 100%;
-  height: 50%;
-  overflow: hidden;
-  background: rgba(255,255,255,0.96);
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  left: 8%;
+  right: 8%;
+  top: 50%;
+  height: 1.5px;
+  background: linear-gradient(to right,
+    transparent 0%,
+    var(--gold) 15%,
+    rgba(245,230,192,0.9) 50%,
+    var(--gold) 85%,
+    transparent 100%);
+  opacity: 0.55;
+  pointer-events: none;
 }
-.flip-top {
-  top: 0;
-  border-radius: 12px 12px 0 0;
-  border-bottom: 1.5px solid var(--gold);
-  align-items: flex-end;
-  padding-bottom: 2px;
-}
-.flip-bottom {
-  bottom: 0;
-  border-radius: 0 0 12px 12px;
-  align-items: flex-start;
-  padding-top: 2px;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.14), 0 2px 0 rgba(0,0,0,0.06);
-}
-.flip-top    span,
-.flip-bottom span {
-  font-size: clamp(2rem, 8vw, 2.5rem);
+
+.slot-num {
+  font-size: clamp(2rem, 8vw, 2.6rem);
   font-weight: 700;
   font-family: 'Playfair Display', serif;
   color: #1a1a1a;
   line-height: 1;
   display: block;
-  /* Clip to show only the relevant half */
-}
-.flip-top    span { transform: translateY(50%); }
-.flip-bottom span { transform: translateY(-50%); }
-
-/* Animated fold-down top half */
-.flip-top-anim {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 50%;
-  overflow: hidden;
-  background: rgba(255,255,255,0.96);
-  border-radius: 12px 12px 0 0;
-  display: flex; justify-content: center; align-items: flex-end;
-  padding-bottom: 2px;
-  transform-origin: bottom center;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
-  z-index: 2;
-  /* starts flat, not animating */
-}
-.flip-top-anim span {
-  font-size: clamp(2rem, 8vw, 2.5rem);
-  font-weight: 700;
-  font-family: 'Playfair Display', serif;
-  color: #1a1a1a;
-  line-height: 1;
-  transform: translateY(50%);
-  display: block;
+  will-change: transform, opacity;
 }
 
-/* Animated unfold bottom half */
-.flip-bottom-anim {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 50%;
-  overflow: hidden;
-  background: rgba(240,240,240,0.96);
-  border-radius: 0 0 12px 12px;
-  display: flex; justify-content: center; align-items: flex-start;
-  padding-top: 2px;
-  transform-origin: top center;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
-  z-index: 2;
-}
-.flip-bottom-anim span {
-  font-size: clamp(2rem, 8vw, 2.5rem);
-  font-weight: 700;
-  font-family: 'Playfair Display', serif;
-  color: #1a1a1a;
-  line-height: 1;
-  transform: translateY(-50%);
-  display: block;
+/* Slot tick animation: glides up and fades, new number glides in from below */
+@keyframes slotTick {
+  0%   { transform: translateY(0);     opacity: 1;   filter: blur(0px);   }
+  38%  { transform: translateY(-65%);  opacity: 0;   filter: blur(3px);   }
+  39%  { transform: translateY(65%);   opacity: 0;   filter: blur(3px);   }
+  100% { transform: translateY(0);     opacity: 1;   filter: blur(0px);   }
 }
 
-/* Flip animations triggered by JS class */
-@keyframes flipTopDown {
-  0%   { transform: rotateX(0deg);   box-shadow: 0 0 0 rgba(0,0,0,0); }
-  100% { transform: rotateX(-90deg); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+.slot-num.ticking {
+  animation: slotTick 0.52s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
-@keyframes flipBottomUp {
-  0%   { transform: rotateX(90deg);  box-shadow: 0 -8px 24px rgba(0,0,0,0.2); }
-  100% { transform: rotateX(0deg);   box-shadow: 0 0 0 rgba(0,0,0,0); }
-}
-.flip-top-anim.flipping    { animation: flipTopDown   0.28s linear forwards; }
-.flip-bottom-anim.flipping { animation: flipBottomUp  0.28s linear forwards 0.26s; }
 
 .cd-label {
   font-size: clamp(0.75rem, 3vw, 0.9rem);
@@ -2158,7 +2051,7 @@ body.env-open .day-night-btn {
 /* ── Global transition for night mode (all affected elements) ── */
 .invitation,
 .env-card,
-.cd-box, .flip-top, .flip-bottom, .flip-top-anim, .flip-bottom-anim,
+.cd-box, .slot-num,
 .section-title, .section-subtitle, .cd-label,
 .tl-event, .tl-date, .tl-location, .tl-time,
 .program-content, #program-section,
@@ -2208,19 +2101,14 @@ body.night-mode #countdown-section::after {
     rgba(8,4,1,0.85) 100%
   );
 }
-body.night-mode .flip-top,
-body.night-mode .flip-bottom,
-body.night-mode .flip-top-anim {
-  background: rgba(28, 18, 6, 0.97);
-  border-color: rgba(201,168,76,0.4);
+body.night-mode .cd-box {
+  background: rgba(22, 14, 5, 0.97);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.05) inset;
 }
-body.night-mode .flip-bottom-anim {
-  background: rgba(22, 14, 4, 0.97);
+body.night-mode .cd-box::after {
+  opacity: 0.7;
 }
-body.night-mode .flip-top span,
-body.night-mode .flip-bottom span,
-body.night-mode .flip-top-anim span,
-body.night-mode .flip-bottom-anim span {
+body.night-mode .slot-num {
   color: #f5e6c0;
 }
 body.night-mode .section-title  { color: #f5e6c0; text-shadow: 0 2px 8px rgba(0,0,0,0.9); }
