@@ -903,17 +903,31 @@ window.submitWish = function() {
   }
 
   initFirebase();
-  _db.collection('invitations').doc(invSlug).update({
-    rsvpConfirmed: isConfirmed,
-    rsvpCount: guestCount,
-    rsvpGuestName: name,
+  
+  const gidRaw = params.get('gid') || params.get('guest');
+  const guestKey = gidRaw || ('anon_' + Math.random().toString(36).substr(2, 9));
+
+  const updateData = {
     wishes: firebase.firestore.FieldValue.arrayUnion({
       name: name,
       message: msg,
       target: recipient,
       timestamp: new Date().toISOString()
     })
-  })
+  };
+
+  updateData["rsvps." + guestKey] = {
+    confirmed: isConfirmed,
+    count: guestCount,
+    name: name,
+    timestamp: new Date().toISOString()
+  };
+
+  updateData.rsvpConfirmed = isConfirmed;
+  updateData.rsvpCount = guestCount;
+  updateData.rsvpGuestName = name;
+
+  _db.collection('invitations').doc(invSlug).update(updateData)
   .then(() => {
     nameInput.value = '';
     messageInput.value = '';
@@ -1617,22 +1631,34 @@ window.onRsvpSelectChange = function() {
 let _confirmedInvitations = [];
 
 function watchRsvpCounter() {
+  const params = new URLSearchParams(window.location.search);
+  const invSlug = params.get('inv');
+  if (!invSlug) return;
+
   initFirebase();
-  _db.collection('invitations').onSnapshot(snapshot => {
+  _db.collection('invitations').doc(invSlug).onSnapshot(doc => {
+    if (!doc.exists) return;
+    const data = doc.data();
+    
+    // 1. Process wishes in real-time for the couple's inbox!
+    if (_currentRole === 'groom' || _currentRole === 'bride') {
+      processWishesForRole(data.wishes);
+    }
+    
+    // 2. Sum up RSVPs in real-time!
+    const rsvps = data.rsvps || {};
     let totalConfirmed = 0;
     _confirmedInvitations = [];
     
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      if (data.rsvpConfirmed) {
-        const count = Number(data.rsvpCount || 1);
+    Object.keys(rsvps).forEach(key => {
+      const rsvp = rsvps[key];
+      if (rsvp.confirmed) {
+        const count = Number(rsvp.count || 1);
         totalConfirmed += count;
-        const displayName = data.rsvpGuestName || (data.wishes && data.wishes.length > 0 ? data.wishes[data.wishes.length - 1].name : null) || data.guestName || 'عام';
         _confirmedInvitations.push({
-          id: doc.id,
-          guestName: displayName,
-          rsvpCount: count,
-          wishes: data.wishes || []
+          id: key,
+          guestName: rsvp.name || 'عام',
+          rsvpCount: count
         });
       }
     });
