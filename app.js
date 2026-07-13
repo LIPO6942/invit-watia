@@ -133,6 +133,7 @@ function loadConfigFromURL() {
   if (invSlug) {
     /* ── Firebase path ── */
     initFirebase();
+    watchRsvpCounter();
     _db.collection('invitations').doc(invSlug).get()
       .then(doc => {
         if (!doc.exists) {
@@ -859,15 +860,32 @@ window.submitWish = function() {
   const nameInput = document.getElementById('gb-name');
   const messageInput = document.getElementById('gb-message');
   const recipientSelect = document.getElementById('gb-recipient');
+  const rsvpSelect = document.getElementById('gb-rsvp');
   if (!nameInput || !messageInput) return;
 
   const name = nameInput.value.trim();
   const msg = messageInput.value.trim();
   const recipient = recipientSelect ? recipientSelect.value : 'both';
-  if (!name || !msg) {
-    alert('الرجاء كتابة الاسم والتهنئة 🌹');
+  
+  if (rsvpSelect && rsvpSelect.value === "") {
+    alert(_currentLang === 'fr' ? 'Veuillez sélectionner votre réponse RSVP 🌹' : 'الرجاء تحديد تأكيد الحضور الخاص بك 🌹');
     return;
   }
+  
+  if (!name || !msg) {
+    alert(_currentLang === 'fr' ? 'Veuillez saisir votre nom et valider votre choix 🌹' : 'الرجاء كتابة الاسم وتأكيد الحضور 🌹');
+    return;
+  }
+
+  let rsvpVal = rsvpSelect ? rsvpSelect.value : '';
+  let guestCount = 0;
+  if (rsvpSelect) {
+    const selectedOpt = rsvpSelect.options[rsvpSelect.selectedIndex];
+    if (selectedOpt) {
+      guestCount = Number(selectedOpt.getAttribute('data-count') || 0);
+    }
+  }
+  const isConfirmed = rsvpVal !== '' && rsvpVal !== 'sorry_0';
 
   const params = new URLSearchParams(window.location.search);
   const invSlug = params.get('inv');
@@ -879,12 +897,15 @@ window.submitWish = function() {
     renderWishesScroller();
     nameInput.value = '';
     messageInput.value = '';
-    alert('تم إرسال تهنئتك بنجاح (معاينة محلية) ✨');
+    if (rsvpSelect) rsvpSelect.value = '';
+    alert(_currentLang === 'fr' ? 'Votre réponse a été envoyée (Aperçu local) ✨' : 'تم إرسال ردك بنجاح (معاينة محلية) ✨');
     return;
   }
 
   initFirebase();
   _db.collection('invitations').doc(invSlug).update({
+    rsvpConfirmed: isConfirmed,
+    rsvpCount: guestCount,
     wishes: firebase.firestore.FieldValue.arrayUnion({
       name: name,
       message: msg,
@@ -895,7 +916,8 @@ window.submitWish = function() {
   .then(() => {
     nameInput.value = '';
     messageInput.value = '';
-    alert('شكراً لك! تم إرسال تهنئتك بنجاح للعروسين ✨');
+    if (rsvpSelect) rsvpSelect.value = '';
+    alert(_currentLang === 'fr' ? 'Merci ! Votre réponse a été transmise aux mariés ✨' : 'شكراً لك! تم إرسال ردك وتأكيد حضورك للعروسين ✨');
     
     // Add real-time update to _roleWishes if this wish matches the current role view
     const newWish = { name, message: msg, target: recipient, timestamp: new Date().toISOString() };
@@ -1198,6 +1220,7 @@ const TRANSLATIONS = {
     guestbook_title: 'دفتر التهاني',
     guestbook_subtitle: 'شاركونا فرحتنا بكلمة طيبة للعروسين',
     gb_name_placeholder: 'اسمك الكريم',
+    gb_rsvp_label: '🗳️ تأكيد الحضور (RSVP) :',
     gb_msg_placeholder: 'أكتب تهنئتك هنا...',
     gb_submit: 'إرسال التهنئة ✨',
     gb_sug_label: '💡 اقتراحات جاهزة للتهنئة:',
@@ -1223,6 +1246,7 @@ const TRANSLATIONS = {
     guestbook_title: 'Livre d\'or',
     guestbook_subtitle: 'Laissez un message de félicitations aux mariés',
     gb_name_placeholder: 'Votre Nom',
+    gb_rsvp_label: '🗳️ Confirmation de présence (RSVP) :',
     gb_msg_placeholder: 'Écrivez votre message ici...',
     gb_submit: 'Envoyer les félicitations ✨',
     gb_sug_label: '💡 Formules de vœux suggérées :',
@@ -1416,6 +1440,7 @@ window.selectSuggestion = function(text) {
 };
 
 function applyLanguage(lang) {
+  _currentLang = lang;
   const dict = TRANSLATIONS[lang] || TRANSLATIONS.ar;
   const isFr = lang === 'fr';
 
@@ -1458,6 +1483,9 @@ function applyLanguage(lang) {
 
   // Render suggestion pills
   renderSuggestions(lang);
+
+  // Render RSVP select options
+  renderRsvpOptions(lang);
 
   // Apply dedicated role inscription for groom/bride private view
   if (window._pendingRoleView) {
@@ -1536,4 +1564,73 @@ window.toggleDayNightMode = function() {
     }
   }, 220); // halfway through the spin, swap icons
 };
+
+/* ────────────────────────────────────────────────
+   RSVP DYNAMIC SYSTEM & REAL-TIME COUNTER
+   ──────────────────────────────────────────────── */
+let _currentLang = 'ar';
+
+const RSVP_OPTIONS = {
+  ar: [
+    { value: "", text: "👉 اختر تأكيد الحضور والتواجد" },
+    { value: "both_1", text: "أؤكد حضوري بمفردي 👤", count: 1 },
+    { value: "wife_2", text: "أؤكد حضوري مع زوجتي 💑 (+1)", count: 2 },
+    { value: "husband_2", text: "أؤكد حضوري مع زوجي 💑 (+1)", count: 2 },
+    { value: "family_3", text: "أؤكد حضورنا مع العائلة 👨‍👩‍👧 (+2)", count: 3 },
+    { value: "family_4", text: "أؤكد حضورنا مع العائلة 👨‍👩‍👧‍👦 (+3)", count: 4 },
+    { value: "sorry_0", text: "أعتذر عن الحضور 🌹", count: 0 }
+  ],
+  fr: [
+    { value: "", text: "👉 Sélectionnez votre réponse RSVP" },
+    { value: "both_1", text: "Je confirme ma présence (Seul/Seule) 👤", count: 1 },
+    { value: "wife_2", text: "Je confirme ma présence avec ma femme 💑 (+1)", count: 2 },
+    { value: "husband_2", text: "Je confirme ma présence avec mon mari 💑 (+1)", count: 2 },
+    { value: "family_3", text: "Je confirme notre présence avec ma famille 👨‍👩‍👧 (+2)", count: 3 },
+    { value: "family_4", text: "Je confirme notre présence avec ma famille 👨‍👩‍👧‍👦 (+3)", count: 4 },
+    { value: "sorry_0", text: "Je m'excuse, je ne pourrai pas être présent 🌹", count: 0 }
+  ]
+};
+
+function renderRsvpOptions(lang) {
+  const selectEl = document.getElementById('gb-rsvp');
+  if (!selectEl) return;
+  const list = RSVP_OPTIONS[lang] || RSVP_OPTIONS.ar;
+  selectEl.innerHTML = list.map(opt => {
+    return `<option value="${opt.value}" data-count="${opt.count || 0}">${opt.text}</option>`;
+  }).join('');
+}
+
+window.onRsvpSelectChange = function() {
+  const rsvpSelect = document.getElementById('gb-rsvp');
+  const messageInput = document.getElementById('gb-message');
+  if (!rsvpSelect || !messageInput) return;
+  
+  const selectedOpt = rsvpSelect.options[rsvpSelect.selectedIndex];
+  if (selectedOpt && selectedOpt.value !== "") {
+    messageInput.value = selectedOpt.text;
+  } else {
+    messageInput.value = "";
+  }
+};
+
+function watchRsvpCounter() {
+  initFirebase();
+  _db.collection('invitations').onSnapshot(snapshot => {
+    let totalConfirmed = 0;
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      if (data.rsvpCount) {
+        totalConfirmed += Number(data.rsvpCount);
+      } else if (data.rsvpConfirmed) {
+        totalConfirmed += 1;
+      }
+    });
+    const badge = document.getElementById('admin-rsvp-counter');
+    if (badge) {
+      const countEl = document.getElementById('rsvp-count-num');
+      if (countEl) countEl.textContent = totalConfirmed;
+      badge.style.display = 'flex';
+    }
+  }, err => console.warn('[InvitApp] Failed to watch RSVP counter:', err));
+}
 

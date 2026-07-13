@@ -100,7 +100,7 @@
       z-index: -1;
     }
 
-    /* Top Sticky Professional WhatsApp Banner (without funny expressions) */
+    /* Top Sticky Professional WhatsApp Banner */
     .whatsapp-banner {
       background: linear-gradient(135deg, #128c7e 0%, #25d366 100%);
       padding: 12px 20px;
@@ -221,7 +221,7 @@
       }
     }
 
-    /* Left Panel: Features List & Detailed RSVP description */
+    /* Left Panel: Features List & Dashboard preview */
     .left-panel-content {
       display: flex;
       flex-direction: column;
@@ -237,12 +237,21 @@
       box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
       border-left: 4px solid var(--gold);
+      margin-top: 30px;
+      margin-bottom: 30px;
+      text-align: right;
     }
     
+    body.lang-fr-active .rsvp-info-card {
+      border-left: 4px solid var(--gold);
+      border-right: none;
+      text-align: left;
+    }
     body.lang-ar-active .rsvp-info-card,
     body.lang-tn-active .rsvp-info-card {
       border-left: none;
       border-right: 4px solid var(--gold);
+      text-align: right;
     }
 
     .rsvp-title {
@@ -253,6 +262,14 @@
       display: flex;
       align-items: center;
       gap: 8px;
+    }
+    
+    body.lang-fr-active .rsvp-title {
+      justify-content: flex-start;
+    }
+    body.lang-ar-active .rsvp-title,
+    body.lang-tn-active .rsvp-title {
+      justify-content: flex-start;
     }
 
     .rsvp-desc {
@@ -916,7 +933,7 @@
   <audio id="audio-wedding_march" src="assets/wedding_march.mp3" preload="auto"></audio>
   <audio id="audio-ziad_gharsa" src="assets/ziad_gharsa.mp3" preload="auto"></audio>
 
-  <!-- Sticky Professional WhatsApp Contact Banner (clean & professional) -->
+  <!-- Sticky Professional WhatsApp Contact Banner -->
   <div class="whatsapp-banner">
     <a href="https://wa.me/21653577634?text=Bonjour,%20je%20suis%20intéressé%20par%20votre%20application%20d'invitation%20de%20mariage%20!" target="_blank" class="wa-banner-link">
       <!-- French (Default) -->
@@ -967,26 +984,7 @@
       <!-- Left Panel: Comprehensive Features List & Dashboard preview -->
       <div class="left-panel-content">
         
-        <!-- RSVP Detailed Explanation Card -->
-        <div class="rsvp-info-card">
-          <h3 class="rsvp-title">
-            <span>🗳️</span>
-            <span data-lang="fr">RSVP : La confirmation de présence simplifiée</span>
-            <span data-lang="ar">ما هو نظام تأكيد الحضور (RSVP)؟</span>
-            <span data-lang="tn">شنية حكاية تأكيد الحضور (RSVP)؟</span>
-          </h3>
-          <p class="rsvp-desc" data-lang="fr">
-            Le <strong>RSVP (Répondez S'il Vous Plaît)</strong> est un système interactif qui permet à vos invités de confirmer en un clic leur présence (seuls, en couple ou en famille) et d'indiquer le nombre d'accompagnants. Fini les dizaines d'appels stressants et les relances manuelles : les confirmations s'enregistrent instantanément sur votre tableau de bord en temps réel.
-          </p>
-          <p class="rsvp-desc" data-lang="ar">
-            نظام <strong>RSVP (تأكيد الحضور)</strong> هو أداة تفاعلية تمكن ضيوفكم من تأكيد حضورهم (بمفردهم، مع الزوج/الزوجة، أو كعائلة) وتحديد عدد المرافقين بنقرة واحدة. يغنيكم هذا تماماً عن عناء الاتصالات الهاتفية المتكررة والطلب اليدوي، حيث تُسجل كل الإجابات والردود فوراً في لوحة التحكم الخاصة بكم.
-          </p>
-          <p class="rsvp-desc" data-lang="tn">
-            نظام <strong>RSVP (تأكيد الحضور)</strong> يخلي ضيافك يجاوبوك ويؤكدوا حضورهم (وحدهم، مع شريكهم، وإلا مع العائلة) ويحددوا قداش من واحد جاي بنقرة بركة. أرتاح من تكسير الراس وتلفونات المتابعة الطويلة، الإجابات الكل تتسجل ديريكت في لوحة التحكم متاعك في لحظتها.
-          </p>
-        </div>
-
-        <!-- Comprehensive Features List Card -->
+        <!-- All Features List Card -->
         <div class="features-card">
           <h2 class="features-title">
             <span>📋</span>
@@ -1019,7 +1017,7 @@
                 <span class="feature-name" data-lang="tn">تأكيد حضور ودفتر تهاني بالاسماء</span>
                 <span class="feature-desc" data-lang="fr">Les mariés reçoivent directement les félicitations et confirmations de présence de leurs invités, chacune étant automatiquement liée au nom du destinataire.</span>
                 <span class="feature-desc" data-lang="ar">يتلقى العروسان رسائل التهاني والردود من ضيوفهم بشكل منظم، حيث ترتبط كل تهنئة باسم الضيف المرسل تلقائياً في لوحة التحكم.</span>
-                <span class="feature-desc" data-lang="tn">العروسين يجيوهم الميساجات والتهاني متاع الضياف مسجلة بالاسم متاعهم ديريكت في لوحة التحكم باش يبقاولهم كذكرى مزيانة.</span>
+                <span class="feature-desc" data-lang="tn">العروسين يجيوهم الميساجات والتهاني متاع الضياف مسجلة بالاسم متاعهم ديريكت في لوحة التحكم باش تبقاولهم كذكرى مزيانة.</span>
               </div>
             </div>
 
@@ -1319,7 +1317,26 @@
       </div>
     </div>
 
-    <!-- Packs Section (NEW) -->
+    <!-- RSVP Detailed Explanation Card (MOVED TO THE BOTTOM) -->
+    <div class="rsvp-info-card">
+      <h3 class="rsvp-title">
+        <span>🗳️</span>
+        <span data-lang="fr">RSVP : Confirmation par vœux préétablis</span>
+        <span data-lang="ar">تأكيد الحضور عبر التهاني المحددة مسبقاً (RSVP)</span>
+        <span data-lang="tn">تأكيد الحضور بالتهاني المكتوبة مسبقاً (RSVP)</span>
+      </h3>
+      <p class="rsvp-desc" data-lang="fr">
+        Dans notre application, la confirmation de présence (RSVP) se fait de manière élégante et fluide. L'invité choisit sa réponse parmi des formules de vœux préétablies (ex: <em>"Je confirme ma présence avec ma femme (+1)"</em>, <em>"Je confirme notre présence avec ma famille (+2)"</em>, etc.). En recevant ce message de félicitations, le marié comprend immédiatement qui vient et avec combien de personnes. Le nombre total d'invités confirmés s'incrémente automatiquement en temps réel en haut à droite pour le couple !
+      </p>
+      <p class="rsvp-desc" data-lang="ar">
+        تتم عملية تأكيد الحضور (RSVP) في دعوتنا الإلكترونية بأسلوب راقٍ وتفاعلي. يختار الضيف صيغة تأكيد حضوره وتواجده من خلال تهنئة جاهزة ومحددة مسبقاً (مثل: <em>"أؤكد حضوري بمفردي"</em>، <em>"أؤكد حضوري مع زوجتي (+1)"</em>، إلخ). بمجرد إرسال التهنئة واستلامها، يعرف العروسان فوراً نية الحضور وعدد المرافقين. كما يظهر إجمالي عدد الحاضرين المؤكدين للعروسين بشكل حي ومباشر يزداد تلقائياً في أعلى يمين دعوتهم !
+      </p>
+      <p class="rsvp-desc" data-lang="tn">
+        تأكيد الحضور (RSVP) في لانفيتاسيون متاعنا يصير بطريقة ساهلة ومزيانة. الضيف يختار تأكيد حضور شكون معاه من خلال ميساجات تهنية مكتوبة مسبقاً (كيف: <em>"أؤكد حضوري بمفردي"</em>، <em>"أؤكد حضوري مع زوجتي (+1)"</em>، إلخ). أول ما يبعث الضيف الميساج، يعرف العريس ديريكت شكون جاي وقداش جايين معاه. وعدد الحاضرين الكل يزيد ويتحسب ديريكت قدام العروسين في أعلى يمين الشاشة !
+      </p>
+    </div>
+
+    <!-- Packs Section -->
     <div class="packs-section">
       <h2 class="promo-section-title" data-lang="fr">Nos Packs d'Invitations</h2>
       <h2 class="promo-section-title" data-lang="ar">باقات الاشتراكات والأسعار</h2>
@@ -1367,7 +1384,7 @@
           <h3 class="pack-name">Pack 100</h3>
           <div class="pack-shares">100 <span data-lang="fr">liens invités</span><span data-lang="ar">مدعو</span><span data-lang="tn">رابط ضيف</span></div>
           
-          <p class="pack-explanation" data-lang="fr">Conçu pour les grands mariages et les grandes familles. Permet de générer jusqu'à 100 liens personnalisés sans aucune restriction pour inviter tout le monde.</p>
+          <p class="pack-explanation" data-lang="fr">Conçu pour les grands mariages et les grands familles. Permet de générer jusqu'à 100 liens personnalisés sans aucune restriction pour inviter tout le monde.</p>
           <p class="pack-explanation" data-lang="ar">مخصصة للحفلات الكبيرة والأفراح التي تضم عائلات موسعة. تتيح توليد وإرسال حتى 100 رابط مخصص لدعوة الجميع بكل سهولة.</p>
           <p class="pack-explanation" data-lang="tn">مخصصة للأفراح الكبيرة والعائلات الموسعة. تعطيك حتى 100 رابط مخصص بالاسم باش تستدعى الناس الكل بلاش حتى قلق.</p>
         </div>
@@ -1507,26 +1524,6 @@
       }
     }
 
-    function playAudio(name) {
-      const audio = document.getElementById('audio-' + name);
-      if (audio) {
-        audio.currentTime = 0;
-        audio.play().catch(err => {
-          console.log('Audio playback blocked by browser policy', err);
-        });
-      }
-    }
-
-    function stopAllAudio() {
-      ['wedding_march', 'ziad_gharsa'].forEach(name => {
-        const audio = document.getElementById('audio-' + name);
-        if (audio) {
-          audio.pause();
-          audio.currentTime = 0;
-        }
-      });
-    }
-
     // Spawning falling rose petals
     function spawnLocalPetals() {
       const container = document.getElementById('petals-container');
@@ -1554,6 +1551,26 @@
         
         container.appendChild(petal);
       }
+    }
+
+    function playAudio(name) {
+      const audio = document.getElementById('audio-' + name);
+      if (audio) {
+        audio.currentTime = 0;
+        audio.play().catch(err => {
+          console.log('Audio playback blocked by browser policy', err);
+        });
+      }
+    }
+
+    function stopAllAudio() {
+      ['wedding_march', 'ziad_gharsa'].forEach(name => {
+        const audio = document.getElementById('audio-' + name);
+        if (audio) {
+          audio.pause();
+          audio.currentTime = 0;
+        }
+      });
     }
 
     // Spawn initial background petals loop

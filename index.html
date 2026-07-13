@@ -251,6 +251,9 @@
               <option value="groom">إلى: العريس 🤵</option>
               <option value="bride">إلى: العروسة 👰</option>
             </select>
+            <div style="font-size:0.75rem; color:var(--brown-mid); text-align:right; margin: 8px 4px 6px 4px; display:flex; justify-content:space-between; align-items:center;" id="gb-rsvp-label" data-tr="gb_rsvp_label">🗳️ تأكيد الحضور (RSVP) :</div>
+            <select id="gb-rsvp" class="guestbook-input rsvp-select" style="width: 100%; margin-bottom: 12px; border: 1px solid rgba(201,168,76,0.3); border-radius: 6px; padding: 8px; font-family: inherit; font-size: 0.9rem;" onchange="onRsvpSelectChange()" required>
+            </select>
             <div style="font-size:0.75rem; color:var(--brown-mid); text-align:right; margin: 8px 4px 6px 4px; display:flex; justify-content:space-between; align-items:center;" id="gb-sug-label" data-tr="gb_sug_label">💡 اقتراحات جاهزة للتهنئة:</div>
             <div class="suggestions-scroller" id="gb-suggestions-list"></div>
             <textarea id="gb-message" class="guestbook-textarea" placeholder="أكتب تهنئتك هنا..." data-tr-placeholder="gb_msg_placeholder" rows="3" required></textarea>
@@ -543,6 +546,11 @@
   <div class="music-slash"></div>
 </button>
 <audio id="wedding-audio" src="assets/wedding_march.mp3" loop></audio>
+
+<!-- Admin RSVP Counter Badge -->
+<div id="admin-rsvp-counter" style="position: fixed; top: 24px; right: 85px; z-index: 9999; background: linear-gradient(135deg, #FCF6BA 0%, #c9a84c 50%, #8a6010 100%); color: #1a1000; padding: 8px 16px; border-radius: 25px; font-family: sans-serif; font-size: 0.9rem; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.3); display: none; align-items: center; gap: 6px; border: 1.5px solid rgba(255,255,255,0.5); transition: opacity 0.5s ease;">
+  👤 <span id="rsvp-count-num">0</span>
+</div>
 
 <!-- Floating Day/Night Theme Toggle (Shown when envelope is open) -->
 <button id="day-night-toggle" class="day-night-btn" onclick="toggleDayNightMode()" aria-label="Toggle Day/Night Mode">
