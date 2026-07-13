@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>دعوة الزفاف الرقمية - اكتشف الميزات الفاخرة</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Naskh+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --gold: #c9a84c;
+      --gold-light: #f5e6c0;
+      --gold-dark: #8a6000;
+      --cream: #fdf8f0;
+      --ivory: #f9f4e8;
+      --brown: #241408;
+      --brown-mid: #4a2c0a;
+      --brown-light: #7a4a2a;
+      --shadow: 0 10px 30px rgba(0,0,0,0.5);
+      --gold-grad: linear-gradient(135deg, #FCF6BA 0%, #BF953F 50%, #c9a84c 100%);
+      
+      /* Theme Pink (Powder) */
+      --pink-gold: #d48a82;
+      --pink-cream: #fbf1ef;
+      --pink-dark: #3e1814;
+      
+      /* Theme Emerald */
+      --emerald-gold: #c9a84c;
+      --emerald-cream: #eaf2ec;
+      --emerald-dark: #051d11;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Amiri', 'Noto Naskh Arabic', serif;
+      background-color: var(--brown);
+      color: var(--cream);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Falling petals */
+    #petals-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+      overflow: hidden;
+    }
+    
+    .petal {
+      position: absolute;
+      top: -20px;
+      pointer-events: none;
+      opacity: 0.7;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(0) rotate(0deg) translateX(0);
+        opacity: 0.8;
+      }
+      50% {
+        opacity: 0.5;
+      }
+      100% {
+        transform: translateY(105vh) rotate(360deg) translateX(50px);
+        opacity: 0;
+      }
+    }
+
+    /* Background decoration */
+    .bg-image {
+      position: fixed;
+      inset: 0;
+      background-image: url('assets/luxury_wedding_hall.png');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.18;
+      z-index: -1;
+      filter: blur(2px) grayscale(10%);
+    }
+
+    .bg-overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(36,20,8,0.4) 0%, rgba(10,5,2,0.92) 100%);
+      z-index: -1;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Language Switcher */
+    .lang-switcher {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .lang-btn {
+      background: rgba(255, 248, 220, 0.05);
+      border: 1px solid rgba(201, 168, 76, 0.3);
+      color: var(--gold-light);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.3s;
+    }
+
+    .lang-btn.active, .lang-btn:hover {
+      background: var(--gold-grad);
+      color: #1a1000;
+      border-color: transparent;
+      box-shadow: 0 0 10px rgba(201, 168, 76, 0.4);
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 60px;
+      animation: fadeInDown 1s ease;
+    }
+
+    .logo-ornament {
+      font-size: 2.2rem;
+      color: var(--gold);
+      margin-bottom: 10px;
+      text-shadow: 0 0 15px rgba(201, 168, 76, 0.3);
+    }
+
+    h1 {
+      font-family: 'Amiri', serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--cream);
+      text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+      margin-bottom: 15px;
+      background: linear-gradient(135deg, #FFF 30%, #f5e6c0 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      color: var(--gold-light);
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Main Showcase Section */
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 60px;
+      align-items: center;
+      margin-bottom: 80px;
+    }
+
+    @media (max-width: 900px) {
+      .showcase-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+    }
+
+    /* Left Side: Features Details */
+    .features-list {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: rgba(255,248,220,0.03);
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: 16px;
+      padding: 24px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 4px; height: 100%;
+      background: var(--gold-grad);
+      opacity: 0.7;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(201, 168, 76, 0.4);
+      background: rgba(255,248,220,0.06);
+      box-shadow: 0 10px 30px rgba(201, 168, 76, 0.1);
+    }
+
+    .feature-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 12px;
+    }
+
+    .feature-icon {
+      font-size: 1.8rem;
+      width: 45px;
+      height: 45px;
+      background: rgba(201, 168, 76, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      border: 1px solid rgba(201, 168, 76, 0.2);
+    }
+
+    .feature-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--gold-light);
+    }
+
+    .feature-desc {
+      font-size: 0.95rem;
+      color: #dfd0b8;
+      line-height: 1.6;
+    }
+
+    /* Right Side: Interactive Mockup */
+    .interactive-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    /* Mockup Controller Buttons */
+    .mockup-controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      background: rgba(0,0,0,0.3);
+      padding: 12px;
+      border-radius: 30px;
+      border: 1px solid rgba(201,168,76,0.15);
+      backdrop-filter: blur(8px);
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .control-btn {
+      background: transparent;
+      border: none;
+      color: var(--cream);
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .control-btn:hover {
+      background: rgba(255,255,255,0.06);
+    }
+
+    .control-btn.active {
+      background: var(--gold-grad);
+      color: #1a1000;
+      font-weight: bold;
+    }
+
+    /* Phone Mockup Frame */
+    .phone-mockup {
+      width: 330px;
+      height: 650px;
+      background: #000;
+      border-radius: 40px;
+      border: 12px solid #1a1a1a;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 0 4px rgba(201,168,76,0.25);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Phone speaker & camera notch */
+    .phone-notch {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 140px;
+      height: 25px;
+      background: #1a1a1a;
+      border-bottom-left-radius: 18px;
+      border-bottom-right-radius: 18px;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .phone-speaker {
+      width: 40px;
+      height: 4px;
+      background: #333;
+      border-radius: 2px;
+      margin-bottom: 4px;
+    }
+
+    /* Phone screen content */
+    .phone-screen {
+      flex: 1;
+      background: radial-gradient(ellipse at 50% 30%, #5c3a10 0%, #241408 100%);
+      position: relative;
+      overflow-y: auto;
+      padding: 35px 16px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: all 0.5s ease;
+      scrollbar-width: none; /* Hide scrollbar for clean look */
+    }
+
+    .phone-screen::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Mockup Invitation Card States */
+    .phone-screen.theme-gold {
+      background: radial-gradient(ellipse at 50% 30%, #6b420f 0%, #241408 100%);
+    }
+    .phone-screen.theme-pink {
+      background: radial-gradient(ellipse at 50% 30%, #57201a 0%, #1a0503 100%);
+    }
+    .phone-screen.theme-emerald {
+      background: radial-gradient(ellipse at 50% 30%, #0d3621 0%, #020b06 100%);
+    }
+
+    /* Envelope styling inside phone */
+    .mock-envelope-wrapper {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      inset: 0;
+      z-index: 50;
+      transition: all 0.8s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+      padding: 16px;
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(3px);
+    }
+
+    .mock-envelope-wrapper.opened {
+      transform: translateY(-100%);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .mock-envelope {
+      width: 100%;
+      height: 250px;
+      background: #fdf8f0;
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 12px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .mock-envelope:hover {
+      transform: scale(1.02);
+    }
+
+    /* Seal icon */
+    .mock-seal {
+      width: 80px;
+      height: 80px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      position: relative;
+      z-index: 10;
+      animation: sealPulse 2s infinite;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      border-radius: 50%;
+      background-color: #a62b2b;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3), inset 0 0 10px rgba(0,0,0,0.4);
+      border: 3px double #f5dca0;
+    }
+
+    @keyframes sealPulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(201, 168, 76, 0.4); }
+      70% { transform: scale(1.05); box-shadow: 0 0 0 12px rgba(201, 168, 76, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(201, 168, 76, 0); }
+    }
+
+    .mock-seal::after {
+      content: '💌';
+    }
+
+    .mock-envelope-title {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      color: #4a2c0a;
+      font-weight: bold;
+      text-align: center;
+      font-family: 'Amiri', serif;
+    }
+
+    .mock-envelope-sub {
+      font-size: 0.72rem;
+      color: #8c7355;
+      margin-top: 5px;
+    }
+
+    /* Wedding Invite Card inside Mockup */
+    .mock-card {
+      width: 100%;
+      min-height: 480px;
+      background: #fdf8f0;
+      border-radius: 12px;
+      border: 1px solid var(--gold);
+      padding: 20px 14px;
+      color: #3e220a;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      font-family: 'Amiri', serif;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+
+    .mock-card::before {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 8px;
+      pointer-events: none;
+    }
+
+    /* Change content background depending on theme active inside mockup */
+    .theme-pink .mock-card {
+      background: #fefaf8;
+      color: #3e1814;
+      border-color: var(--pink-gold);
+    }
+    .theme-pink .mock-card::before {
+      border-color: rgba(212,138,130,0.35);
+    }
+
+    .theme-emerald .mock-card {
+      background: #f5f9f6;
+      color: #051d11;
+      border-color: var(--emerald-gold);
+    }
+    .theme-emerald .mock-card::before {
+      border-color: rgba(201,168,76,0.35);
+    }
+
+    .mock-card-basmala {
+      font-size: 0.8rem;
+      color: #8c6030;
+      margin-bottom: 12px;
+    }
+    .theme-pink .mock-card-basmala { color: #9c4e46; }
+    .theme-emerald .mock-card-basmala { color: #165333; }
+
+    .mock-card-title {
+      font-size: 0.78rem;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .mock-card-families {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      font-size: 0.7rem;
+      line-height: 1.4;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    .mock-card-families div {
+      line-height: 1.3;
+    }
+
+    .mock-card-names {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #8a6000;
+      margin: 15px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .theme-pink .mock-card-names { color: var(--pink-gold); }
+    .theme-emerald .mock-card-names { color: var(--gold); }
+
+    .mock-card-names span {
+      display: inline-block;
+    }
+
+    .mock-card-divider {
+      font-size: 1.1rem;
+      opacity: 0.6;
+    }
+
+    .mock-card-details {
+      font-size: 0.76rem;
+      color: #555;
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+
+    /* Countdown simulator */
+    .mock-countdown {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+
+    .mock-cd-unit {
+      background: rgba(201,168,76,0.1);
+      border: 1px solid rgba(201,168,76,0.25);
+      border-radius: 6px;
+      padding: 6px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 40px;
+    }
+    .theme-pink .mock-cd-unit {
+      background: rgba(212,138,130,0.1);
+      border-color: rgba(212,138,130,0.25);
+    }
+    .theme-emerald .mock-cd-unit {
+      background: rgba(13,54,33,0.06);
+      border-color: rgba(201,168,76,0.25);
+    }
+
+    .mock-cd-num {
+      font-size: 0.85rem;
+      font-weight: bold;
+      font-family: monospace;
+      color: #111;
+    }
+
+    .mock-cd-label {
+      font-size: 0.58rem;
+      color: #666;
+    }
+
+    /* Audio ambiance preview status */
+    .mock-audio-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      color: #27ae60;
+      background: rgba(39,174,96,0.08);
+      border: 1px solid rgba(39,174,96,0.2);
+      border-radius: 12px;
+      padding: 4px 10px;
+      margin-top: auto;
+    }
+
+    .mock-audio-status.playing .music-wave span {
+      animation: wave 1s infinite alternate;
+    }
+
+    .music-wave {
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 10px;
+    }
+
+    .music-wave span {
+      width: 2px;
+      height: 3px;
+      background: #27ae60;
+      border-radius: 1px;
+    }
+    .music-wave span:nth-child(2) { animation-delay: 0.2s; }
+    .music-wave span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes wave {
+      0% { height: 3px; }
+      100% { height: 10px; }
+    }
+
+    /* Features visual cards below */
+    .promo-details-section {
+      margin-top: 80px;
+      text-align: center;
+    }
+
+    .promo-section-title {
+      font-size: 2rem;
+      color: var(--gold-light);
+      margin-bottom: 40px;
+      text-align: center;
+      position: relative;
+      display: inline-block;
+    }
+
+    .promo-section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 20%;
+      right: 20%;
+      height: 2px;
+      background: var(--gold-grad);
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-bottom: 60px;
+    }
+
+    .detail-card {
+      background: rgba(10, 6, 2, 0.7);
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      border-radius: 20px;
+      padding: 35px 25px;
+      transition: all 0.3s;
+      box-shadow: var(--shadow);
+    }
+
+    .detail-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(201, 168, 76, 0.15);
+    }
+
+    .detail-emoji {
+      font-size: 2.8rem;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .detail-title {
+      font-size: 1.4rem;
+      color: var(--gold);
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .detail-desc {
+      font-size: 0.92rem;
+      color: var(--cream);
+      opacity: 0.85;
+      line-height: 1.6;
+    }
+
+    /* Interactive dashboard visual preview */
+    .dashboard-preview {
+      background: rgba(20, 14, 8, 0.6);
+      border: 1px solid rgba(201, 168, 76, 0.25);
+      border-radius: 24px;
+      padding: 40px;
+      margin-bottom: 60px;
+      text-align: right;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    @media (max-width: 800px) {
+      .dashboard-preview {
+        grid-template-columns: 1fr;
+        padding: 24px;
+        text-align: center;
+      }
+    }
+
+    .dash-info h3 {
+      font-size: 1.8rem;
+      color: var(--gold-light);
+      margin-bottom: 15px;
+    }
+
+    .dash-info p {
+      font-size: 1rem;
+      color: #dfd0b8;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .dash-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .dash-features li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95rem;
+    }
+    
+    @media (max-width: 800px) {
+      .dash-features li {
+        justify-content: center;
+      }
+    }
+
+    .dash-features li::before {
+      content: '✦';
+      color: var(--gold);
+      font-weight: bold;
+    }
+
+    .dash-visual {
+      display: flex;
+      justify-content: center;
+    }
+
+    /* Simulated dashboard screenshot/layout */
+    .simulated-dash {
+      background: #110c06;
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 420px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      direction: rtl;
+    }
+
+    .dash-head {
+      background: #1c140b;
+      padding: 12px;
+      border-bottom: 1px solid rgba(201,168,76,0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .dash-head-title {
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: var(--gold);
+    }
+
+    .dash-head-badge {
+      background: rgba(39,174,96,0.15);
+      border: 1px solid rgba(39,174,96,0.3);
+      color: #27ae60;
+      font-size: 0.68rem;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    .dash-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .sim-row {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(201,168,76,0.1);
+      border-radius: 8px;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sim-guest-name {
+      font-size: 0.82rem;
+      font-weight: bold;
+      color: var(--cream);
+    }
+
+    .sim-guest-formula {
+      font-size: 0.65rem;
+      color: var(--gold-light);
+      background: rgba(201,168,76,0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-right: 6px;
+    }
+
+    .sim-btn-wa {
+      background: #25d366;
+      border: none;
+      color: white;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      padding: 5px 8px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    /* Call To Action */
+    .cta-container {
+      background: linear-gradient(135deg, rgba(74,44,10,0.8) 0%, rgba(20,10,2,0.95) 100%);
+      border: 1px solid var(--gold);
+      border-radius: 30px;
+      padding: 50px 30px;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+      margin-bottom: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-container::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%; width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .cta-title {
+      font-size: 2.2rem;
+      color: var(--cream);
+      margin-bottom: 15px;
+      font-family: 'Amiri', serif;
+    }
+
+    .cta-desc {
+      font-size: 1.1rem;
+      color: var(--gold-light);
+      max-width: 600px;
+      margin: 0 auto 30px;
+      line-height: 1.6;
+    }
+
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .primary-btn {
+      background: var(--gold-grad);
+      color: #1a1000;
+      border: none;
+      border-radius: 30px;
+      padding: 14px 36px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      box-shadow: 0 6px 20px rgba(201, 168, 76, 0.3);
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(201, 168, 76, 0.5);
+      opacity: 0.95;
+    }
+
+    .secondary-btn {
+      background: transparent;
+      color: var(--cream);
+      border: 1px solid var(--gold);
+      border-radius: 30px;
+      padding: 14px 36px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .secondary-btn:hover {
+      background: rgba(201,168,76,0.1);
+      color: var(--gold-light);
+      transform: translateY(-3px);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 30px 0;
+      color: var(--gold-light);
+      font-size: 0.85rem;
+      opacity: 0.7;
+      border-top: 1px solid rgba(201,168,76,0.1);
+    }
+
+    /* Translation Classes */
+    [data-lang="fr"] {
+      display: none !important;
+    }
+
+    body.lang-fr-active [data-lang="ar"] {
+      display: none !important;
+    }
+
+    body.lang-fr-active [data-lang="fr"] {
+      display: block !important;
+    }
+    
+    /* Inline helper for flex/grid items showing dynamic language */
+    body.lang-fr-active span[data-lang="fr"],
+    body.lang-fr-active button[data-lang="fr"],
+    body.lang-fr-active li[data-lang="fr"] {
+      display: inline-flex !important;
+    }
+    body.lang-fr-active div[data-lang="fr"].sim-row {
+      display: flex !important;
+    }
+
+    body.lang-fr-active {
+      direction: ltr;
+      font-family: 'Playfair Display', sans-serif;
+    }
+
+    body.lang-fr-active h1, 
+    body.lang-fr-active .cta-title,
+    body.lang-fr-active .promo-section-title,
+    body.lang-fr-active .feature-title,
+    body.lang-fr-active .detail-title,
+    body.lang-fr-active .mock-envelope-title,
+    body.lang-fr-active .mock-card-names {
+      font-family: 'Playfair Display', serif;
+    }
+
+    body.lang-fr-active .dashboard-preview {
+      text-align: left;
+      direction: ltr;
+    }
+
+    body.lang-fr-active .simulated-dash {
+      direction: ltr;
+    }
+
+    /* Animations */
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="lang-ar-active">
+
+  <!-- Floating Audio Elements -->
+  <audio id="audio-wedding_march" src="assets/wedding_march.mp3" preload="auto"></audio>
+  <audio id="audio-ziad_gharsa" src="assets/ziad_gharsa.mp3" preload="auto"></audio>
+
+  <!-- Background Layer -->
+  <div class="bg-image"></div>
+  <div class="bg-overlay"></div>
+
+  <!-- Falling Petals Container -->
+  <div id="petals-container"></div>
+
+  <div class="container">
+    
+    <!-- Language Switch -->
+    <div class="lang-switcher">
+      <button class="lang-btn active" id="btn-lang-ar" onclick="setLanguage('ar')">العربية</button>
+      <button class="lang-btn" id="btn-lang-fr" onclick="setLanguage('fr')">Français</button>
+    </div>
+
+    <!-- Header Section -->
+    <header>
+      <div class="logo-ornament">👑</div>
+      
+      <!-- Arabic Title -->
+      <h1 data-lang="ar">دعوة الزفاف الرقمية التفاعلية</h1>
+      <p data-lang="ar">اكتشفوا الجيل الجديد من دعوات الزفاف. تصميم راقٍ، تخصيص فوري، وإدارة ذكية لضيوفكم في مكان واحد.</p>
+      
+      <!-- French Title -->
+      <h1 data-lang="fr">L'Invitation de Mariage Numérique Interactive</h1>
+      <p data-lang="fr">Découvrez la nouvelle génération d'invitations de mariage. Design raffiné, personnalisation instantanée et gestion intelligente de vos invités.</p>
+    </header>
+
+    <!-- Main Interactive Demo Area -->
+    <div class="showcase-grid">
+      
+      <!-- Left: Features Description -->
+      <div class="features-list">
+        
+        <!-- Feature 1 -->
+        <div class="feature-card">
+          <div class="feature-header">
+            <span class="feature-icon">✉️</span>
+            <h3 class="feature-title" data-lang="ar">ظرف تفاعلي بختم شمعي</h3>
+            <h3 class="feature-title" data-lang="fr">Enveloppe avec Sceau de Cire</h3>
+          </div>
+          <p class="feature-desc" data-lang="ar">محاكاة حقيقية لفتح ظرف الرسالة الورقية بلمسة تفاعلية مميزة. يفتح الضيف الختم الشمعي لتنطلق موسيقى الزفاف الكلاسيكية مع تأثيرات تساقط بتلات الورد الذهبية المذهلة.</p>
+          <p class="feature-desc" data-lang="fr">Une simulation authentique de l'ouverture d'une enveloppe papier. L'invité brise le sceau de cire virtuel pour lancer la musique d'ambiance et une pluie poétique de pétales dorés.</p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="feature-card">
+          <div class="feature-header">
+            <span class="feature-icon">🎨</span>
+            <h3 class="feature-title" data-lang="ar">تخصيص كامل وفوري للثيم</h3>
+            <h3 class="feature-title" data-lang="fr">Personnalisation Intégrale</h3>
+          </div>
+          <p class="feature-desc" data-lang="ar">تحكم كامل في الألوان (ذهبي ملكي، وردي ناعم، زمردي فاخر)، الموسيقى الافتتاحية (مارش زفاف كلاسيكي أو مالوف تونسي للفنان زياد غرسة)، تفاصيل العائلات، ونقشة خلفية المغلف.</p>
+          <p class="feature-desc" data-lang="fr">Adaptez l'invitation à votre image : thèmes de couleur (Or Royal, Rose Poudré, Vert Émeraude), musique de fond au choix (Marche Nuptiale ou classique tunisien de Ziad Gharsa), et motifs d'enveloppe.</p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="feature-card">
+          <div class="feature-header">
+            <span class="feature-icon">🗺️</span>
+            <h3 class="feature-title" data-lang="ar">برنامج الحفل والموقع الجغرافي</h3>
+            <h3 class="feature-title" data-lang="fr">Programme & Guidage GPS</h3>
+          </div>
+          <p class="feature-desc" data-lang="ar">جدول زمني تفاعلي يعرض مراحل الحفل (مراسم العقد، الاستقبال، جلسة التصوير، مأدبة العشاء) مع أزرار خرائط مباشرة تفتح خرائط الهاتف لترشد ضيوفكم إلى مكان القاعة بدقة.</p>
+          <p class="feature-desc" data-lang="fr">Un planning interactif des moments forts (Signature de l'acte, Réception, Séance photo, Dîner) avec boutons de géolocalisation intégrés pour guider vos invités via GPS vers les différents lieux.</p>
+        </div>
+
+      </div>
+
+      <!-- Right: Interactive Live Phone Preview Mockup -->
+      <div class="interactive-container">
+        
+        <!-- Interactive Controls -->
+        <div class="mockup-controls">
+          <button class="control-btn active" onclick="changeMockupTheme('gold')">👑 Gold</button>
+          <button class="control-btn" onclick="changeMockupTheme('pink')">🌸 Pink</button>
+          <button class="control-btn" onclick="changeMockupTheme('emerald')">🌿 Emerald</button>
+          <button class="control-btn" id="music-preview-btn" onclick="toggleMockupMusic()">🎵 Play Audio</button>
+        </div>
+
+        <!-- Phone Frame -->
+        <div class="phone-mockup">
+          <div class="phone-notch"><div class="phone-speaker"></div></div>
+          
+          <div class="phone-screen theme-gold" id="phoneScreen">
+            
+            <!-- 1. Simulated Virtual Envelope (overlay) -->
+            <div class="mock-envelope-wrapper" id="mockEnvelopeWrapper">
+              <div class="mock-envelope" onclick="openMockEnvelope()">
+                <div class="mock-seal"></div>
+                <div class="mock-envelope-title" data-lang="ar">دعوة زفاف مرتضى & مريم</div>
+                <div class="mock-envelope-title" data-lang="fr">Invitation Mariage Mortadha & Mariam</div>
+                <div class="mock-envelope-sub" data-lang="ar">إفتح الرسالة ✉️</div>
+                <div class="mock-envelope-sub" data-lang="fr">Cliquez pour ouvrir ✉️</div>
+              </div>
+            </div>
+
+            <!-- 2. Inside Invitation Card content -->
+            <div class="mock-card" id="mockCard">
+              <div class="mock-card-basmala" data-lang="ar">بارك الله لهما وجمع بينهما في خير</div>
+              <div class="mock-card-basmala" data-lang="fr">Bismillah Ar-Rahman Ar-Rahim</div>
+              
+              <div class="mock-card-title" data-lang="ar">تتشرف عائلتا الرياحي والعمري بدعوتكم</div>
+              <div class="mock-card-title" data-lang="fr">Les familles Riah & Amri ont l'honneur de vous inviter</div>
+              
+              <div class="mock-card-families" data-lang="ar">
+                <div>السيد محمد الرياحي<br>وحرمه جميلة</div>
+                <div>السيد خالد العمري<br>وحرمه عواطف</div>
+              </div>
+              <div class="mock-card-families" data-lang="fr">
+                <div>M. Mohamed Riahi<br>& son épouse Jamila</div>
+                <div>M. Khaled Amri<br>& son épouse Awatef</div>
+              </div>
+              
+              <div class="mock-card-title" data-lang="ar">لحضور حفل زفاف نجليهما</div>
+              <div class="mock-card-title" data-lang="fr">au mariage de leurs enfants</div>
+
+              <div class="mock-card-names">
+                <span id="mockGroomName">مرتضى</span>
+                <span class="mock-card-divider">&</span>
+                <span id="mockBrideName">مريم</span>
+              </div>
+
+              <div class="mock-card-details" data-lang="ar">
+                📅 الأحد 12 جويلية 2026<br>
+                📍 فضاء الحبيب، طبلبة
+              </div>
+              <div class="mock-card-details" data-lang="fr">
+                📅 Dimanche 12 Juillet 2026<br>
+                📍 Espace El Habib, Teboulba
+              </div>
+
+              <!-- Mini countdown simulation -->
+              <div class="mock-countdown">
+                <div class="mock-cd-unit">
+                  <span class="mock-cd-num">48</span>
+                  <span class="mock-cd-label" data-lang="ar">يوم</span>
+                  <span class="mock-cd-label" data-lang="fr">jrs</span>
+                </div>
+                <div class="mock-cd-unit">
+                  <span class="mock-cd-num">12</span>
+                  <span class="mock-cd-label" data-lang="ar">ساعة</span>
+                  <span class="mock-cd-label" data-lang="fr">hrs</span>
+                </div>
+                <div class="mock-cd-unit">
+                  <span class="mock-cd-num">34</span>
+                  <span class="mock-cd-label" data-lang="ar">دقيقة</span>
+                  <span class="mock-cd-label" data-lang="fr">mins</span>
+                </div>
+              </div>
+
+              <button class="primary-btn" style="font-size: 0.72rem; padding: 6px 14px; box-shadow: none;" onclick="resetEnvelope()" data-lang="ar">🔄 إغلاق المغلف للتجربة</button>
+              <button class="primary-btn" style="font-size: 0.72rem; padding: 6px 14px; box-shadow: none;" onclick="resetEnvelope()" data-lang="fr">🔄 Refermer l'enveloppe</button>
+
+              <!-- Dynamic status labels -->
+              <div class="mock-audio-status" id="musicStatus" style="display:none;">
+                <div class="music-wave">
+                  <span></span><span></span><span></span>
+                </div>
+                <span data-lang="ar">الموسيقى تعمل حالياً 🔊</span>
+                <span data-lang="fr">Musique en cours 🔊</span>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Extra Showcase: Guest Management Dashboard -->
+    <div class="promo-details-section">
+      <h2 class="promo-section-title" data-lang="ar">إدارة ثورية لقائمة المدعوين</h2>
+      <h2 class="promo-section-title" data-lang="fr">Gestion Révolutionnaire des Invités</h2>
+      
+      <div class="dashboard-preview">
+        
+        <!-- Info text -->
+        <div class="dash-info">
+          <h3 data-lang="ar">وداعاً للروابط العشوائية والدعوات المنسية</h3>
+          <h3 data-lang="fr">Fini les oublis et les invitations perdues</h3>
+          
+          <p data-lang="ar">تم تجهيز لوحة التحكم بنظام ذكي ومحمي بكلمة مرور خاصة للعروسين، يتيح لهم إضافة مئات الأسماء وإنشاء روابط فريدة لكل ضيف فوراً وبصيغ الترحيب المناسبة.</p>
+          <p data-lang="fr">La console d'administration offre un espace sécurisé par mot de passe pour les mariés. Ils peuvent importer leur liste d'invités, générer des formules personnalisées (Monsieur, Madame, Famille) et suivre les consultations.</p>
+          
+          <ul class="dash-features">
+            <li data-lang="ar">توليد تلقائي لصيغ الترحيب ("إلى السيد ... وحرمه وأبنائه").</li>
+            <li data-lang="fr">Formules d'adresse personnalisées selon l'invité.</li>
+            
+            <li data-lang="ar">إرسال مباشر وسريع عبر WhatsApp بكبسة زر واحدة.</li>
+            <li data-lang="fr">Envoi direct sur WhatsApp en un clic sans enregistrer le numéro.</li>
+            
+            <li data-lang="ar">حظر الروابط تلقائياً عند تجاوز سعة الباقة المحددة مسبقاً.</li>
+            <li data-lang="fr">Limitation automatique des invitations selon le forfait.</li>
+          </ul>
+        </div>
+
+        <!-- Simulated visual component -->
+        <div class="dash-visual">
+          <div class="simulated-dash">
+            <div class="dash-head">
+              <span class="dash-head-title" data-lang="ar">📋 قائمة المدعوين (لوحة العروسين)</span>
+              <span class="dash-head-title" data-lang="fr">📋 Liste des Invités (Dashboard)</span>
+              <span class="dash-head-badge" data-lang="ar">نشط</span>
+              <span class="dash-head-badge" data-lang="fr">Actif</span>
+            </div>
+            <div class="dash-body">
+              
+              <!-- Guest Row 1 -->
+              <div class="sim-row" data-lang="ar">
+                <div>
+                  <span class="sim-guest-name">محمد الرياحي</span>
+                  <span class="sim-guest-formula">إلى السيد محمد وحرمه</span>
+                </div>
+                <button class="sim-btn-wa">💬 إرسال</button>
+              </div>
+              <div class="sim-row" data-lang="fr">
+                <div>
+                  <span class="sim-guest-name">M. et Mme Riahi</span>
+                  <span class="sim-guest-formula">M. et Mme Riahi</span>
+                </div>
+                <button class="sim-btn-wa">💬 Envoyer</button>
+              </div>
+
+              <!-- Guest Row 2 -->
+              <div class="sim-row" data-lang="ar">
+                <div>
+                  <span class="sim-guest-name">خالد العمري</span>
+                  <span class="sim-guest-formula">إلى السيد خالد وحرمه وأبنائه</span>
+                </div>
+                <button class="sim-btn-wa" style="background:#8a6000; color:white;">✓ تم الإرسال</button>
+              </div>
+              <div class="sim-row" data-lang="fr">
+                <div>
+                  <span class="sim-guest-name">M. Khaled Amri</span>
+                  <span class="sim-guest-formula">Famille Amri</span>
+                </div>
+                <button class="sim-btn-wa" style="background:#8a6000; color:white;">✓ Envoyé</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Call to Action Section -->
+    <div class="cta-container">
+      <h2 class="cta-title" data-lang="ar">هل أنتم جاهزون لتصميم دعوتكم الرقمية الفريدة؟</h2>
+      <h2 class="cta-title" data-lang="fr">Prêt à créer votre invitation numérique ?</h2>
+      
+      <p class="cta-desc" data-lang="ar">ابدأ الآن بتخصيص بطاقة دعوتكم الخاصة، اختر الموسيقى، الألوان والبرنامج، وشارك الفرحة مع ضيوفك بطريقة عصرية وراقية.</p>
+      <p class="cta-desc" data-lang="fr">Configurez votre thème, importez vos invités et partagez votre bonheur de manière moderne, écologique et prestigieuse.</p>
+      
+      <div class="cta-buttons">
+        <a href="admin.html" class="primary-btn">
+          <span data-lang="ar">✨ دخول لوحة الإدارة</span>
+          <span data-lang="fr">✨ Console d'Administration</span>
+        </a>
+        <a href="index.html" class="secondary-btn" target="_blank">
+          <span data-lang="ar">👁️ عرض النموذج التجريبي</span>
+          <span data-lang="fr">👁️ Voir la démo invitée</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>© 2026 - دعوة زفاف إلكترونية تفاعلية راقية. جميع الحقوق محفوظة.</p>
+    </footer>
+
+  </div>
+
+  <script>
+    'use strict';
+
+    // State Variables
+    let currentTheme = 'gold';
+    let isMusicPlaying = false;
+    let selectedAudioName = 'wedding_march';
+
+    // Set Language toggle
+    function setLanguage(lang) {
+      const body = document.body;
+      const btnAr = document.getElementById('btn-lang-ar');
+      const btnFr = document.getElementById('btn-lang-fr');
+      
+      if (lang === 'fr') {
+        body.classList.remove('lang-ar-active');
+        body.classList.add('lang-fr-active');
+        body.dir = 'ltr';
+        btnFr.classList.add('active');
+        btnAr.classList.remove('active');
+      } else {
+        body.classList.remove('lang-fr-active');
+        body.classList.add('lang-ar-active');
+        body.dir = 'rtl';
+        btnAr.classList.add('active');
+        btnFr.classList.remove('active');
+      }
+    }
+
+    // Change Mockup Themes
+    function changeMockupTheme(theme) {
+      currentTheme = theme;
+      const screen = document.getElementById('phoneScreen');
+      screen.className = 'phone-screen theme-' + theme;
+      
+      // Update UI buttons active state
+      const buttons = document.querySelectorAll('.mockup-controls .control-btn');
+      buttons.forEach(btn => {
+        if (btn.textContent.toLowerCase().includes(theme)) {
+          btn.classList.add('active');
+        } else if (!btn.id.includes('music')) {
+          btn.classList.remove('active');
+        }
+      });
+
+      // Update names inside mockup based on theme colors if needed (done automatically by CSS classes)
+      // Map music default for theme
+      if (theme === 'emerald') {
+        selectedAudioName = 'ziad_gharsa';
+      } else {
+        selectedAudioName = 'wedding_march';
+      }
+
+      // If already playing, transition music
+      if (isMusicPlaying) {
+        stopAllAudio();
+        playAudio(selectedAudioName);
+      }
+    }
+
+    // Open simulated envelope
+    function openMockEnvelope() {
+      document.getElementById('mockEnvelopeWrapper').classList.add('opened');
+      // Auto-play audio when envelope is opened for the first time
+      if (!isMusicPlaying) {
+        toggleMockupMusic();
+      }
+      spawnLocalPetals();
+    }
+
+    // Reset simulated envelope
+    function resetEnvelope() {
+      document.getElementById('mockEnvelopeWrapper').classList.remove('opened');
+      if (isMusicPlaying) {
+        toggleMockupMusic(); // mute
+      }
+    }
+
+    // Music Player controls
+    function toggleMockupMusic() {
+      const musicBtn = document.getElementById('music-preview-btn');
+      const statusIndicator = document.getElementById('musicStatus');
+      
+      if (isMusicPlaying) {
+        stopAllAudio();
+        isMusicPlaying = false;
+        musicBtn.classList.remove('active');
+        musicBtn.textContent = '🎵 Play Audio';
+        statusIndicator.style.display = 'none';
+        statusIndicator.classList.remove('playing');
+      } else {
+        playAudio(selectedAudioName);
+        isMusicPlaying = true;
+        musicBtn.classList.add('active');
+        musicBtn.textContent = '🔇 Stop Audio';
+        statusIndicator.style.display = 'flex';
+        statusIndicator.classList.add('playing');
+      }
+    }
+
+    function playAudio(name) {
+      const audio = document.getElementById('audio-' + name);
+      if (audio) {
+        audio.currentTime = 0;
+        audio.play().catch(err => {
+          console.log('Audio playback block by browser policy', err);
+        });
+      }
+    }
+
+    function stopAllAudio() {
+      ['wedding_march', 'ziad_gharsa'].forEach(name => {
+        const audio = document.getElementById('audio-' + name);
+        if (audio) {
+          audio.pause();
+          audio.currentTime = 0;
+        }
+      });
+    }
+
+    // Spawning falling rose petals
+    function spawnLocalPetals() {
+      const container = document.getElementById('petals-container');
+      if (!container) return;
+      
+      // Clean previous petals
+      container.innerHTML = '';
+      
+      const colors = ['#f5dedc', '#d48a82', '#f5e6c0', '#c9a84c', '#fff8d0', '#f5dca0'];
+      
+      for (let i = 0; i < 25; i++) {
+        const petal = document.createElement('div');
+        petal.className = 'petal';
+        
+        const size = Math.random() * 12 + 6;
+        const left = Math.random() * 100;
+        const duration = Math.random() * 5 + 6;
+        const delay = Math.random() * 3;
+        
+        petal.style.width = size + 'px';
+        petal.style.height = (size * 1.4) + 'px';
+        petal.style.left = left + '%';
+        petal.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        petal.style.borderRadius = '50% 0 50% 50%';
+        petal.style.animationDuration = duration + 's';
+        petal.style.animationDelay = delay + 's';
+        
+        container.appendChild(petal);
+      }
+    }
+
+    // Spawn initial background petals loop
+    setInterval(spawnLocalPetals, 9000);
+    window.addEventListener('DOMContentLoaded', spawnLocalPetals);
+  </script>
+
+</body>
+</html>

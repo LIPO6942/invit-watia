@@ -10,6 +10,8 @@
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<!-- QR Code Generator Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 <style>
 /* Floating save bar */
 .save-bar {
@@ -104,6 +106,7 @@
     <div class="nav-item"         onclick="showPage('page-date')">      <span class="nav-icon">📅</span><span class="nav-label">التاريخ</span></div>
     <div class="nav-item"         onclick="showPage('page-programme')"> <span class="nav-icon">🗓️</span><span class="nav-label">البرنامج</span></div>
     <div class="nav-item"         onclick="showPage('page-links')">     <span class="nav-icon">🔗</span><span class="nav-label">الروابط</span></div>
+    <div class="nav-item"         onclick="showPage('page-qrcode')">    <span class="nav-icon">🔳</span><span class="nav-label">رمز QR</span></div>
     <div class="sidebar-bottom">
       <button class="logout-btn" onclick="doLogout()">🚪 خروج</button>
     </div>
@@ -413,6 +416,48 @@
       </div>
     </div>
 
+    <!-- ▸ PAGE 6 — QR Code -->
+    <div class="page" id="page-qrcode">
+      <div class="page-title">🔳 رمز الاستجابة السريعة (QR Code)</div>
+      <div class="page-subtitle">روج لطلبك أو اعرض الميزات عبر مسح الرمز</div>
+      
+      <div class="card no-print">
+        <div class="card-title">⚙️ إعدادات رمز QR والملصق الدعائي</div>
+        <div class="field" style="margin-top:12px">
+          <label>رابط الوجهة عند مسح الرمز (يرتبط تلقائياً بصفحة الميزات):</label>
+          <input id="qrDestUrl" type="text" readonly dir="ltr" style="font-family:monospace; font-size:0.85rem; width:100%; border:1px solid var(--border); padding:10px; border-radius:6px; background:rgba(0,0,0,0.25); color:var(--gold-light);">
+        </div>
+        <div class="form-row">
+          <div class="field"><label>عنوان الملصق (بالعربية)</label><input id="qrTitleAr" type="text" value="اكتشف دعوتنا الرقمية التفاعلية"></div>
+          <div class="field"><label>Titre de l'affiche (Français)</label><input id="qrTitleFr" type="text" value="Découvrez notre invitation numérique"></div>
+        </div>
+        <div style="display:flex; gap:10px; margin-top:12px; flex-wrap: wrap;">
+          <button class="btn btn-primary" style="flex:1; min-width: 140px;" onclick="printQrFlyer()">🖨️ طباعة الملصق الدعائي</button>
+          <button class="btn btn-outline" style="flex:1; min-width: 140px; border-color: var(--gold); color: var(--gold);" onclick="downloadQrCode()">💾 تحميل رمز QR فقط</button>
+        </div>
+      </div>
+
+      <!-- Printable QR Code Flyer -->
+      <div class="qr-flyer-container">
+        <div class="qr-flyer" id="qrFlyerCard">
+          <div class="flyer-border">
+            <div class="flyer-ornament">👑</div>
+            <div class="flyer-title-ar" id="flyerTitleAr">اكتشف دعوتنا الرقمية التفاعلية</div>
+            <div class="flyer-title-fr" id="flyerTitleFr">Découvrez notre invitation numérique</div>
+            
+            <div class="flyer-qr-wrapper">
+              <canvas id="qrCanvas"></canvas>
+            </div>
+            
+            <div class="flyer-instructions-ar">امسح رمز الـ QR أعلاه بالجوال لتجربة دعوتنا، الألوان، والموسيقى الافتتاحية!</div>
+            <div class="flyer-instructions-fr">Scannez le code QR ci-dessus pour découvrir notre invitation, ses thèmes et musiques !</div>
+            <div class="flyer-footer">💍 حفل زفاف العريس والعروس 💍</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
   </main>
 
   <!-- ══ SINGLE FLOATING SAVE BAR ══ -->
@@ -616,9 +661,13 @@ function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  const map = { 'page-couple':0,'page-families':1,'page-date':2,'page-programme':3,'page-links':4 };
+  const map = { 'page-couple':0,'page-families':1,'page-date':2,'page-programme':3,'page-links':4,'page-qrcode':5 };
   document.querySelectorAll('.nav-item')[map[id]].classList.add('active');
   window.scrollTo(0, 0);
+  if (id === 'page-qrcode') {
+    generatePromoQr();
+    updateFlyerFooter();
+  }
 }
 
 // ── Init ──
@@ -635,6 +684,97 @@ function initAdmin() {
       document.getElementById('sealInitialsField').style.display = isMonogram ? 'flex' : 'none';
     });
   }
+
+  // QR Code Flyer input listeners
+  const titleArInput = document.getElementById('qrTitleAr');
+  const titleFrInput = document.getElementById('qrTitleFr');
+  if (titleArInput) {
+    titleArInput.addEventListener('input', function() {
+      document.getElementById('flyerTitleAr').textContent = this.value;
+    });
+  }
+  if (titleFrInput) {
+    titleFrInput.addEventListener('input', function() {
+      document.getElementById('flyerTitleFr').textContent = this.value;
+    });
+  }
+
+  const pUrl = document.getElementById('prodUrlInput');
+  if (pUrl) {
+    pUrl.addEventListener('input', generatePromoQr);
+  }
+  const grAr = document.getElementById('groomAr');
+  const brAr = document.getElementById('brideAr');
+  if (grAr) grAr.addEventListener('input', updateFlyerFooter);
+  if (brAr) brAr.addEventListener('input', updateFlyerFooter);
+
+  // Initial QR generation
+  setTimeout(() => {
+    generatePromoQr();
+    updateFlyerFooter();
+  }, 500);
+}
+
+// ── QR Code & Flyer Utilities ──
+let _qrInstance = null;
+function generatePromoQr() {
+  let targetUrl;
+  const prodUrl = val('prodUrlInput');
+  if (prodUrl) {
+    let cleanProd = prodUrl.trim();
+    if (!cleanProd.startsWith('http')) cleanProd = 'https://' + cleanProd;
+    if (cleanProd.endsWith('/')) targetUrl = cleanProd + 'features.html';
+    else if (cleanProd.endsWith('admin.html')) targetUrl = cleanProd.replace('admin.html', 'features.html');
+    else if (cleanProd.endsWith('index.html')) targetUrl = cleanProd.replace('index.html', 'features.html');
+    else targetUrl = cleanProd + '/features.html';
+  } else {
+    targetUrl = window.location.href.split('?')[0].replace('admin.html', 'features.html');
+  }
+
+  // Set input field
+  const destInput = document.getElementById('qrDestUrl');
+  if (destInput) destInput.value = targetUrl;
+
+  // Render QR Canvas
+  const canvas = document.getElementById('qrCanvas');
+  if (!canvas) return;
+
+  if (typeof QRious === 'undefined') {
+    console.error('QRious library not loaded yet');
+    return;
+  }
+
+  _qrInstance = new QRious({
+    element: canvas,
+    value: targetUrl,
+    size: 240,
+    background: '#fdf8f0', // matches ivory flyer background
+    foreground: '#4a2c0a', // deep brown foreground for romantic look
+    level: 'H' // High error correction
+  });
+}
+
+function updateFlyerFooter() {
+  const g = val('groomAr') || 'العريس';
+  const b = val('brideAr') || 'العروس';
+  const footerEl = document.querySelector('.flyer-footer');
+  if (footerEl) {
+    footerEl.textContent = `💍 حفل زفاف ${g} و ${b} 💍`;
+  }
+}
+
+function printQrFlyer() {
+  window.print();
+}
+
+function downloadQrCode() {
+  const canvas = document.getElementById('qrCanvas');
+  if (!canvas) return;
+  const link = document.createElement('a');
+  link.download = 'wedding_promo_qr.png';
+  link.href = canvas.toDataURL();
+  link.click();
+  showToast('📥 تم تحميل رمز QR بنجاح!');
 }
 
 // ── Save / Load ──
