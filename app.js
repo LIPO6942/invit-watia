@@ -1642,10 +1642,6 @@ function watchRsvpCounter() {
       badge.style.display = 'flex';
       badge.style.cursor = 'pointer';
       badge.onclick = openRsvpList;
-      
-      // Shift day-night toggle slightly to the left to avoid overlap
-      const dnToggle = document.getElementById('day-night-toggle');
-      if (dnToggle) dnToggle.style.right = '85px';
     } else if (badge) {
       badge.style.display = 'none';
     }
@@ -1670,18 +1666,10 @@ window.openRsvpList = function() {
     scrollList.innerHTML = _confirmedInvitations.map(inv => {
       totalCount += inv.rsvpCount;
       
-      let lastWishMsg = '';
-      if (inv.wishes && inv.wishes.length > 0) {
-        lastWishMsg = inv.wishes[inv.wishes.length - 1].message || '';
-      }
-      
       return `
-        <div style="background:rgba(201,168,76,0.06); border:1px solid rgba(201,168,76,0.15); border-radius:10px; padding:12px 14px; display:flex; flex-direction:column; gap:4px; text-align:right;">
-          <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
-            <strong style="color:var(--brown); font-size:1.05rem;">👤 ${inv.guestName}</strong>
-            <span style="background:linear-gradient(135deg, #FCF6BA 0%, #c9a84c 50%, #8a6010 100%); color:#1a1000; font-size:0.75rem; font-weight:bold; padding:2px 8px; border-radius:12px;">+${inv.rsvpCount}</span>
-          </div>
-          ${lastWishMsg ? `<div style="font-size:0.8rem; color:#7c4c1e; font-style:italic; margin-top:2px;">"${lastWishMsg}"</div>` : ''}
+        <div style="background:rgba(201,168,76,0.06); border:1px solid rgba(201,168,76,0.15); border-radius:10px; padding:12px 14px; display:flex; justify-content:space-between; align-items:center; width:100%; text-align:right;">
+          <strong style="color:var(--brown); font-size:1.05rem;">👤 ${inv.guestName}</strong>
+          <span style="background:linear-gradient(135deg, #FCF6BA 0%, #c9a84c 50%, #8a6010 100%); color:#1a1000; font-size:0.75rem; font-weight:bold; padding:2px 8px; border-radius:12px;">+${inv.rsvpCount}</span>
         </div>
       `;
     }).join('');
