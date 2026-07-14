@@ -897,7 +897,7 @@ function applyConfigToFields(c) {
 
   if (c.ev && c.ev.length > 0) {
     window._adminEvents = c.ev.map(e => ({
-      nameAr:   e.n, date: e.d, time: e.t, ampm: e.a,
+      nameAr:   e.n, date: e.d, time: e.t,
       location: e.l, lat:  e.la != null ? String(e.la) : '',
       lng:      e.lo != null ? String(e.lo) : '', emoji: e.e
     }));
@@ -947,11 +947,11 @@ function set(id, v) {
 // ── Events ──
 const EMOJI_OPTIONS = ['💍','🏡','📷','🍽️','🎉','🌹','💐','🎊','🕌','🎶'];
 const DEFAULT_EVENTS = [
-  { nameAr:'مراسم العقد',   date:'12/07/2026', time:'3:30', ampm:'PM', location:'فضاء الحبيب، طبلبة',    lat:'35.632714', lng:'10.941811', emoji:'💍' },
-  { nameAr:'استقبال الضيوف',date:'13/07/2026', time:'4:30', ampm:'PM', location:'منزل العريس، طبلبة',    lat:'35.642004', lng:'10.966089', emoji:'🏡' },
-  { nameAr:'جلسة تصوير',   date:'14/07/2026', time:'5:00', ampm:'PM', location:'برج الراس، المهدية',    lat:'35.508971', lng:'11.081458', emoji:'📷' },
-  { nameAr:'مأدبة العشاء', date:'15/07/2026', time:'6:30', ampm:'PM', location:'منزل العريس، طبلبة',    lat:'35.642004', lng:'10.966089', emoji:'🍽️'},
-  { nameAr:'حفل الأفراح',  date:'16/07/2026', time:'8:00', ampm:'PM', location:'فضاء موازين، قصر هلال', lat:'35.658203', lng:'10.880335', emoji:'🎉' },
+  { nameAr:'مراسم العقد',   date:'12/07/2026', time:'15:30', location:'فضاء الحبيب، طبلبة',    lat:'35.632714', lng:'10.941811', emoji:'💍' },
+  { nameAr:'استقبال الضيوف',date:'13/07/2026', time:'16:30', location:'منزل العريس، طبلبة',    lat:'35.642004', lng:'10.966089', emoji:'🏡' },
+  { nameAr:'جلسة تصوير',   date:'14/07/2026', time:'17:00', location:'برج الراس، المهدية',    lat:'35.508971', lng:'11.081458', emoji:'📷' },
+  { nameAr:'مأدبة العشاء', date:'15/07/2026', time:'18:30', location:'منزل العريس، طبلبة',    lat:'35.642004', lng:'10.966089', emoji:'🍽️'},
+  { nameAr:'حفل الأفراح',  date:'16/07/2026', time:'20:00', location:'فضاء موازين، قصر هلال', lat:'35.658203', lng:'10.880335', emoji:'🎉' },
 ];
 
 function renderEvents() {
@@ -974,9 +974,8 @@ function renderEvents() {
         <div class="field"><label>اسم الحدث</label><input class="ev-nameAr" type="text" value="${ev.nameAr||''}"></div>
         <div class="field"><label>التاريخ</label><input class="ev-date" type="text" value="${ev.date||''}" dir="ltr"></div>
       </div>
-      <div class="form-row three">
-        <div class="field"><label>الوقت</label><input class="ev-time" type="text" value="${ev.time||''}" dir="ltr"></div>
-        <div class="field"><label>ص/م</label><select class="ev-ampm"><option ${ev.ampm==='AM'?'selected':''}>AM</option><option ${ev.ampm==='PM'?'selected':''}>PM</option></select></div>
+      <div class="form-row">
+        <div class="field"><label>الوقت (صيغة 24ساعة)</label><input class="ev-time" type="text" value="${ev.time||''}" placeholder="مثال: 15:30" dir="ltr"></div>
         <div class="field"><label>الإيموجي</label><input class="ev-emoji" type="text" value="${ev.emoji||'🎉'}" readonly style="cursor:pointer;text-align:center;font-size:1.3rem"></div>
       </div>
       <div class="form-row single">
@@ -1008,7 +1007,6 @@ function collectEvents() {
     nameAr:   card.querySelector('.ev-nameAr').value.trim(),
     date:     card.querySelector('.ev-date').value.trim(),
     time:     card.querySelector('.ev-time').value.trim(),
-    ampm:     card.querySelector('.ev-ampm').value,
     emoji:    card.querySelector('.ev-emoji').value,
     location: card.querySelector('.ev-location').value.trim(),
     lat:      card.querySelector('.ev-lat').value.trim(),
