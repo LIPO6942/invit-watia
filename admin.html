@@ -299,10 +299,18 @@
       <div class="page-subtitle">يُضبط العدّاد التنازلي تلقائياً</div>
       <div class="card">
         <div class="card-title">⏰ موعد الحفل</div>
-        <div class="form-row">
-          <div class="field"><label>التاريخ والوقت</label><input id="weddingDate" type="datetime-local" value="2026-07-12T15:30" dir="ltr"></div>
-          <div class="field"><label>العرض في الدعوة</label><input id="weddingDateDisplay" type="text" value="الأحد 12 جويلية 2026"></div>
+        <div class="form-row" style="grid-template-columns:1fr">
+          <div class="field">
+            <label>التاريخ والوقت</label>
+            <input id="weddingDate" type="datetime-local" value="2026-07-12T15:30" dir="ltr"
+              oninput="autoFillDateDisplay(this.value)">
+          </div>
         </div>
+        <div id="dateDisplayPreview" style="margin-top:10px;padding:10px 14px;background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.2);border-radius:8px;font-size:0.82rem;color:var(--gold-light);text-align:center;direction:rtl">
+          <!-- filled by JS -->
+        </div>
+        <!-- Hidden field used by buildConfig/applyConfigToFields -->
+        <input type="hidden" id="weddingDateDisplay">
       </div>
     </div>
 
@@ -692,6 +700,9 @@ function initAdmin() {
   loadSaved();
   renderEvents();
   renderLinksHistory();
+  // Init date preview from default value
+  const wdEl = document.getElementById('weddingDate');
+  if (wdEl && wdEl.value) autoFillDateDisplay(wdEl.value);
 
   // Seal change listener
   const sealSelect = document.getElementById('envSeal');
@@ -870,7 +881,8 @@ function applyConfigToFields(c) {
   set('brideFather',       c.bf  || '');
   set('brideMother',       c.bm  || '');
   set('weddingDate',       c.wd  || '');
-  set('weddingDateDisplay',c.wdd || '');
+  autoFillDateDisplay(c.wd || ''); // regenerate date display from stored date
+  set('weddingDateDisplay',c.wdd || ''); // fallback: also restore legacy saved text
   set('envPattern',        c.ep  || 'floral');
   set('envSeal',           c.es  || 'heart');
   set('envSealInitials',   c.si  || '');
@@ -922,6 +934,32 @@ function applyConfigToFields(c) {
     });
     renderEvents();
   }
+}
+
+// ── Auto-generate wedding date display text from datetime-local ──
+function autoFillDateDisplay(val) {
+  if (!val) return;
+  const dt = new Date(val);
+  if (isNaN(dt)) return;
+
+  const arDay  = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  const arMonth= ['جانفي','فيفري','مارس','أفريل','ماي','جوان','جويلية','أوت','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  const frDay  = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+  const frMonth= ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+
+  const d = dt.getDay(), day = dt.getDate(), m = dt.getMonth(), y = dt.getFullYear();
+  const arText = `${arDay[d]} ${day} ${arMonth[m]} ${y}`;
+  const frText = `${frDay[d]} ${day} ${frMonth[m]} ${y}`;
+
+  // Set hidden field (used by buildConfig)
+  const hidden = document.getElementById('weddingDateDisplay');
+  if (hidden) hidden.value = arText;
+
+  // Update preview box
+  const preview = document.getElementById('dateDisplayPreview');
+  if (preview) preview.innerHTML =
+    `<div style="margin-bottom:4px">🇹🇳 <strong>${arText}</strong></div>` +
+    `<div style="direction:ltr;color:var(--text-muted)">🇫🇷 ${frText}</div>`;
 }
 
 async function loadSaved() {
