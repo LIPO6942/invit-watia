@@ -1786,7 +1786,7 @@ body.env-open .music-btn {
 }
 
 .animated-groom {
-  font-size: clamp(1.3rem, 6.2vw, 2.8rem);
+  font-size: clamp(1.05rem, 5.0vw, 2.2rem);
   background: linear-gradient(90deg, #ffe596 0%, #c9a84c 40%, #fff8d0 60%, #a07820 80%, #ffe596 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
@@ -1799,7 +1799,7 @@ body.env-open .music-btn {
 }
 
 .animated-bride {
-  font-size: clamp(1.3rem, 6.2vw, 2.8rem);
+  font-size: clamp(1.05rem, 5.0vw, 2.2rem);
   background: linear-gradient(90deg, #ffe596 0%, #c9a84c 40%, #fff8d0 60%, #a07820 80%, #ffe596 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
