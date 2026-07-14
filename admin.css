@@ -693,63 +693,72 @@ html, body {
   .main-content { padding: 20px 16px; }
 }
 
+/* ── Mobile Bottom Nav (always hidden on desktop) ── */
+.mobile-bottom-nav { display: none; }
+
 /* ── Responsive — Mobile (≤ 600px) ── */
 @media (max-width: 600px) {
-  /* Full page layout: content scrolls, nav pinned at bottom */
+  /* Layout: column, content on top, mobile nav pinned at bottom */
   #admin-app {
     flex-direction: column;
     height: 100vh;
+    overflow: hidden;
   }
 
+  /* Hide desktop sidebar entirely */
+  .sidebar { display: none !important; }
+
+  /* Main scrollable content area */
   .main-content {
     flex: 1 1 auto;
     overflow-y: auto;
+    overflow-x: hidden;
     padding: 14px 12px 8px;
     min-height: 0;
   }
 
-  /* Bottom tab bar */
-  .sidebar {
-    width: 100% !important;
-    height: 58px !important;
-    min-height: 58px;
+  /* ── Mobile bottom nav ── */
+  .mobile-bottom-nav {
+    display: flex !important;
+    width: 100%;
+    height: 60px;
     flex-shrink: 0;
-    flex-direction: row !important;
-    padding: 0 !important;
-    border-left: none !important;
+    background: var(--bg-sidebar);
     border-top: 1px solid var(--border);
     overflow-x: auto;
     overflow-y: hidden;
-    background: var(--bg-sidebar);
-    display: flex !important;
-    order: 2; /* go after main content */
   }
 
-  .sidebar-logo,
-  .sidebar-logo-sub,
-  .nav-label,
-  .sidebar-bottom { display: none !important; }
+  .mbn-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    min-width: 44px;
+    cursor: pointer;
+    border-top: 3px solid transparent;
+    color: var(--text-muted);
+    transition: color 0.18s, background 0.18s;
+    padding: 4px 2px;
+  }
 
-  .nav-item {
-    flex: 1 !important;
-    flex-direction: column !important;
-    gap: 2px !important;
-    padding: 6px 4px !important;
-    min-width: 44px !important;
-    justify-content: center !important;
-    align-items: center !important;
-    border-right: none !important;
-    border-top: 3px solid transparent !important;
-    font-size: 0.6rem !important;
+  .mbn-item:hover { background: rgba(201,168,76,0.06); color: var(--gold-light); }
+
+  .mbn-item.active {
+    border-top-color: var(--gold);
+    background: rgba(201,168,76,0.08);
+    color: var(--gold);
+  }
+
+  .mbn-icon { font-size: 1.35rem; line-height: 1; }
+
+  .mbn-label {
+    font-size: 0.58rem;
+    font-weight: 600;
     white-space: nowrap;
-  }
-
-  .nav-icon { font-size: 1.4rem !important; display: block !important; }
-
-  .nav-item.active {
-    border-right-color: transparent !important;
-    border-top-color: var(--gold) !important;
-    background: rgba(201,168,76,0.08) !important;
+    letter-spacing: 0.01em;
   }
 
   /* Fix URL overflow in link cards */
@@ -768,9 +777,6 @@ html, body {
   .form-row { grid-template-columns: 1fr !important; }
   .form-row.three { grid-template-columns: 1fr !important; }
   .pack-selector { grid-template-columns: 1fr !important; }
-
-  /* Buttons wrap on small screens */
-  .link-output-box > div > div { flex-wrap: wrap !important; }
 
   /* Page title sizing */
   .page-title { font-size: 1.2rem; }

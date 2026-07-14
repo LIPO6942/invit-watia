@@ -458,6 +458,16 @@
     </button>
   </div>
 
+  <!-- ── Mobile Bottom Navigation (visible only on small screens) ── -->
+  <nav class="mobile-bottom-nav" id="mobileBottomNav">
+    <div class="mbn-item active" onclick="showPage('page-couple')"    data-page="page-couple">    <span class="mbn-icon">💑</span><span class="mbn-label">العروسان</span></div>
+    <div class="mbn-item"        onclick="showPage('page-families')"  data-page="page-families">  <span class="mbn-icon">👨‍👩‍👦</span><span class="mbn-label">العائلات</span></div>
+    <div class="mbn-item"        onclick="showPage('page-date')"      data-page="page-date">      <span class="mbn-icon">📅</span><span class="mbn-label">التاريخ</span></div>
+    <div class="mbn-item"        onclick="showPage('page-programme')" data-page="page-programme"> <span class="mbn-icon">🗓️</span><span class="mbn-label">البرنامج</span></div>
+    <div class="mbn-item"        onclick="showPage('page-links')"     data-page="page-links">     <span class="mbn-icon">🔗</span><span class="mbn-label">الروابط</span></div>
+    <div class="mbn-item"        onclick="showPage('page-qrcode')"    data-page="page-qrcode">    <span class="mbn-icon">🔳</span><span class="mbn-label">QR</span></div>
+  </nav>
+
 </div>
 
 <div id="toast"></div>
@@ -653,14 +663,16 @@ function showPage(id) {
   document.getElementById(id).classList.add('active');
   const map = { 'page-couple':0,'page-families':1,'page-date':2,'page-programme':3,'page-links':4,'page-qrcode':5 };
   document.querySelectorAll('.nav-item')[map[id]].classList.add('active');
+  // Sync mobile bottom nav
+  document.querySelectorAll('.mbn-item').forEach(n => n.classList.remove('active'));
+  const mbnItem = document.querySelector('.mbn-item[data-page="' + id + '"]');
+  if (mbnItem) mbnItem.classList.add('active');
+  // Scroll content to top
+  const mc = document.querySelector('.main-content');
+  if (mc) mc.scrollTop = 0;
   window.scrollTo(0, 0);
-  if (id === 'page-programme') {
-    renderEvents();
-  }
-  if (id === 'page-qrcode') {
-    generatePromoQr();
-    updateFlyerFooter();
-  }
+  if (id === 'page-programme') renderEvents();
+  if (id === 'page-qrcode') { generatePromoQr(); updateFlyerFooter(); }
 }
 
 // ── Init ──
