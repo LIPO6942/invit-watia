@@ -1423,6 +1423,43 @@ body.lang-fr .wish-item {
   text-align: left;
 }
 
+/* French: couple hero names — larger, allow wrapping on small screens */
+body.lang-fr .animated-groom,
+body.lang-fr .animated-bride {
+  font-size: clamp(1.4rem, 6vw, 2.6rem);
+  white-space: normal;
+  word-break: break-word;
+  text-align: center;
+}
+
+/* French: closing easel names — scale down to fit inside the frame */
+body.lang-fr .closing-easel-groom,
+body.lang-fr .closing-easel-bride {
+  font-size: clamp(0.65rem, 2.8vw, 1rem);
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.2;
+}
+
+body.lang-fr .closing-easel-txts {
+  width: 46%;
+  overflow: hidden;
+}
+
+/* French: timeline location button label — already handled by data-tr, just ensure LTR direction */
+body.lang-fr .tl-location-btn {
+  direction: ltr;
+}
+
+/* French: guestbook centering fix on mobile */
+body.lang-fr #guestbook-section {
+  text-align: center;
+}
+body.lang-fr .guestbook-form {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 body.lang-fr .tl-left-cell {
   text-align: right;
   align-items: flex-end;

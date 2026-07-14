@@ -1271,7 +1271,7 @@ const TRANSLATIONS = {
     basmala: 'Que Dieu les bénisse, les comble de bonheur et les réunisse.',
     invite_title: 'Les familles',
     mr: 'M.',
-    mrs: 'et Mme',
+    mrs: 'Mme',
     and: 'et',
     invite_desc: 'ont l\'honneur de vous inviter au mariage de leurs enfants',
     and_char: '&',
