@@ -314,7 +314,7 @@ function rebuildTimelineFromConfig(events) {
   const timeline = document.getElementById('timeline');
   if (!timeline) return;
   const isFr = document.body.classList.contains('lang-fr');
-  const pinLabel = isFr ? 'Lieu' : 'الموقع';
+  const pinLabel = isFr ? 'Localisation' : 'الموقع';
   const pinIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`;
   timeline.innerHTML = events.map((ev, i) => {
     const isEven  = i % 2 === 0;
@@ -325,7 +325,7 @@ function rebuildTimelineFromConfig(events) {
       <div class="tl-event font-amiri">${evName}</div>
       <div class="tl-location">${ev.l||''}</div>
       <div class="tl-time">${formatTo24h(ev.t, ev.a)}</div>
-      <button class="tl-location-btn" onclick="openMap(this)">${pinIcon}<span>الموقع</span></button>`;
+      <button class="tl-location-btn" onclick="openMap(this)">${pinIcon}<span>${pinLabel}</span></button>`;
     return `
       <div class="timeline-item"
            data-location="${ev.l||''}"
@@ -1531,6 +1531,9 @@ function applyLanguage(lang) {
   // Render RSVP select options
   renderRsvpOptions(lang);
 
+  // Render Recipient select options
+  renderRecipientOptions(lang);
+
   // Apply dedicated role inscription for groom/bride private view
   if (window._pendingRoleView) {
     const roleLabel  = document.getElementById('role-inscription-banner');
@@ -1641,6 +1644,29 @@ function renderRsvpOptions(lang) {
   const list = RSVP_OPTIONS[lang] || RSVP_OPTIONS.ar;
   selectEl.innerHTML = list.map(opt => {
     return `<option value="${opt.value}" data-count="${opt.count || 0}">${opt.text}</option>`;
+  }).join('');
+}
+
+const RECIPIENT_OPTIONS = {
+  ar: [
+    { value: "both", text: "إلى: العرايس معاً 💑" },
+    { value: "groom", text: "إلى: العريس 🤵" },
+    { value: "bride", text: "إلى: العروسة 👰" }
+  ],
+  fr: [
+    { value: "both", text: "Aux mariés ensemble 💑" },
+    { value: "groom", text: "Au marié 🤵" },
+    { value: "bride", text: "À la mariée 👰" }
+  ]
+};
+
+function renderRecipientOptions(lang) {
+  const selectEl = document.getElementById('gb-recipient');
+  if (!selectEl) return;
+  const list = RECIPIENT_OPTIONS[lang] || RECIPIENT_OPTIONS.ar;
+  const currentVal = selectEl.value;
+  selectEl.innerHTML = list.map(opt => {
+    return `<option value="${opt.value}" ${opt.value === currentVal ? 'selected' : ''}>${opt.text}</option>`;
   }).join('');
 }
 

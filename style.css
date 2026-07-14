@@ -1435,15 +1435,29 @@ body.lang-fr .animated-bride {
 /* French: closing easel names — scale down to fit inside the frame */
 body.lang-fr .closing-easel-groom,
 body.lang-fr .closing-easel-bride {
-  font-size: clamp(0.65rem, 2.8vw, 1rem);
+  font-family: 'Playfair Display', 'Didot', 'Georgia', serif;
+  font-size: clamp(0.55rem, 2.2vw, 0.82rem);
   white-space: normal;
-  word-break: break-word;
+  word-break: break-all;
   line-height: 1.2;
+  color: #321c0b;
+}
+
+body.lang-fr .closing-easel-header {
+  font-family: 'Playfair Display', 'Didot', 'Georgia', serif;
+  font-size: clamp(0.68rem, 2.8vw, 0.95rem);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 body.lang-fr .closing-easel-txts {
-  width: 46%;
-  overflow: hidden;
+  width: 44%;
+  left: -1%; /* Center the text container on the whiteboard */
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 /* French: timeline location button label — already handled by data-tr, just ensure LTR direction */
