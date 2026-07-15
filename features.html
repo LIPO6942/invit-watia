@@ -932,6 +932,7 @@
   <!-- Floating Audio Elements -->
   <audio id="audio-wedding_march" src="assets/wedding_march.mp3" preload="auto"></audio>
   <audio id="audio-ziad_gharsa" src="assets/ziad_gharsa.mp3" preload="auto"></audio>
+  <audio id="audio-mabrouk_ramy_ayach" src="assets/mabrouk_ramy_ayach.mp3" preload="auto"></audio>
 
   <!-- Sticky Professional WhatsApp Contact Banner -->
   <div class="whatsapp-banner">
@@ -1211,6 +1212,9 @@
             </button>
             <button class="music-play-btn" id="btn-play-gharsa" onclick="playSpecificMusic('ziad_gharsa')">
               <span>🌙</span> Z. Gharsa (Malouf)
+            </button>
+            <button class="music-play-btn" id="btn-play-mabrouk" onclick="playSpecificMusic('mabrouk_ramy_ayach')">
+              <span>🎊</span> Mabrouk (Ramy Ayach)
             </button>
           </div>
 
@@ -1619,14 +1623,18 @@
     function updateActiveMusicButtonState(playingName) {
       const btnMarch = document.getElementById('btn-play-march');
       const btnGharsa = document.getElementById('btn-play-gharsa');
+      const btnMabrouk = document.getElementById('btn-play-mabrouk');
       
       if (btnMarch) btnMarch.classList.remove('active');
       if (btnGharsa) btnGharsa.classList.remove('active');
+      if (btnMabrouk) btnMabrouk.classList.remove('active');
 
       if (playingName === 'wedding_march' && btnMarch) {
         btnMarch.classList.add('active');
       } else if (playingName === 'ziad_gharsa' && btnGharsa) {
         btnGharsa.classList.add('active');
+      } else if (playingName === 'mabrouk_ramy_ayach' && btnMabrouk) {
+        btnMabrouk.classList.add('active');
       }
     }
 
@@ -1670,7 +1678,7 @@
     }
 
     function stopAllAudio() {
-      ['wedding_march', 'ziad_gharsa'].forEach(name => {
+      ['wedding_march', 'ziad_gharsa', 'mabrouk_ramy_ayach'].forEach(name => {
         const audio = document.getElementById('audio-' + name);
         if (audio) {
           audio.pause();

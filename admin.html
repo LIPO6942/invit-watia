@@ -193,9 +193,22 @@
             <audio id="preview-ziad_gharsa" src="assets/ziad_gharsa.mp3" preload="none"></audio>
           </div>
 
+          <!-- Option 3: Mabrouk - Ramy Ayach -->
+          <div id="mo-mabrouk_ramy_ayach" onclick="selectMusic('mabrouk_ramy_ayach')"
+               style="flex:1;padding:14px 10px;border:1px solid var(--border);border-radius:10px;cursor:pointer;background:rgba(0,0,0,0.3);text-align:center;transition:all 0.2s">
+            <div style="font-size:1.6rem">🎊</div>
+            <div style="font-size:0.8rem;margin-top:6px;color:white;font-weight:700">مبروك</div>
+            <div style="font-size:0.66rem;color:var(--text-muted);margin-top:2px">رامي عياش</div>
+            <button onclick="event.stopPropagation();previewMusic('mabrouk_ramy_ayach')"
+              style="margin-top:8px;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);color:var(--gold);border-radius:6px;padding:4px 10px;font-size:0.72rem;cursor:pointer;font-family:'Amiri',serif">
+              ▶ استماع
+            </button>
+            <audio id="preview-mabrouk_ramy_ayach" src="assets/mabrouk_ramy_ayach.mp3" preload="none"></audio>
+          </div>
+
         </div>
         <div style="font-size:0.72rem;color:#2ecc71;margin-top:8px;text-align:center">
-          ✅ الملف جاهز — <code style="color:var(--gold)">ziad_gharsa.mp3</code> محمل وجاهز للاستخدام فوراً
+          ✅ الملفات جاهزة — اختر الأغنية المناسبة للمناسبة
         </div>
       </div>
       <div class="card">
@@ -554,7 +567,7 @@ let _previewAudio = null;
 
 function selectMusic(name, doSave = true) {
   window._selectedMusic = name;
-  ['wedding_march', 'ziad_gharsa'].forEach(m => {
+  ['wedding_march', 'ziad_gharsa', 'mabrouk_ramy_ayach'].forEach(m => {
     const el = document.getElementById('mo-' + m);
     if (!el) return;
     if (m === name) {

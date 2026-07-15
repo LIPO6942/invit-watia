@@ -1429,13 +1429,14 @@ function readAndApplyGuestParam() {
 /* ────────────────────────────────────────────────
    MUSIC FROM CONFIG
    Reads cfg.mu and switches the <audio> src accordingly.
-   Supported keys: 'wedding_march' | 'ziad_gharsa'
+   Supported keys: 'wedding_march' | 'ziad_gharsa' | 'mabrouk_ramy_ayach'
 ──────────────────────────────────────────────── */
 function applyMusicFromConfig(cfg) {
   if (!cfg || !cfg.mu) return;
   const MUSIC_MAP = {
-    'wedding_march': 'assets/wedding_march.mp3',
-    'ziad_gharsa':   'assets/ziad_gharsa.mp3',
+    'wedding_march':      'assets/wedding_march.mp3',
+    'ziad_gharsa':        'assets/ziad_gharsa.mp3',
+    'mabrouk_ramy_ayach': 'assets/mabrouk_ramy_ayach.mp3',
   };
   const src = MUSIC_MAP[cfg.mu];
   if (!src) return;
