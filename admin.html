@@ -1218,7 +1218,7 @@ function copyShortLink()  { navigator.clipboard.writeText(_shortUrl).then(() => 
 function copyGuestsLink() { navigator.clipboard.writeText(_guestsUrl).then(() => showToast('📋 تم نسخ رابط الإدارة!')); }
 function openGuestsLink() { if (_guestsUrl) window.open(_guestsUrl, '_blank'); }
 function shareWhatsApp()  {
-  const msg = encodeURIComponent('🌹 دعوة زفاف\n\n' + _shortUrl);
+  const msg = encodeURIComponent(`✨ *دعوة زفاف إلكترونية* ✨\n\nيسعدنا دعوتكم لمشاركتنا فرحة العمر. لمشاهدة تفاصيل الدعوة الكاملة وتأكيد حضوركم، تفضلوا بفتح الرابط التالي:\n👇👇👇\n${_shortUrl}`);
   window.open('https://wa.me/?text=' + msg, '_blank');
 }
 function openShortLink() { window.open(_shortUrl, '_blank'); }
@@ -1420,7 +1420,7 @@ async function updateLinkConfig(slug) {
 }
 
 function shareHistLink(url) {
-  const msg = encodeURIComponent('🌹 دعوة زفاف\n\n' + url);
+  const msg = encodeURIComponent(`✨ *دعوة زفاف إلكترونية* ✨\n\nيسعدنا دعوتكم لمشاركتنا فرحة العمر. لمشاهدة تفاصيل الدعوة الكاملة وتأكيد حضوركم، تفضلوا بفتح الرابط التالي:\n👇👇👇\n${url}`);
   window.open('https://wa.me/?text=' + msg, '_blank');
 }
 

@@ -356,12 +356,9 @@ function shareWA(id){
   const groom=cfg.gf2||cfg.ga||'';
   const bride=cfg.bf2||cfg.ba||'';
   const isAr=g.type.startsWith('ar');
-  const intro=isAr
-    ?`دعوة خاصة بـ ${g.name} ♥️`
-    :`Invitation pour ${g.name} ♥️`;
   const msg=isAr
-    ?`🌹 ${intro}\n\n${label},\n\nيسعدنا دعوتكم لحضور حفل زفاف\n💍 ${groom} & ${bride}\n\nتفضلوا بفتح دعوتكم الخاصة:\n${link}`
-    :`🌹 ${intro}\n\n${label},\n\nNous vous invitons au mariage de\n💍 ${groom} & ${bride}\n\nOuvrez votre invitation:\n${link}`;
+    ?`✨ *دعوة زفاف خاصة* ✨\n\n${label} 🌹\n\nيسرّنا ويشرفنا دعوتكم لحضور حفل زفاف:\n💍 *${groom} & ${bride}*\n\nلمشاهدة بطاقة الدعوة التفاعلية وتأكيد الحضور، يرجى فتح الرابط التالي:\n👇👇👇\n${link}\n\nحضوركم يكتمل به فرحنا وسعادتنا ♥️`
+    :`✨ *Invitation de Mariage Personnalisée* ✨\n\n${label} 🌹\n\nNous avons l'immense honneur de vous inviter à célébrer le mariage de :\n💍 *${groom} & ${bride}*\n\nPour découvrir votre carte d'invitation interactive et confirmer votre présence, veuillez ouvrir ce lien :\n👇👇👇\n${link}\n\nVotre présence fera notre plus grande joie ♥️`;
   window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
 }
 let _toastTimer=null;
