@@ -1902,9 +1902,16 @@ function loadWeatherForecast() {
         const wind     = Math.round(d.windspeed_10m_max[0]);
         const precProb = d.precipitation_probability_max ? Math.round(d.precipitation_probability_max[0]) : null;
 
-        // Show range for daily forecast
-        const tempVal = document.getElementById('weather-temp-val');
-        if (tempVal) tempVal.textContent = `${tempMin}–${tempMax}°C`;
+        // Show range for daily forecast — format for RTL readability
+        const tempVal = document.getElementById('weather-temp-val');\n        if (tempVal) {
+          const maxLabel = isFr ? 'max' : 'أقصى';
+          const minLabel = isFr ? 'min' : 'أدنى';
+          // Two clearly labeled temperature values, works in both RTL and LTR
+          tempVal.innerHTML =
+            `<span class="temp-max-block"><span class="temp-num" style="color:#ffcc55">${tempMax}°</span><span class="temp-unit-label">C</span><span class="temp-badge temp-badge-max">${maxLabel}</span></span>` +
+            `<span class="temp-divider">/</span>` +
+            `<span class="temp-min-block"><span class="temp-num" style="color:#99ccff">${tempMin}°</span><span class="temp-unit-label">C</span><span class="temp-badge temp-badge-min">${minLabel}</span></span>`;
+        }
 
         // Humidity not available in daily, show rain probability instead
         const humidityEl = document.getElementById('weather-humidity-val');

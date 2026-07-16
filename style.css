@@ -1112,6 +1112,59 @@ body.lang-ar .weather-temp-block {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   line-height: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  direction: ltr; /* always left-to-right for numbers */
+  unicode-bidi: bidi-override;
+}
+
+/* Temperature max/min blocks */
+.temp-max-block, .temp-min-block {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 1px;
+}
+.temp-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1;
+  -webkit-text-fill-color: initial; /* override parent gradient */
+}
+.temp-unit-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-right: 2px;
+  -webkit-text-fill-color: initial;
+  color: rgba(255,255,255,0.6);
+}
+.temp-badge {
+  font-size: 0.5rem;
+  font-weight: 700;
+  padding: 1px 4px;
+  border-radius: 4px;
+  align-self: flex-end;
+  margin-bottom: 4px;
+  letter-spacing: 0.03em;
+  -webkit-text-fill-color: initial;
+}
+.temp-badge-max {
+  background: rgba(255, 200, 50, 0.25);
+  color: #ffcc55;
+  border: 1px solid rgba(255, 200, 50, 0.4);
+}
+.temp-badge-min {
+  background: rgba(100, 180, 255, 0.2);
+  color: #99ccff;
+  border: 1px solid rgba(100, 180, 255, 0.35);
+}
+.temp-divider {
+  font-size: 1.2rem;
+  color: rgba(255,255,255,0.3);
+  margin: 0 4px;
+  -webkit-text-fill-color: initial;
+  align-self: center;
 }
 
 .weather-desc {
