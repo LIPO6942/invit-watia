@@ -1902,21 +1902,15 @@ function loadWeatherForecast() {
         const wind     = Math.round(d.windspeed_10m_max[0]);
         const precProb = d.precipitation_probability_max ? Math.round(d.precipitation_probability_max[0]) : null;
 
-        // Show range for daily forecast — format for RTL readability
+        // Show single average temperature — clean, no min/max confusion
         const tempVal = document.getElementById('weather-temp-val');
         if (tempVal) {
-          const maxLabel = isFr ? 'max' : 'أقصى';
-          const minLabel = isFr ? 'min' : 'أدنى';
-          // Two clearly labeled temperature values, works in both RTL and LTR
-          tempVal.innerHTML =
-            `<span class="temp-max-block"><span class="temp-num" style="color:#ffcc55">${tempMax}°</span><span class="temp-unit-label">C</span><span class="temp-badge temp-badge-max">${maxLabel}</span></span>` +
-            `<span class="temp-divider">/</span>` +
-            `<span class="temp-min-block"><span class="temp-num" style="color:#99ccff">${tempMin}°</span><span class="temp-unit-label">C</span><span class="temp-badge temp-badge-min">${minLabel}</span></span>`;
+          tempVal.textContent = `${tempAvg}°C`;
         }
 
-        // Humidity not available in daily, show rain probability instead
+        // Rain probability in the humidity slot
         const humidityEl = document.getElementById('weather-humidity-val');
-        if (humidityEl && precProb !== null) humidityEl.textContent = `${precProb}%`;
+        if (humidityEl) humidityEl.textContent = precProb !== null ? `${precProb}%` : '--';
 
         const windEl = document.getElementById('weather-wind-val');
         if (windEl) windEl.textContent = `${wind} km/h`;
@@ -1929,9 +1923,9 @@ function loadWeatherForecast() {
         const card = document.querySelector('.weather-glass-card');
         if (card) card.classList.remove('weather-skeleton');
 
-        // Update humidity label to show "Pluie" instead of humidity for daily
+        // Short label for rain probability (fits in one line)
         document.querySelectorAll('[data-tr="weather_humidity"]').forEach(el => {
-          el.textContent = isFr ? 'Risque pluie' : 'احتمال مطر';
+          el.textContent = isFr ? 'Pluie' : 'مطر';
         });
 
       } else {
