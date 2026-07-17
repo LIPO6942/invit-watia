@@ -1722,19 +1722,31 @@ body.lang-fr .timeline-item:nth-child(even) .tl-right-cell {
           contrast(1.2) brightness(1.05);
 }
 
-/* ── Bord de Mer Motif styling (Ultra-Realistic Textured Paper) ── */
+/* ── Bord de Mer Motif styling (Ultra-Realistic Linen Paper) ── */
 .pattern-minimalist-active .left-panel {
   background:
-    /* Layer 1: Fine diagonal paper grain texture */
+    /* Layer 1: Fine diagonal paper grain 1 (darker fibers) */
     repeating-linear-gradient(
-      -42deg,
-      transparent 0px, transparent 3px,
-      rgba(0,0,0,0.025) 3px, rgba(0,0,0,0.025) 4px
+      -45deg,
+      transparent 0px, transparent 2.5px,
+      rgba(0,0,0,0.02) 2.5px, rgba(0,0,0,0.02) 3.5px
     ),
-    /* Layer 2: 3D lighting + crease shadow at right meeting edge */
-    linear-gradient(to right, rgba(255,255,255,0.18) 0%, rgba(74,44,10,0.02) 90%, rgba(0,0,0,0.25) 100%),
-    linear-gradient(to bottom, rgba(255,255,255,0.12) 0%, rgba(0,0,0,0.1) 100%),
-    /* Layer 3: Main vertical stripes */
+    /* Layer 2: Fine diagonal paper grain 2 (lighter fibers) */
+    repeating-linear-gradient(
+      45deg,
+      transparent 0px, transparent 3px,
+      rgba(255,255,255,0.025) 3px, rgba(255,255,255,0.025) 4.5px
+    ),
+    /* Layer 3: Vertical soft paper fiber texture */
+    repeating-linear-gradient(
+      to right,
+      transparent 0px, transparent 4px,
+      rgba(0,0,0,0.012) 4px, rgba(0,0,0,0.012) 5px
+    ),
+    /* Layer 4: 3D lighting + crease shadow at right meeting edge */
+    linear-gradient(to right, rgba(255,255,255,0.18) 0%, rgba(74,44,10,0.02) 90%, rgba(0,0,0,0.28) 100%),
+    linear-gradient(to bottom, rgba(255,255,255,0.14) 0%, rgba(0,0,0,0.15) 100%),
+    /* Layer 5: Main vertical stripes */
     repeating-linear-gradient(
       to right,
       #52748d 0px,
@@ -1749,16 +1761,28 @@ body.lang-fr .timeline-item:nth-child(even) .tl-right-cell {
 
 .pattern-minimalist-active .right-panel {
   background:
-    /* Layer 1: Fine diagonal paper grain texture (mirrored) */
+    /* Layer 1: Fine diagonal paper grain 1 (darker fibers) */
     repeating-linear-gradient(
-      42deg,
-      transparent 0px, transparent 3px,
-      rgba(0,0,0,0.025) 3px, rgba(0,0,0,0.025) 4px
+      45deg,
+      transparent 0px, transparent 2.5px,
+      rgba(0,0,0,0.02) 2.5px, rgba(0,0,0,0.02) 3.5px
     ),
-    /* Layer 2: 3D lighting + crease shadow at left meeting edge */
-    linear-gradient(to left, rgba(255,255,255,0.18) 0%, rgba(74,44,10,0.02) 88%, rgba(0,0,0,0.3) 100%),
-    linear-gradient(to bottom, rgba(255,255,255,0.12) 0%, rgba(0,0,0,0.1) 100%),
-    /* Layer 3: Main vertical stripes */
+    /* Layer 2: Fine diagonal paper grain 2 (lighter fibers, mirrored) */
+    repeating-linear-gradient(
+      -45deg,
+      transparent 0px, transparent 3px,
+      rgba(255,255,255,0.025) 3px, rgba(255,255,255,0.025) 4.5px
+    ),
+    /* Layer 3: Vertical soft paper fiber texture */
+    repeating-linear-gradient(
+      to right,
+      transparent 0px, transparent 4px,
+      rgba(0,0,0,0.012) 4px, rgba(0,0,0,0.012) 5px
+    ),
+    /* Layer 4: 3D lighting + crease shadow at left meeting edge */
+    linear-gradient(to left, rgba(255,255,255,0.18) 0%, rgba(74,44,10,0.02) 88%, rgba(0,0,0,0.32) 100%),
+    linear-gradient(to bottom, rgba(255,255,255,0.14) 0%, rgba(0,0,0,0.15) 100%),
+    /* Layer 5: Main vertical stripes */
     repeating-linear-gradient(
       to right,
       #52748d 0px,
@@ -1788,19 +1812,25 @@ body.lang-fr .timeline-item:nth-child(even) .tl-right-cell {
   width: 100%;
   height: 220px;
   background:
-    /* Diagonal paper grain texture */
+    /* Layer 1: Fine diagonal paper grain texture */
     repeating-linear-gradient(
-      -42deg,
-      transparent 0px, transparent 3px,
-      rgba(0,0,0,0.02) 3px, rgba(0,0,0,0.02) 4px
+      -45deg,
+      transparent 0px, transparent 2.5px,
+      rgba(0,0,0,0.02) 2.5px, rgba(0,0,0,0.02) 3.5px
     ),
-    /* Soft shading and highlights */
-    linear-gradient(to bottom, rgba(255,255,255,0.18) 0%, rgba(0,0,0,0.24) 100%),
+    /* Layer 2: Fine diagonal paper grain texture 2 (lighter) */
+    repeating-linear-gradient(
+      45deg,
+      transparent 0px, transparent 3px,
+      rgba(255,255,255,0.02) 3px, rgba(255,255,255,0.02) 4.5px
+    ),
+    /* Layer 3: Soft shading and highlights */
+    linear-gradient(to bottom, rgba(255,255,255,0.2) 0%, rgba(0,0,0,0.26) 100%),
     #3a556a;
   box-shadow:
-    inset 0 2px 4px rgba(255,255,255,0.18),
-    inset 0 -2px 4px rgba(0,0,0,0.25);
-  filter: drop-shadow(0 4px 5px rgba(0,0,0,0.35));
+    inset 0 2px 4px rgba(255,255,255,0.22),
+    inset 0 -2px 4px rgba(0,0,0,0.28);
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.38));
 }
 
 .left-flap {
@@ -1821,18 +1851,19 @@ body.lang-fr .timeline-item:nth-child(even) .tl-right-cell {
   height: 52px;
   background: linear-gradient(
     to bottom,
-    #cfbf9b 0%,
-    #e8d8b6 25%,
-    #fffcf2 50%,
-    #cfbf9b 75%,
-    #ad9c7a 100%
+    #bda17e 0%,
+    #dccfa9 20%,
+    #fffbf2 45%,
+    #fffbf2 55%,
+    #cfbf9b 80%,
+    #998866 100%
   );
   box-shadow:
-    0 4px 8px rgba(0,0,0,0.18),
+    0 5px 12px rgba(0,0,0,0.22),
     inset 0 1px 2px rgba(255,255,255,0.7),
-    inset 0 -1px 2px rgba(0,0,0,0.2);
-  border-top: 1.5px solid rgba(255,255,255,0.35);
-  border-bottom: 1.5px solid rgba(0,0,0,0.15);
+    inset 0 -1.5px 2.5px rgba(0,0,0,0.25);
+  border-top: 1.5px solid rgba(255,255,255,0.45);
+  border-bottom: 1.5px solid rgba(0,0,0,0.2);
 }
 
 .left-ribbon {
@@ -1845,6 +1876,8 @@ body.lang-fr .timeline-item:nth-child(even) .tl-right-cell {
 
 .pattern-minimalist-active .envelope-botanicals {
   display: block !important;
+  /* Cast a realistic soft shadow from pampas leaves onto striped envelope */
+  filter: drop-shadow(2px 5px 6px rgba(45, 25, 10, 0.38)) !important;
 }
 
 .pattern-minimalist-active .ribbon-bow {
