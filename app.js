@@ -153,11 +153,7 @@ function loadConfigFromURL() {
 
         /* Guest links (with ?guest= or ?gid=) get unlimited views — no pack check, no count increment */
         const hasGuestLink = !!(params.get('guest') || params.get('gid'));
-
-        if (!hasGuestLink && count >= pack) {
-          showPackExpired();
-          return;
-        }
+        // Removed: pack limits the number of added guests, not public view clicks
 
         /* Process wishes for Groom/Bride private inbox */
         processWishesForRole(data.wishes);
@@ -202,7 +198,7 @@ function loadConfigFromURL() {
         const cfg   = data.config;
         const count = (data.count || 0) + 1;
         const pack  = data.pack || cfg.ps || 9999;
-        if (count > pack) { showPackExpired(); return; }
+        // Removed count > pack check
 
         /* Process wishes for Groom/Bride private inbox */
         processWishesForRole(data.wishes);
@@ -236,7 +232,7 @@ function loadConfigFromURL() {
 
     if (cfg.th && cfg.th !== 'gold') document.body.classList.add('theme-' + cfg.th);
     applyEnvelopeDesign(cfg);
-    if (cfg.id && cfg.ps) checkAndIncrementPack(cfg.id, cfg.ps);
+    // Removed count-api check
 
   } else {
     // ── localStorage fallback (local testing) ──
