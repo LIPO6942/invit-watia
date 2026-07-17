@@ -226,7 +226,7 @@
             <select id="envPattern">
               <option value="floral">🌸 أوراق ونباتات طبيعية (Floral)</option>
               <option value="vintage">⚜️ إطار كلاسيكي مزخرف (Vintage)</option>
-              <option value="minimalist">💠 هندسي راقي (Minimaliste)</option>
+              <option value="minimalist">🌊 بحري إبداعي (Bord de Mer)</option>
               <option value="nature">🌿 طبيعة صيفية خضراء (Nature Estivale)</option>
             </select>
           </div>
@@ -1365,19 +1365,24 @@ async function renderLinksHistory() {
 function updateCounter(slug, data) {
   const el = document.getElementById('ctr-' + slug);
   if (!el) return;
-  const guestsCount = Array.isArray(data.guests) ? data.guests.length : 0;
+  const guestsList  = Array.isArray(data.guests) ? data.guests : [];
+  const guestsCount = guestsList.length;
   const views       = data.count || 0;
+  const guestViews  = guestsList.reduce((sum, g) => sum + (g.views || 0), 0);
   const pack        = data.pack  || 100;
   const remaining   = Math.max(0, pack - guestsCount);
   const pct         = Math.min(100, Math.round((guestsCount / pack) * 100));
   const color       = remaining === 0 ? '#e74c3c' : remaining < pack * 0.2 ? '#f39c12' : '#2ecc71';
   el.innerHTML = `
     <div style="font-size:0.78rem;">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
         <span>👥 المدعوين: <strong>${guestsCount}</strong> / ${pack}</span>
-        <span style="font-size:0.72rem; color:var(--text-muted);">👁 الزيارات العامة: ${views}</span>
+        <div style="font-size:0.72rem; color:var(--text-muted); text-align:left; display:flex; flex-direction:column; gap:2px;">
+          <span>👁 الزيارات العامة: ${views}</span>
+          <span>👤 فتح الروابط الشخصية: ${guestViews}</span>
+        </div>
       </div>
-      <div style="margin-top:2px;">
+      <div style="margin-top:4px;">
         <div style="background:rgba(255,255,255,0.08);border-radius:20px;height:5px;overflow:hidden">
           <div style="width:${pct}%;height:100%;background:${color};border-radius:20px"></div>
         </div>

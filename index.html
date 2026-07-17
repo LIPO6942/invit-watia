@@ -468,8 +468,11 @@
       <!-- Motif 2: Vintage (New refined generated image motif) -->
       <img class="panel-vintage" src="assets/vintage_pattern_new.png" alt="Vintage Motif" style="display:none; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none; mix-blend-mode:multiply; opacity:0.85;">
 
-      <!-- Motif 3: Minimalist Geometric (New modern generated image motif) -->
-      <img class="panel-minimalist" src="assets/minimalist_pattern.png" alt="Minimalist Motif" style="display:none; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none; mix-blend-mode:multiply; opacity:0.85;">
+      <!-- Motif 3: Bord de Mer Elements (Custom Marine Theme) -->
+      <div class="panel-minimalist marine-decor left-decor" style="display:none; position:absolute; inset:0; pointer-events:none; z-index:5;">
+        <div class="marine-flap left-flap"></div>
+        <div class="marine-ribbon left-ribbon"></div>
+      </div>
 
       <!-- Motif 4: Nature Summer (Botanical green generated image motif) -->
       <img class="panel-nature" src="assets/nature_summer_pattern.png" alt="Nature Motif" style="display:none; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none; mix-blend-mode:multiply; opacity:0.9;">
@@ -488,8 +491,11 @@
       <!-- Motif 2: Vintage (New refined generated image motif) -->
       <img class="panel-vintage" src="assets/vintage_pattern_new.png" alt="Vintage Motif" style="display:none; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none; mix-blend-mode:multiply; opacity:0.85; transform:scaleX(-1);">
 
-      <!-- Motif 3: Minimalist Geometric (New modern generated image motif) -->
-      <img class="panel-minimalist" src="assets/minimalist_pattern.png" alt="Minimalist Motif" style="display:none; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none; mix-blend-mode:multiply; opacity:0.85; transform:scaleX(-1);">
+      <!-- Motif 3: Bord de Mer Elements (Custom Marine Theme) -->
+      <div class="panel-minimalist marine-decor right-decor" style="display:none; position:absolute; inset:0; pointer-events:none; z-index:5;">
+        <div class="marine-flap right-flap"></div>
+        <div class="marine-ribbon right-ribbon"></div>
+      </div>
 
       <!-- Motif 4: Nature Summer (Botanical green generated image motif) -->
       <img class="panel-nature" src="assets/nature_summer_pattern.png" alt="Nature Motif" style="display:none; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none; mix-blend-mode:multiply; opacity:0.9; transform:scaleX(-1);">
@@ -531,12 +537,96 @@
         <div class="sparkle sp-8">·</div>
       </div>
 
+      <!-- Custom Marine Botanicals (Bord de Mer) -->
+      <svg class="envelope-botanicals" viewBox="0 0 200 250" style="display:none; position:absolute; bottom:135px; width:200px; height:250px; pointer-events:none; z-index:1;">
+        <!-- Bunny tail grass (right side) -->
+        <path d="M 100 200 Q 120 130, 135 70" stroke="#cbbca0" stroke-width="2" fill="none" />
+        <ellipse cx="137" cy="65" rx="8" ry="20" transform="rotate(15 137 65)" fill="#dfd5c0" opacity="0.95" />
+        
+        <!-- Branch with leaves (left side) -->
+        <path d="M 100 200 Q 80 130, 70 60" stroke="#cbbca0" stroke-width="1.5" fill="none" />
+        <!-- Left leaves -->
+        <path d="M 85 150 C 75 145, 65 150, 72 155 C 80 160, 85 155, 85 150 Z" fill="#d2c5ae" />
+        <path d="M 80 120 C 70 115, 60 120, 67 125 C 75 130, 80 125, 80 120 Z" fill="#d2c5ae" />
+        <path d="M 75 90 C 65 85, 55 90, 62 95 C 70 100, 75 95, 75 90 Z" fill="#d2c5ae" />
+        <!-- Right leaves -->
+        <path d="M 88 135 C 95 130, 105 135, 98 140 C 90 145, 88 140, 88 135 Z" fill="#d2c5ae" />
+        <path d="M 83 105 C 90 100, 100 105, 93 110 C 85 115, 83 110, 83 105 Z" fill="#d2c5ae" />
+        <path d="M 78 75 C 85 70, 95 75, 88 80 C 80 85, 78 80, 78 75 Z" fill="#d2c5ae" />
+        <!-- Tip leaf -->
+        <path d="M 70 60 C 65 50, 75 50, 70 60 Z" fill="#d2c5ae" />
+        
+        <!-- Central small flowers (baby's breath) -->
+        <path d="M 100 200 L 105 110" stroke="#cbbca0" stroke-width="1.5" fill="none" />
+        <path d="M 103 140 Q 115 120, 110 100" stroke="#cbbca0" stroke-width="1" fill="none" />
+        <path d="M 102 125 Q 92 105, 98 90" stroke="#cbbca0" stroke-width="1" fill="none" />
+        
+        <!-- Flower buds -->
+        <circle cx="105" cy="110" r="3" fill="#e8dec9" />
+        <circle cx="110" cy="100" r="3" fill="#e8dec9" />
+        <circle cx="115" cy="95" r="2.5" fill="#e8dec9" />
+        <circle cx="98" cy="90" r="3" fill="#e8dec9" />
+        <circle cx="92" cy="85" r="2.5" fill="#e8dec9" />
+        <circle cx="104" cy="82" r="3" fill="#e8dec9" />
+      </svg>
+
+      <!-- Custom Ribbon Bow (Bord de Mer) -->
+      <svg class="ribbon-bow" viewBox="0 0 300 200" style="display:none; position:absolute; width:300px; height:200px; pointer-events:none; z-index:1;">
+        <defs>
+          <linearGradient id="satinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ebdcb9" />
+            <stop offset="35%" stop-color="#fff5df" />
+            <stop offset="70%" stop-color="#dcbfa0" />
+            <stop offset="100%" stop-color="#bda082" />
+          </linearGradient>
+        </defs>
+        <!-- Left loop -->
+        <path d="M 150 100 C 100 60, 50 70, 70 100 C 90 130, 130 110, 150 100 Z" fill="url(#satinGrad)" filter="drop-shadow(0 3px 5px rgba(0,0,0,0.2))" />
+        <!-- Right loop -->
+        <path d="M 150 100 C 200 60, 250 70, 230 100 C 210 130, 170 110, 150 100 Z" fill="url(#satinGrad)" filter="drop-shadow(0 3px 5px rgba(0,0,0,0.2))" />
+        <!-- Left tail -->
+        <path d="M 145 105 L 100 180 L 120 185 L 155 110 Z" fill="url(#satinGrad)" filter="drop-shadow(0 3px 5px rgba(0,0,0,0.25))" />
+        <!-- Right tail -->
+        <path d="M 155 105 L 200 180 L 180 185 L 145 110 Z" fill="url(#satinGrad)" filter="drop-shadow(0 3px 5px rgba(0,0,0,0.25))" />
+      </svg>
+
       <div class="seal" id="seal" onclick="openEnvelopeNow()">
         <!-- 3D Wax Seal Image (dynamically swapped by JS) -->
         <img id="seal-3d-img" src="assets/heart_wax_seal.png" alt="Seal" style="opacity: 0; transition: opacity 0.3s ease; mix-blend-mode: multiply; width: 100%; height: 100%; object-fit: cover;">
         
         <!-- Monogram overlay text (displayed only when monogram is selected) -->
         <div id="seal-3d-monogram-text" class="font-amiri" style="display:none;">M &amp; M</div>
+
+        <!-- Custom Marine Wax Seal (Bord de Mer) -->
+        <div id="seal-marine-custom" style="display:none; position:absolute; inset:0; justify-content:center; align-items:center;">
+          <svg viewBox="0 0 100 100" style="width:100%; height:100%; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15));">
+            <circle cx="50" cy="50" r="42" fill="none" stroke="#5a4224" stroke-width="1.5" stroke-dasharray="2 1" opacity="0.6" />
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#5a4224" stroke-width="1" opacity="0.5" />
+            
+            <path id="textPathTop" d="M 18 50 A 32 32 0 0 1 82 50" fill="none" stroke="none" />
+            <path id="textPathBottom" d="M 82 50 A 32 32 0 0 1 18 50" fill="none" stroke="none" />
+            
+            <text font-family="'Playfair Display', serif" font-size="7.2" font-weight="700" fill="#324c60" letter-spacing="1.2">
+              <textPath href="#textPathTop" startOffset="50%" text-anchor="middle">INVITATION</textPath>
+            </text>
+            
+            <text font-family="'Playfair Display', serif" font-size="7.2" font-weight="700" fill="#324c60" letter-spacing="1">
+              <textPath href="#textPathBottom" startOffset="50%" text-anchor="middle">BORD DE MER</textPath>
+            </text>
+            
+            <circle cx="16" cy="50" r="1.2" fill="#324c60" />
+            <circle cx="84" cy="50" r="1.2" fill="#324c60" />
+            
+            <g transform="translate(36, 32) scale(0.28)" fill="#324c60">
+              <path d="M 50 0 A 8 8 0 1 0 50 16 A 8 8 0 1 0 50 0 Z M 50 4 A 4 4 0 1 1 50 12 A 4 4 0 1 1 50 4 Z" />
+              <rect x="46" y="14" width="8" height="50" rx="2" />
+              <rect x="25" y="24" width="50" height="8" rx="2" />
+              <path d="M 12 50 C 12 75, 88 75, 88 50 L 80 50 C 80 68, 20 68, 20 50 Z" />
+              <path d="M 12 50 L 0 50 L 12 36 Z" />
+              <path d="M 88 50 L 100 50 L 88 36 Z" />
+            </g>
+          </svg>
+        </div>
       </div>
       <!-- Curved text SVG around the seal — 280x280 to clear 135px seal radius -->
       <svg class="seal-text-svg" viewBox="0 0 280 280">

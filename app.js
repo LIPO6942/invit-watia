@@ -1132,6 +1132,15 @@ function applyEnvelopeDesign(cfg) {
     el.style.display = showNature ? 'block' : 'none';
   });
 
+  const invitationEl = document.getElementById('invitation');
+  if (invitationEl) {
+    if (showMinimalist) {
+      invitationEl.classList.add('pattern-minimalist-active');
+    } else {
+      invitationEl.classList.remove('pattern-minimalist-active');
+    }
+  }
+
   // Apply nature green panel background when nature theme is active
   const panels = document.querySelectorAll('.env-panel');
   panels.forEach(p => {
@@ -1442,9 +1451,16 @@ function readAndApplyGuestParam() {
       .then(doc => {
         if (!doc.exists) return;
         const guests = doc.data().guests || [];
-        const guest  = guests.find(g => g.id === gidRaw);
-        if (!guest) return;
+        const guestIdx  = guests.findIndex(g => g.id === gidRaw);
+        if (guestIdx === -1) return;
+        const guest = guests[guestIdx];
         _applyGuestBanner(guest.name, guest.type || 'ar_couple');
+
+        // Increment views counter
+        guests[guestIdx].views = (guests[guestIdx].views || 0) + 1;
+        _db.collection('invitations').doc(invSlug).update({
+          guests: guests
+        }).catch(err => console.warn('[InvitApp] Failed to update guest view count:', err));
       })
       .catch(e => console.warn('[InvitApp] gid lookup failed:', e));
 

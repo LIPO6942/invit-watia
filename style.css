@@ -1722,14 +1722,120 @@ body.lang-fr .timeline-item:nth-child(even) .tl-right-cell {
           contrast(1.2) brightness(1.05);
 }
 
-/* ── Minimalist Motif Image styling ── */
-.panel-minimalist {
+/* ── Bord de Mer Motif styling ── */
+.pattern-minimalist-active .left-panel {
+  background: repeating-linear-gradient(
+    to right,
+    #52748d 0px,
+    #52748d 30px,
+    #ede0c4 30px,
+    #ede0c4 60px
+  ) !important;
+  box-shadow:
+    inset -6px 0 15px rgba(0,0,0,0.25),
+    inset 0 0 40px rgba(0,0,0,0.05) !important;
+}
+
+.pattern-minimalist-active .right-panel {
+  background: repeating-linear-gradient(
+    to right,
+    #52748d 0px,
+    #52748d 30px,
+    #ede0c4 30px,
+    #ede0c4 60px
+  ) !important;
+  box-shadow:
+    -6px 0 16px rgba(0,0,0,0.30),
+    inset 6px 0 15px rgba(0,0,0,0.25),
+    inset 0 0 40px rgba(0,0,0,0.05) !important;
+}
+
+.marine-decor {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  mix-blend-mode: multiply;
-  opacity: 1;
-  filter: contrast(1.2) brightness(1.08);
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.marine-flap {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 220px;
+  background: #3e5b72;
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.12),
+    inset 0 -2px 4px rgba(0,0,0,0.2);
+  filter: drop-shadow(0 3px 4px rgba(0,0,0,0.3));
+}
+
+.left-flap {
+  right: 0;
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+}
+
+.right-flap {
+  left: 0;
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+
+.marine-ribbon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  height: 52px;
+  background: linear-gradient(to bottom, #d2c19e 0%, #fff6df 45%, #cbbba0 55%, #b2a082 100%);
+  box-shadow:
+    0 4px 8px rgba(0,0,0,0.18),
+    inset 0 1px 2px rgba(255,255,255,0.7),
+    inset 0 -1px 2px rgba(0,0,0,0.2);
+  border-top: 1.5px solid rgba(255,255,255,0.35);
+  border-bottom: 1.5px solid rgba(0,0,0,0.15);
+}
+
+.left-ribbon {
+  right: 0;
+}
+
+.right-ribbon {
+  left: 0;
+}
+
+.pattern-minimalist-active .envelope-botanicals {
+  display: block !important;
+}
+
+.pattern-minimalist-active .ribbon-bow {
+  display: block !important;
+}
+
+.pattern-minimalist-active #seal-marine-custom {
+  display: flex !important;
+}
+
+.pattern-minimalist-active .seal {
+  background: radial-gradient(
+    circle at 36% 30%,
+    #fffcf5 0%,
+    #fdfcf7 20%,
+    #ebe1c8 65%,
+    #c4b69c 100%
+  ) !important;
+  border: none !important;
+  box-shadow:
+    0 14px 36px rgba(45, 35, 25, 0.45),
+    0 0 0 3px rgba(235, 220, 185, 0.55),
+    0 0 0 7px rgba(235, 220, 185, 0.18),
+    inset 0 3px 10px rgba(255, 255, 255, 0.75),
+    inset 0 -3px 10px rgba(0, 0, 0, 0.15) !important;
+}
+
+.pattern-minimalist-active .seal-text-svg text {
+  fill: #324c60 !important;
 }
 
 /* ── Nature Motif Image styling ── */
@@ -1740,7 +1846,6 @@ body.lang-fr .timeline-item:nth-child(even) .tl-right-cell {
   mix-blend-mode: multiply;
   opacity: 1;
   filter: contrast(1.15) brightness(1.05);
->>>>>>> 66076f750528a70cb3a08728811b1d71a6ba100a
 }
 
 /* ── RESTORED INTRO OVERLAY & GRADIENT ── */

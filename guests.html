@@ -314,7 +314,7 @@ function deleteGuest(id){
 }
 async function saveGuests(){
   initFirebase();
-  await _db.collection('invitations').doc(_slug).update({guests:_guests.map(g=>({id:g.id,name:g.name,type:g.type,createdAt:g.createdAt}))});
+  await _db.collection('invitations').doc(_slug).update({guests:_guests.map(g=>({id:g.id,name:g.name,type:g.type,createdAt:g.createdAt,views:g.views||0}))});
 }
 function filterGuests(){_filterQ=document.getElementById('search-input').value.trim().toLowerCase();renderGuestList()}
 function renderGuestList(){
@@ -332,6 +332,7 @@ function renderGuestList(){
       <div class="guest-info">
         <div class="guest-name">${escHtml(g.name)}</div>
         <span class="formula-badge ${f.badge}">${f.emoji} ${f.label}</span>
+        <span class="formula-badge" style="background:rgba(255,255,255,0.08);color:var(--text);margin-right:5px;" title="عدد مرات فتح الدعوة">👁️ ${g.views || 0}</span>
       </div>
       <div class="guest-actions">
         <button class="btn-icon" title="نسخ الرابط البسيط" onclick="copyLink('${g.id}')">
