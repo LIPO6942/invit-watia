@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 /* ═══════════════════════════════════════════════════════════════════
    WEDDING INVITATION — app.js
@@ -58,18 +58,12 @@ function fromB64(str) {
 }
 
 function applyConfigToDOM(cfg) {
-  const isFr = cfg.la === 'fr';
-
-  const groomDisplay = isFr ? (cfg.gf2 || cfg.ga) : cfg.ga;
-  const brideDisplay = isFr ? (cfg.bf2 || cfg.ba) : cfg.ba;
+  // Outeya: always Arabic, show only bride
+  const brideDisplay = cfg.ba;
 
   const MAP = {
-    groomAr:          groomDisplay,
     brideAr:          brideDisplay,
-    groomNameDisplay: groomDisplay,  // shown in the big animated names + envelope banner
     brideNameDisplay: brideDisplay,
-    groomFather: cfg.gf,
-    groomMother: cfg.gm,
     brideFather: cfg.bf,
     brideMother: cfg.bm,
   };
@@ -80,12 +74,12 @@ function applyConfigToDOM(cfg) {
     });
   });
 
-  // Apply language translations
-  applyLanguage(cfg.la || 'ar');
+  // Always Arabic for Outeya
+  applyLanguage('ar');
 
   // Set page title dynamically
-  if (groomDisplay && brideDisplay) {
-    document.title = isFr ? `Mariage de ${groomDisplay} & ${brideDisplay}` : `حفل زفاف ${groomDisplay} و ${brideDisplay}`;
+  if (brideDisplay) {
+    document.title = `حفل وطية ${brideDisplay}`;
   }
 }
 
@@ -968,11 +962,11 @@ window.submitWish = function() {
     nameInput.value = '';
     messageInput.value = '';
     if (rsvpSelect) rsvpSelect.value = '';
-    alert(_currentLang === 'fr' ? 'Merci ! Votre réponse a été transmise aux mariés ✨' : 'شكراً لك! تم إرسال ردك وتأكيد حضورك للعروسين ✨');
+    alert('شكراً لك! تم إرسال ردك وتأكيد حضورك للعروسة ✨');
     
     // Add real-time update to _roleWishes if this wish matches the current role view
     const newWish = { name, message: msg, target: recipient, timestamp: new Date().toISOString() };
-    if (_currentRole === 'groom' && (recipient === 'groom' || recipient === 'both')) {
+    if (_currentRole === 'bride' && (recipient === 'bride' || recipient === 'both')) {
       _roleWishes.unshift(newWish);
     } else if (_currentRole === 'bride' && (recipient === 'bride' || recipient === 'both')) {
       _roleWishes.unshift(newWish);
@@ -997,7 +991,7 @@ window.openWishesWall = function() {
   overlay.style.display = 'flex';
   
   if (titleEl) {
-    titleEl.textContent = _currentRole === 'groom' ? 'صندوق تهاني العريس 🤵' : 'صندوق تهاني العروسة 👰';
+    titleEl.textContent = 'صندوق تهاني العروسة 👰';
   }
 
   if (_roleWishes.length === 0) {
@@ -1006,7 +1000,7 @@ window.openWishesWall = function() {
   }
 
   listEl.innerHTML = _roleWishes.map(w => {
-    const targetLabel = w.target === 'groom' ? '🤵 خاص بالعريس' : w.target === 'bride' ? '👰 خاص بالعروسة' : '💑 للعروسين';
+    const targetLabel = w.target === 'bride' ? '👰 خاص بالعروسة' : '👰 للعروسة';
     const dateStr = w.timestamp ? new Date(w.timestamp).toLocaleString('ar-TN') : '';
     return `
       <div class="wishes-wall-card">
@@ -1265,16 +1259,16 @@ function applyEnvelopeDesign(cfg) {
 }
 
 /* ────────────────────────────────────────────────
-   TRANSLATION & LOCALIZATION SYSTEM
+   TRANSLATION & LOCALIZATION SYSTEM (Outeya — Arabic only)
    ──────────────────────────────────────────────── */
 const TRANSLATIONS = {
   ar: {
-    basmala: 'بارك الله لهما وبارك عليهما وجمع بينهما في خير',
-    invite_title: 'تتشرف عائلتا',
+    basmala: 'بسم الله الرحمان الرحيم',
+    invite_title: 'تتشرف عائلة',
     mr: 'السيد',
     mrs: 'والسيدة',
     and: 'و',
-    invite_desc: 'بدعوتكم لحضور حفل زفاف نجليهما',
+    invite_desc: 'بدعوتكم لحضور حفل وطية ابنتهم',
     and_char: '&',
     scroll_hint: 'اسحب للأسفل',
     countdown_title: 'العد التنازلي',
@@ -1286,7 +1280,7 @@ const TRANSLATIONS = {
     program_title: 'برنامج الحفل',
     location_btn: 'الموقع',
     guestbook_title: 'دفتر التهاني',
-    guestbook_subtitle: 'شاركونا فرحتنا بكلمة طيبة للعروسين',
+    guestbook_subtitle: 'شاركونا فرحتنا بكلمة طيبة للعروسة',
     gb_name_placeholder: 'اسمك الكريم',
     gb_rsvp_label: '🗳️ تأكيد الحضور (RSVP) :',
     gb_msg_placeholder: 'أكتب تهنئتك هنا...',
@@ -1294,49 +1288,16 @@ const TRANSLATIONS = {
     gb_sug_label: '💡 اقتراحات جاهزة للتهنئة:',
     closing_tagline: 'يسعدنا مشاركتكم هذه الفرحة',
     closing_to: 'إلى',
-    closing_easel_header: 'حفل زفاف',
+    closing_easel_header: 'وطية',
     open_maps: 'افتح في خرائط جوجل',
-    weather_title: 'حالة الطقس ليوم الزفاف',
+    weather_title: 'حالة الطقس ليوم الوطية',
     weather_location: 'طبلبة، تونس',
     weather_humidity: 'الرطوبة',
     weather_wind: 'الرياح',
     weather_season_avg: 'معدل طقس صيفي مثالي ☀️',
   },
-  fr: {
-    basmala: 'Que Dieu les bénisse, les comble de bonheur et les réunisse.',
-    invite_title: 'Les familles',
-    mr: 'M.',
-    mrs: 'Mme',
-    and: 'et',
-    invite_desc: 'ont l\'honneur de vous inviter au mariage de leurs enfants',
-    and_char: '&',
-    scroll_hint: 'Faites défiler vers le bas',
-    countdown_title: 'Compte à rebours',
-    countdown_subtitle: 'Quelques instants nous séparent de ce grand jour',
-    days: 'Jours',
-    hours: 'Heures',
-    mins: 'Minutes',
-    secs: 'Secondes',
-    program_title: 'Programme de la Fête',
-    location_btn: 'Localisation',
-    guestbook_title: 'Livre d\'or',
-    guestbook_subtitle: 'Laissez un message de félicitations aux mariés',
-    gb_name_placeholder: 'Votre Nom',
-    gb_rsvp_label: '🗳️ Confirmation de présence (RSVP) :',
-    gb_msg_placeholder: 'Écrivez votre message ici...',
-    gb_submit: 'Envoyer les félicitations ✨',
-    gb_sug_label: '💡 Formules de vœux suggérées :',
-    closing_tagline: 'Nous sommes honorés de partager ce moment avec vous',
-    closing_to: 'À',
-    closing_easel_header: 'Mariage de',
-    open_maps: 'Ouvrir dans Google Maps',
-    weather_title: 'Météo prévue pour le Jour J',
-    weather_location: 'Teboulba, Tunisie',
-    weather_humidity: 'Humidité',
-    weather_wind: 'Vent',
-    weather_season_avg: 'Météo estivale idéale ☀️',
-  }
 };
+
 
 /* ────────────────────────────────────────────────
    GUEST NOMINATIVE BANNER
@@ -1364,7 +1325,6 @@ function _applyGuestBanner(guestName, guestType) {
     case 'fr_man':             title = 'Monsieur'; name = guestName; isLtr = true; break;
     case 'fr_woman':           title = 'Madame'; name = guestName; isLtr = true; break;
     case 'fr_friend_m':        title = 'Pour mon Ami'; name = guestName; isLtr = true; break;
-    case 'fr_friend_f':        title = 'Pour mon amie'; name = guestName; isLtr = true; break;
     default:                   title = 'إلى السيد'; name = `${guestName} وحرمه`;
   }
 
@@ -1378,9 +1338,9 @@ function _applyGuestBanner(guestName, guestType) {
   banner.style.display = 'flex';
   if (isLtr) banner.classList.add('ltr');
 
-  // Update browser tab title
-  const fullSalutation = `${title} ${name}`;
-  document.title = `${fullSalutation} — ${document.title}`;
+  // Update browser tab title: Outeya + Bride only
+  const brideName = window.cfg?.ba || 'العروسة';
+  document.title = `وطية ${brideName} — ${title} ${name}`;
 
   // Pre-fill guestbook name field
   const gbNameInput = document.getElementById('gb-name');
@@ -1401,6 +1361,7 @@ function _applyGuestBanner(guestName, guestType) {
 /** Updates the invitation description text dynamically for personalized guests */
 function _updatePersonalizedInviteDesc() {
   if (!_resolvedGuestName) return;
+  // Outeya: always show bride-only invite text
   const inviteDescEl = document.querySelector('[data-tr="invite_desc"]');
   if (!inviteDescEl) return;
 
@@ -1416,26 +1377,12 @@ function _updatePersonalizedInviteDesc() {
     case 'ar_woman':           title = 'إلى السيدة'; name = guestName; break;
     case 'ar_friend_m':        title = 'إلى عْشيري'; name = guestName; break;
     case 'ar_friend_f':        title = 'إلى عْشيرتي'; name = guestName; break;
-    case 'fr_couple':          title = 'Monsieur & Madame'; name = guestName; break;
-    case 'fr_man':             title = 'Monsieur'; name = guestName; break;
-    case 'fr_woman':           title = 'Madame'; name = guestName; break;
-    case 'fr_friend_m':        title = 'Pour mon Ami'; name = guestName; break;
-    case 'fr_friend_f':        title = 'Pour mon amie'; name = guestName; break;
     default:                   title = 'إلى السيد'; name = `${guestName} وحرمه`;
   }
 
-  const isFr = document.documentElement.lang === 'fr';
-  if (isFr) {
-    let cleanTitle = title;
-    if (title.startsWith('Pour mon ')) {
-      cleanTitle = title.replace('Pour mon ', 'leur ami ').toLowerCase();
-    }
-    inviteDescEl.innerHTML = `ont l'honneur d'inviter <span class="invite-guest-name">${cleanTitle} ${name}</span> au mariage de leurs enfants`;
-  } else {
-    const cleanTitle = title.replace('إلى ', '').trim();
-    const titlePrefix = cleanTitle ? cleanTitle + ' ' : '';
-    inviteDescEl.innerHTML = `بدعوة <span class="invite-guest-name">${titlePrefix}${name}</span> لحضور زفاف نجليهما`;
-  }
+  const cleanTitle = title.replace('إلى ', '').trim();
+  const titlePrefix = cleanTitle ? cleanTitle + ' ' : '';
+  inviteDescEl.innerHTML = `بدعوة <span class="invite-guest-name">${titlePrefix}${name}</span> لحضور حفل وطية ابنتهم`;
 }
 
 function readAndApplyGuestParam() {
@@ -1532,22 +1479,17 @@ window.selectSuggestion = function(text) {
 };
 
 function applyLanguage(lang) {
-  _currentLang = lang;
-  const dict = TRANSLATIONS[lang] || TRANSLATIONS.ar;
-  const isFr = lang === 'fr';
+  // Outeya: always Arabic
+  _currentLang = 'ar';
+  const dict = TRANSLATIONS['ar'];
 
   // Set html properties
-  document.documentElement.lang = lang;
-  document.documentElement.dir = isFr ? 'ltr' : 'rtl';
+  document.documentElement.lang = 'ar';
+  document.documentElement.dir = 'rtl';
 
   // Apply language class to body
-  if (isFr) {
-    document.body.classList.add('lang-fr');
-    document.body.classList.remove('lang-ar');
-  } else {
-    document.body.classList.add('lang-ar');
-    document.body.classList.remove('lang-fr');
-  }
+  document.body.classList.add('lang-ar');
+  document.body.classList.remove('lang-fr');
 
   // Translate static texts
   document.querySelectorAll('[data-tr]').forEach(el => {
@@ -1582,26 +1524,16 @@ function applyLanguage(lang) {
   // Render Recipient select options
   renderRecipientOptions(lang);
 
-  // Apply dedicated role inscription for groom/bride private view
-  if (window._pendingRoleView) {
+  // Outeya: no groom role, only bride
+  // Skip role view for groom
+  if (window._pendingRoleView && window._pendingRoleView === 'bride') {
     const roleLabel  = document.getElementById('role-inscription-banner');
     const roleTitleEl = document.getElementById('role-inscription-title');
     const roleSubEl   = document.getElementById('role-inscription-sub');
     if (roleLabel && roleTitleEl && roleSubEl) {
-      const isGroom = window._pendingRoleView === 'groom';
-      if (isFr) {
-        roleLabel.classList.add('ltr');
-        roleTitleEl.textContent = 'Invitation souvenir';
-        roleSubEl.textContent = isGroom
-          ? 'Pour le marié'
-          : 'Pour la mariée';
-      } else {
-        roleLabel.classList.remove('ltr');
-        roleTitleEl.textContent = 'دعوة خاصة';
-        roleSubEl.textContent = isGroom
-          ? 'بالعريس للتذكار'
-          : 'بالعروسة للتذكار';
-      }
+      roleLabel.classList.remove('ltr');
+      roleTitleEl.textContent = 'دعوة خاصة';
+      roleSubEl.textContent = 'بالعروسة للتذكار';
       roleLabel.style.display = 'flex';
     }
   }
@@ -1697,14 +1629,7 @@ function renderRsvpOptions(lang) {
 
 const RECIPIENT_OPTIONS = {
   ar: [
-    { value: "both", text: "إلى: العرايس معاً 💑" },
-    { value: "groom", text: "إلى: العريس 🤵" },
     { value: "bride", text: "إلى: العروسة 👰" }
-  ],
-  fr: [
-    { value: "both", text: "Aux mariés ensemble 💑" },
-    { value: "groom", text: "Au marié 🤵" },
-    { value: "bride", text: "À la mariée 👰" }
   ]
 };
 

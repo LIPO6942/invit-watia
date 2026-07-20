@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -94,7 +94,7 @@ details[open] .chevron{transform:rotate(180deg)}
 <div id="main-app" style="display:none">
   <button class="logout-btn" onclick="doLogout()">🚪 خروج</button>
   <div class="app-header">
-    <div class="header-couple" id="header-couple">💍 حفل الزفاف</div>
+    <div class="header-couple" id="header-couple">🌸 حفل وطية</div>
     <div class="header-sub">إدارة قائمة المدعوين الخاصة بكم</div>
     <div class="stats-row">
       <div class="stat-pill">👥 المدعوين: <strong id="stat-total">0</strong></div>
@@ -169,11 +169,6 @@ const FORMULAS=[
   {value:'ar_woman',           label:'إلى السيدة ...',             badge:'b-arw', emoji:'👗'},
   {value:'ar_friend_m',        label:'إلى عْشيري ...',            badge:'b-afm', emoji:'🤝'},
   {value:'ar_friend_f',        label:'إلى عْشيرتي ...',           badge:'b-aff', emoji:'👩‍🤝‍👩'},
-  {value:'fr_couple',          label:'M. et Mme ...',            badge:'b-frc', emoji:'💑'},
-  {value:'fr_man',             label:'Monsieur ...',              badge:'b-frm', emoji:'🤵'},
-  {value:'fr_woman',           label:'Madame ...',                badge:'b-frw', emoji:'👰'},
-  {value:'fr_friend_m',        label:'Pour mon Ami ...',          badge:'b-ffm', emoji:'👨‍🤝‍👨'},
-  {value:'fr_friend_f',        label:'Pour mon amie ...',         badge:'b-fff', emoji:'👩‍🤝‍👩'},
 ];
 function formatLabel(name,type){
   switch(type){
@@ -241,10 +236,9 @@ function doLogout(){location.reload()}
 let _pack=9999;
 function initApp(){
   const cfg=_invData.config||{};
-  const groom=cfg.gf2||cfg.ga||'العريس';
-  const bride=cfg.bf2||cfg.ba||'العروسة';
-  document.getElementById('header-couple').textContent=`💍 ${groom} & ${bride}`;
-  document.title=`قائمة مدعوي ${groom} & ${bride}`;
+  const bride=cfg.ba||'العروسة';
+  document.getElementById('header-couple').textContent=`🌸 وطية ${bride}`;
+  document.title=`دعوة وطية ${bride}`;
   _pack=_invData.pack||9999;
   _guests=Array.isArray(_invData.guests)?[..._invData.guests]:[];
   renderGuestList();
@@ -363,12 +357,8 @@ function shareWA(id){
   const link=buildGuestLink(g.id);
   const label=formatLabel(g.name,g.type);
   const cfg=(_invData&&_invData.config)||{};
-  const groom=cfg.gf2||cfg.ga||'';
-  const bride=cfg.bf2||cfg.ba||'';
-  const isAr=g.type.startsWith('ar');
-  const msg=isAr
-    ?`✨ *دعوة زفاف خاصة* ✨\n\n${label} 🌹\n\nيسرّنا ويشرفنا دعوتكم لحضور حفل زفاف:\n💍 *${groom} & ${bride}*\n\nلمشاهدة بطاقة الدعوة التفاعلية وتأكيد الحضور، يرجى فتح الرابط التالي:\n👇👇👇\n${link}\n\nحضوركم يكتمل به فرحنا وسعادتنا ♥️`
-    :`✨ *Invitation de Mariage Personnalisée* ✨\n\n${label} 🌹\n\nNous avons l'immense honneur de vous inviter à célébrer le mariage de :\n💍 *${groom} & ${bride}*\n\nPour découvrir votre carte d'invitation interactive et confirmer votre présence, veuillez ouvrir ce lien :\n👇👇👇\n${link}\n\nVotre présence fera notre plus grande joie ♥️`;
+  const bride=cfg.ba||'';
+  const msg=`✨ *دعوة وطية خاصة* ✨\n\n${label} 🌹\n\nيسرّنا ويشرفنا دعوتكم لحضور حفل وطية:\n🌸 *${bride}*\n\nلمشاهدة بطاقة الدعوة التفاعلية وتأكيد الحضور، يرجى فتح الرابط التالي:\n👇👇👇\n${link}\n\nحضوركم يكتمل به فرحنا وسعادتنا ♥️`;
   window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
 }
 function shareMessenger(id){
@@ -377,15 +367,11 @@ function shareMessenger(id){
   const link=buildGuestLink(g.id);
   const label=formatLabel(g.name,g.type);
   const cfg=(_invData&&_invData.config)||{};
-  const groom=cfg.gf2||cfg.ga||'';
-  const bride=cfg.bf2||cfg.ba||'';
-  const isAr=g.type.startsWith('ar');
-  const msg=isAr
-    ?`✨ *دعوة زفاف خاصة* ✨\n\n${label} 🌹\n\nيسرّنا ويشرفنا دعوتكم لحضور حفل زفاف:\n💍 *${groom} & ${bride}*\n\nلمشاهدة بطاقة الدعوة التفاعلية وتأكيد الحضور، يرجى فتح الرابط التالي:\n👇👇👇\n${link}\n\nحضوركم يكتمل به فرحنا وسعادتنا ♥️`
-    :`✨ *Invitation de Mariage Personnalisée* ✨\n\n${label} 🌹\n\nNous avons l'immense honneur de vous inviter à célébrer le mariage de :\n💍 *${groom} & ${bride}*\n\nPour découvrir votre carte d'invitation interactive et confirmer votre présence, veuillez ouvrir ce lien :\n👇👇👇\n${link}\n\nVotre présence fera notre plus grande joie ♥️`;
+  const bride=cfg.ba||'';
+  const msg=`✨ *دعوة وطية خاصة* ✨\n\n${label} 🌹\n\nيسرّنا ويشرفنا دعوتكم لحضور حفل وطية:\n🌸 *${bride}*\n\nلمشاهدة بطاقة الدعوة التفاعلية وتأكيد الحضور، يرجى فتح الرابط التالي:\n👇👇👇\n${link}\n\nحضوركم يكتمل به فرحنا وسعادتنا ♥️`;
   
   navigator.clipboard.writeText(msg).then(()=>{
-    showToast(isAr ? '📋 تم نسخ الرسالة! افتح ماسنجر والصقها' : '📋 Message copié ! Ouvrez Messenger et collez-le');
+    showToast('📋 تم نسخ الرسالة! افتح ماسنجر والصقها');
     setTimeout(()=>{
       window.open('https://m.me/', '_blank');
     }, 1200);

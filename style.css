@@ -74,6 +74,92 @@ body {
 }
 
 .font-amiri { font-family: 'Amiri', serif; }
+.font-ruqaa  { font-family: 'Aref Ruqaa Ink', serif; }
+
+/* ═══════════════════════════════════════════════════════════════
+   وطية — OUTEYA-SPECIFIC STYLES
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Basmala Banner at top of opened invitation card ── */
+.outeya-basmala-banner {
+  position: relative;
+  width: 100%;
+  z-index: 5;
+  background: linear-gradient(135deg,
+    rgba(201,168,76,0.18) 0%,
+    rgba(245,230,192,0.25) 40%,
+    rgba(201,168,76,0.18) 100%);
+  border-bottom: 2px solid rgba(201,168,76,0.45);
+  padding: 18px 16px 16px;
+  text-align: center;
+  direction: rtl;
+  /* Subtle shimmer animation */
+  animation: basmalaPulse 3s ease-in-out infinite;
+}
+
+@keyframes basmalaPulse {
+  0%, 100% { background-size: 100% 100%; }
+  50%       { background-size: 105% 105%; }
+}
+
+.outeya-basmala-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.outeya-basmala-ornament {
+  color: var(--gold);
+  font-size: 0.85rem;
+  letter-spacing: 8px;
+  opacity: 0.75;
+}
+
+.outeya-basmala-text {
+  font-family: 'Aref Ruqaa Ink', serif;
+  font-size: clamp(1.5rem, 7vw, 2.2rem);
+  font-weight: 700;
+  color: transparent;
+  background: var(--gold-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  line-height: 1.4;
+  letter-spacing: 2px;
+  text-shadow: none;
+  filter: drop-shadow(0 2px 6px rgba(140,90,10,0.35));
+  padding: 4px 8px;
+}
+
+/* Night mode Basmala */
+body.night-mode .outeya-basmala-banner {
+  background: linear-gradient(135deg,
+    rgba(201,168,76,0.12) 0%,
+    rgba(245,230,192,0.10) 40%,
+    rgba(201,168,76,0.12) 100%);
+  border-bottom-color: rgba(201,168,76,0.3);
+}
+
+/* ── Bride-only name display (no groom, no & separator) ── */
+.outeya-bride-name-only {
+  justify-content: center;
+}
+
+.outeya-bride-name-only .bride-name {
+  font-size: clamp(2.2rem, 11vw, 3.4rem);
+  letter-spacing: 3px;
+}
+
+/* ── Bride-only family row (centered single block) ── */
+.outeya-family-row {
+  justify-content: center;
+  gap: 0;
+}
+
+/* ── Hide French closing thanks line ── */
+.closing-thanks-fr { display: none !important; }
+
+
 
 /* ─────── 1. Envelope Section ─────── */
 #envelope-section {

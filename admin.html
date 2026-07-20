@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -98,7 +98,7 @@
   <div class="login-card">
     <div class="login-logo">👑</div>
     <div class="login-title">لوحة الإدارة</div>
-    <div class="login-sub">إدارة دعوة الزفاف</div>
+    <div class="login-sub">إدارة دعوة الوطية</div>
     <input id="pwdInput" class="login-input" type="password" placeholder="••••••••" dir="ltr" autocomplete="current-password">
     <button class="login-btn" onclick="doLogin()">دخول</button>
     <div class="login-error" id="loginError"></div>
@@ -128,9 +128,9 @@
 
     <!-- ▸ PAGE 1 — Couple -->
     <div class="page active" id="page-couple">
-      <div class="page-title">💑 المتزوجان</div>
-      <div class="page-subtitle">أسماء العريس والعروس</div>
-      <div class="card">
+      <div class="page-title">🌸 العروسة</div>
+      <div class="page-subtitle">اسم العروسة</div>
+      <div class="card" style="display:none" id="groomCard">
         <div class="card-title">🌙 العريس</div>
         <div class="form-row">
           <div class="field"><label>الاسم بالعربية</label><input id="groomAr" type="text" value="مرتضى"></div>
@@ -140,7 +140,7 @@
       <div class="card">
         <div class="card-title">🌸 العروسة</div>
         <div class="form-row">
-          <div class="field"><label>الاسم بالعربية</label><input id="brideAr" type="text" value="مريم"></div>
+          <div class="field"><label>اسم العروسة بالعربية</label><input id="brideAr" type="text" value="مريم"></div>
           <div class="field"><label>Prénom en français</label><input id="brideFr" type="text" value="Mariam" dir="ltr"></div>
         </div>
       </div>
@@ -216,9 +216,8 @@
         <div class="form-row" style="margin-top:10px">
           <div class="field">
             <label>لغة الدعوة (Langue)</label>
-            <select id="invLanguage">
-              <option value="ar">العربية (Arabe)</option>
-              <option value="fr">الفرنسية (Français)</option>
+            <select id="invLanguage" disabled>
+              <option value="ar" selected>العربية — ثابت</option>
             </select>
           </div>
           <div class="field">
@@ -286,11 +285,11 @@
       </div>
     </div>
 
-    <!-- ▸ PAGE 2 — Families -->
+    <!-- ▸ PAGE 2 — Families (bride only for Outeya) -->
     <div class="page" id="page-families">
-      <div class="page-title">👨‍👩‍👦 العائلات</div>
-      <div class="page-subtitle">أسماء والدَي كل عائلة</div>
-      <div class="card">
+      <div class="page-title">👨‍👩‍👧 عائلة العروسة</div>
+      <div class="page-subtitle">والدي العروسة</div>
+      <div class="card" style="display:none" id="groomFamilyCard">
         <div class="card-title">👔 عائلة العريس</div>
         <div class="form-row">
           <div class="field"><label>الأب</label><input id="groomFather" type="text" value="محمد الرياحي"></div>
@@ -300,15 +299,15 @@
       <div class="card">
         <div class="card-title">👗 عائلة العروسة</div>
         <div class="form-row">
-          <div class="field"><label>الأب</label><input id="brideFather" type="text" value="خالد العمري"></div>
-          <div class="field"><label>الأم</label><input id="brideMother" type="text" value="عواطف بلقاسم"></div>
+          <div class="field"><label>اسم الأب</label><input id="brideFather" type="text" value="خالد العمري"></div>
+          <div class="field"><label>اسم الأم</label><input id="brideMother" type="text" value="عواطف بلقاسم"></div>
         </div>
       </div>
     </div>
 
     <!-- ▸ PAGE 3 — Date -->
     <div class="page" id="page-date">
-      <div class="page-title">📅 تاريخ الزفاف</div>
+      <div class="page-title">📅 تاريخ الوطية</div>
       <div class="page-subtitle">يُضبط العدّاد التنازلي تلقائياً</div>
       <div class="card">
         <div class="card-title">⏰ موعد الحفل</div>
@@ -474,7 +473,7 @@
             
             <div class="flyer-instructions-ar">امسح رمز الـ QR أعلاه بالجوال لتجربة دعوتنا، الألوان، والموسيقى الافتتاحية!</div>
             <div class="flyer-instructions-fr">Scannez le code QR ci-dessus pour découvrir notre invitation, ses thèmes et musiques !</div>
-            <div class="flyer-footer">💍 حفل زفاف العريس والعروس 💍</div>
+            <div class="flyer-footer">💍 حفل وطية العريس والعروس 💍</div>
           </div>
         </div>
       </div>
@@ -618,17 +617,17 @@ function initFirebase() {
   _db    = firebase.firestore();
 }
 
-// ── Personalised Slug Builder: e.g. mortadha-mariam-2026 ──
-function buildInvSlug(groomFr, brideFr) {
+// ── Personalised Slug Builder: e.g. mariam-watia-2026 ──
+function buildInvSlug(brideFr) {
   const clean = s => (s || 'invite')
     .toLowerCase()
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // strip accents
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
-  const g = clean(groomFr).split('-')[0];
-  const b = clean(brideFr).split('-')[0];
-  const year = 2026;
-  return `${g}-${b}-${year}`;
+  // وطية: slug based on bride name only
+  const b = clean(brideFr || val('brideFr')).split('-')[0];
+  const year = new Date().getFullYear();
+  return `${b}-watia-${year}`;
 }
 
 // ── Firebase Firestore operations ──
@@ -800,7 +799,7 @@ function updateFlyerFooter() {
   const b = val('brideAr') || 'العروس';
   const footerEl = document.querySelector('.flyer-footer');
   if (footerEl) {
-    footerEl.textContent = `💍 حفل زفاف ${g} و ${b} 💍`;
+    footerEl.textContent = `⬖ وطية ${b} ⬗`;
   }
 }
 
@@ -830,11 +829,8 @@ function buildConfig() {
     si: val('envSealInitials'), // seal initials
     hp: window._selectedHallPhoto   || 'luxury_wedding_hall', // hall photo background
     cp: window._selectedClosingPhoto || 'wedding_hall_board',  // closing section photo
-    la: val('invLanguage'),  // invitation language
-    ga: val('groomAr'),
-    gf2:val('groomFr'),
-    gf: val('groomFather'),
-    gm: val('groomMother'),
+    // Outeya: no groom fields
+    la: 'ar',
     ba: val('brideAr'),
     bf2:val('brideFr'),
     bf: val('brideFather'),
@@ -885,12 +881,13 @@ async function saveAll() {
 }
 
 function applyConfigToFields(c) {
-  set('groomAr',           c.ga  || '');
-  set('groomFr',           c.gf2 || '');   
   set('brideAr',           c.ba  || '');
   set('brideFr',           c.bf2 || '');
-  set('groomFather',       c.gf  || '');
-  set('groomMother',       c.gm  || '');
+  // Hidden groom fields for data compatibility
+  if (document.getElementById('groomAr')) set('groomAr', c.ga || '');
+  if (document.getElementById('groomFr')) set('groomFr', c.gf2 || '');
+  if (document.getElementById('groomFather')) set('groomFather', c.gf || '');
+  if (document.getElementById('groomMother')) set('groomMother', c.gm || '');
   set('brideFather',       c.bf  || '');
   set('brideMother',       c.bm  || '');
   set('weddingDate',       c.wd  || '');
@@ -913,7 +910,10 @@ function applyConfigToFields(c) {
   // Apply closing photo
   if (c.cp) selectClosingPhoto(c.cp, false);
   else selectClosingPhoto('wedding_hall_board', false);
-  set('invLanguage', c.la || 'ar');
+  set('invLanguage', 'ar');
+  if (document.getElementById('invLanguage')) {
+    document.getElementById('invLanguage').value = 'ar';
+  }
   
   if (c.th) {
     window._selectedTheme = c.th;
@@ -1144,7 +1144,7 @@ async function generateLink() {
     cfg.id = invSlug;
   } else {
     // Create new invitation
-    const baseSlug   = buildInvSlug(val('groomFr'), val('brideFr'));
+    const baseSlug   = buildInvSlug(val('brideFr'));
     const randSuffix = Math.random().toString(36).substring(2, 6);
     invSlug = `${baseSlug}-${randSuffix}`;
     cfg.id = invSlug;
@@ -1218,7 +1218,7 @@ function copyShortLink()  { navigator.clipboard.writeText(_shortUrl).then(() => 
 function copyGuestsLink() { navigator.clipboard.writeText(_guestsUrl).then(() => showToast('📋 تم نسخ رابط الإدارة!')); }
 function openGuestsLink() { if (_guestsUrl) window.open(_guestsUrl, '_blank'); }
 function shareWhatsApp()  {
-  const msg = encodeURIComponent(`✨ *دعوة زفاف إلكترونية* ✨\n\nيسعدنا دعوتكم لمشاركتنا فرحة العمر. لمشاهدة تفاصيل الدعوة الكاملة وتأكيد حضوركم، تفضلوا بفتح الرابط التالي:\n👇👇👇\n${_shortUrl}`);
+  const msg = encodeURIComponent(`✨ *دعوة وطية إلكترونية* ✨\n\nيسعدنا دعوتكم لمشاركتنا فرحة العمر. لمشاهدة تفاصيل الدعوة الكاملة وتأكيد حضوركم، تفضلوا بفتح الرابط التالي:\n👇👇👇\n${_shortUrl}`);
   window.open('https://wa.me/?text=' + msg, '_blank');
 }
 function openShortLink() { window.open(_shortUrl, '_blank'); }
@@ -1425,7 +1425,7 @@ async function updateLinkConfig(slug) {
 }
 
 function shareHistLink(url) {
-  const msg = encodeURIComponent(`✨ *دعوة زفاف إلكترونية* ✨\n\nيسعدنا دعوتكم لمشاركتنا فرحة العمر. لمشاهدة تفاصيل الدعوة الكاملة وتأكيد حضوركم، تفضلوا بفتح الرابط التالي:\n👇👇👇\n${url}`);
+  const msg = encodeURIComponent(`✨ *دعوة وطية إلكترونية* ✨\n\nيسعدنا دعوتكم لمشاركتنا فرحة العمر. لمشاهدة تفاصيل الدعوة الكاملة وتأكيد حضوركم، تفضلوا بفتح الرابط التالي:\n👇👇👇\n${url}`);
   window.open('https://wa.me/?text=' + msg, '_blank');
 }
 
