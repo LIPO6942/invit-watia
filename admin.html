@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -96,9 +96,9 @@
 <!-- ══ LOGIN ══ -->
 <div id="login-screen">
   <div class="login-card">
-    <div class="login-logo">👑</div>
+    <div class="login-logo">🌸</div>
     <div class="login-title">لوحة الإدارة</div>
-    <div class="login-sub">إدارة دعوة الزفاف</div>
+    <div class="login-sub">إدارة دعوات الوطية</div>
     <input id="pwdInput" class="login-input" type="password" placeholder="••••••••" dir="ltr" autocomplete="current-password">
     <button class="login-btn" onclick="doLogin()">دخول</button>
     <div class="login-error" id="loginError"></div>
@@ -110,11 +110,11 @@
 
   <nav class="sidebar">
     <div class="sidebar-logo">
-      <div class="sidebar-logo-title">💍 لوحة التحكم</div>
-      <div class="sidebar-logo-sub">إدارة الدعوة</div>
+      <div class="sidebar-logo-title">🌸 لوحة التحكم</div>
+      <div class="sidebar-logo-sub">إدارة دعوات الوطية</div>
     </div>
-    <div class="nav-item active"  onclick="showPage('page-couple')">    <span class="nav-icon">💑</span><span class="nav-label">المتزوجان</span></div>
-    <div class="nav-item"         onclick="showPage('page-families')">  <span class="nav-icon">👨‍👩‍👦</span><span class="nav-label">العائلات</span></div>
+    <div class="nav-item active"  onclick="showPage('page-couple')">    <span class="nav-icon">🌸</span><span class="nav-label">العروسة</span></div>
+    <div class="nav-item"         onclick="showPage('page-families')">  <span class="nav-icon">👨‍👩‍👧</span><span class="nav-label">العائلة</span></div>
     <div class="nav-item"         onclick="showPage('page-date')">      <span class="nav-icon">📅</span><span class="nav-label">التاريخ</span></div>
     <div class="nav-item"         onclick="showPage('page-programme')"> <span class="nav-icon">🗓️</span><span class="nav-label">البرنامج</span></div>
     <div class="nav-item"         onclick="showPage('page-photos')">    <span class="nav-icon">📸</span><span class="nav-label">ألبوم الصور</span></div>
@@ -840,7 +840,7 @@ function buildInvSlug(brideFr) {
 // ── Firebase Firestore operations ──
 async function saveInvitationToFirebase(slug, cfg, pack, guestName, couplePwd, isUpdate = false) {
   initFirebase();
-  const docRef = _db.collection('invitations').doc(slug);
+  const docRef = _db.collection('watia_invitations').doc(slug);
   const doc = await docRef.get();
   
   if (isUpdate && doc.exists) {
@@ -872,7 +872,7 @@ const _fbListeners = {};
 function watchInvitation(slug, callback) {
   if (_fbListeners[slug]) _fbListeners[slug](); // unsubscribe previous
   initFirebase();
-  _fbListeners[slug] = _db.collection('invitations').doc(slug)
+  _fbListeners[slug] = _db.collection('watia_invitations').doc(slug)
     .onSnapshot(doc => { if (doc.exists) callback(doc.data()); }, err => console.error(err));
 }
 
@@ -1109,8 +1109,8 @@ async function saveAll() {
 
   // ── Build config (includes updated Cloudinary URLs) and save ──
   const cfg = buildConfig();
-  localStorage.setItem('weddingAdminConfig', JSON.stringify(cfg));
-  localStorage.setItem('weddingAdminProdUrl', val('prodUrlInput'));
+  localStorage.setItem('watiaAdminConfig', JSON.stringify(cfg));
+  localStorage.setItem('watiaAdminProdUrl', val('prodUrlInput'));
   if (label) label.textContent = '⏳ جاري حفظ الإعدادات...';
 
   try {
@@ -1487,7 +1487,7 @@ async function loadGuestDropdown() {
 
   try {
     initFirebase();
-    const snap = await _db.collection('invitations').get();
+    const snap = await _db.collection('watia_invitations').get();
 
     if (snap.empty) {
       weddingSel.innerHTML = '<option value="">لا توجد دعوات محفوظة بعد</option>';
@@ -1660,7 +1660,7 @@ async function onGuestPhotoSelect(slug) {
 
   try {
     initFirebase();
-    const doc = await _db.collection('invitations').doc(slug).get();
+    const doc = await _db.collection('watia_invitations').doc(slug).get();
     if (!doc.exists) {
       if (bannerText) bannerText.textContent = '⚠️ الدعوة غير موجودة في قاعدة البيانات';
       return;
@@ -1742,7 +1742,7 @@ async function savePhotosForGuest() {
 
     // 3. Check the invitation doc exists
     initFirebase();
-    const docRef = _db.collection('invitations').doc(_selectedGuestSlug);
+    const docRef = _db.collection('watia_invitations').doc(_selectedGuestSlug);
     const snap   = await docRef.get();
     if (!snap.exists) {
       showToast('❌ المدعو غير موجود في قاعدة البيانات');
@@ -1849,8 +1849,8 @@ function autoFillDateDisplay(val) {
 }
 
 async function loadSaved() {
-  const raw = localStorage.getItem('weddingAdminConfig');
-  const savedProdUrl = localStorage.getItem('weddingAdminProdUrl');
+  const raw = localStorage.getItem('watiaAdminConfig');
+  const savedProdUrl = localStorage.getItem('watiaAdminProdUrl');
   if (savedProdUrl) {
     set('prodUrlInput', savedProdUrl);
   }
@@ -1869,11 +1869,11 @@ async function loadSaved() {
       const data = doc.data();
       if (data.prodUrl) {
         set('prodUrlInput', data.prodUrl);
-        localStorage.setItem('weddingAdminProdUrl', data.prodUrl);
+        localStorage.setItem('watiaAdminProdUrl', data.prodUrl);
       }
       if (data.config) {
         applyConfigToFields(data.config);
-        localStorage.setItem('weddingAdminConfig', JSON.stringify(data.config));
+        localStorage.setItem('watiaAdminConfig', JSON.stringify(data.config));
       }
       document.getElementById('lastSavedLabel').textContent = 'محفوظ (سيرفر)';
     }
@@ -2105,7 +2105,7 @@ async function renderLinksHistory() {
   c.innerHTML = '<div style="color:var(--text-muted);font-size:0.82rem;text-align:center;padding:20px"><span class="spinner"></span> جاري تحميل الروابط...</div>';
   try {
     initFirebase();
-    const querySnapshot = await _db.collection('invitations').get();
+    const querySnapshot = await _db.collection('watia_invitations').get();
     const hist = [];
     querySnapshot.forEach(doc => {
       const data = doc.data();
@@ -2271,7 +2271,7 @@ function updateCounter(slug, data) {
 async function updateLinkConfig(slug) {
   try {
     initFirebase();
-    const doc = await _db.collection('invitations').doc(slug).get();
+    const doc = await _db.collection('watia_invitations').doc(slug).get();
     if (!doc.exists) {
       showToast('❌ الدعوة غير موجودة');
       return;
@@ -2321,7 +2321,7 @@ async function updateClientPassword(id) {
   }
   try {
     initFirebase();
-    await _db.collection('invitations').doc(id).update({
+    await _db.collection('watia_invitations').doc(id).update({
       couplePassword: newPwd
     });
     showToast('✅ تم تحديث كلمة المرور بنجاح!');
@@ -2348,7 +2348,7 @@ async function deleteLink(id) {
   try {
     initFirebase();
     if (_fbListeners[id]) { _fbListeners[id](); delete _fbListeners[id]; }
-    await _db.collection('invitations').doc(id).delete();
+    await _db.collection('watia_invitations').doc(id).delete();
     showToast('🗑️ تم الحذف من السيرفر بنجاح');
     await renderLinksHistory();
   } catch (e) {
@@ -2364,7 +2364,7 @@ async function clearHistory() {
     // Stop all listeners
     Object.keys(_fbListeners).forEach(k => { _fbListeners[k](); delete _fbListeners[k]; });
     
-    const querySnapshot = await _db.collection('invitations').get();
+    const querySnapshot = await _db.collection('watia_invitations').get();
     const batch = _db.batch();
     querySnapshot.forEach(doc => {
       batch.delete(doc.ref);

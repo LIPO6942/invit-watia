@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 /* ═══════════════════════════════════════════════════════════════════
    WEDDING INVITATION — app.js
@@ -139,7 +139,7 @@ function loadConfigFromURL() {
     /* ── Firebase path ── */
     initFirebase();
     watchRsvpCounter();
-    _db.collection('invitations').doc(invSlug).get()
+    _db.collection('watia_invitations').doc(invSlug).get()
       .then(doc => {
         if (!doc.exists) {
           console.warn('[InvitApp] Invitation not found:', invSlug);
@@ -182,7 +182,7 @@ function loadConfigFromURL() {
 
         /* Atomic counter increment — only for generic (non-guest-specific) links */
         if (!hasGuestLink) {
-          _db.collection('invitations').doc(invSlug).update({
+          _db.collection('watia_invitations').doc(invSlug).update({
             count: firebase.firestore.FieldValue.increment(1)
           }).catch(e => console.warn('[InvitApp] Counter increment failed:', e));
         }
@@ -235,7 +235,7 @@ function loadConfigFromURL() {
 
   } else {
     // ── localStorage fallback (local testing) ──
-    const raw = localStorage.getItem('weddingAdminConfig');
+    const raw = localStorage.getItem('watiaAdminConfig');
     if (raw) {
       try {
         const cfg = JSON.parse(raw);
@@ -962,7 +962,7 @@ window.submitWish = function() {
   updateData.rsvpCount = guestCount;
   updateData.rsvpGuestName = name;
 
-  _db.collection('invitations').doc(invSlug).update(updateData)
+  _db.collection('watia_invitations').doc(invSlug).update(updateData)
   .then(() => {
     nameInput.value = '';
     messageInput.value = '';
@@ -1028,7 +1028,7 @@ let wishesInterval = null;
 
 function loadAllWishes() {
   initFirebase();
-  _db.collection('invitations').get()
+  _db.collection('watia_invitations').get()
     .then(snapshot => {
       let wishes = [];
       snapshot.forEach(doc => {
@@ -1267,7 +1267,7 @@ function applyEnvelopeDesign(cfg) {
 const TRANSLATIONS = {
   ar: {
     basmala: 'بسم الله الرحمان الرحيم',
-    invite_title: 'تتش�/** Updates the invitation description text dynamically for personalized guests */
+    invite_title: 'تتش�/** Updates the invitation description text dynamically for personalized guests */
 function _updatePersonalizedInviteDesc() {
   if (!_resolvedGuestName) return;
   const inviteDescEl = document.querySelector('[data-tr="invite_desc"]');
@@ -1291,7 +1291,7 @@ function _updatePersonalizedInviteDesc() {
   const cleanTitle = title.replace('إلى ', '').trim();
   const titlePrefix = cleanTitle ? cleanTitle + ' ' : '';
   inviteDescEl.innerHTML = `بدعوة <span class="invite-guest-name">${titlePrefix}${name}</span> لحضور حفل وطية ابنتهم`;
-}�───────────────── */
+}�───────────────── */
 
 /** Apply banner data once name + type are resolved */
 function _applyGuestBanner(guestName, guestType) {
@@ -1396,7 +1396,7 @@ function readAndApplyGuestParam() {
     const invSlug = params.get('inv');
     if (!invSlug) return;
     initFirebase();
-    _db.collection('invitations').doc(invSlug).get()
+    _db.collection('watia_invitations').doc(invSlug).get()
       .then(doc => {
         if (!doc.exists) return;
         const guests = doc.data().guests || [];
@@ -1407,7 +1407,7 @@ function readAndApplyGuestParam() {
 
         // Increment views counter
         guests[guestIdx].views = (guests[guestIdx].views || 0) + 1;
-        _db.collection('invitations').doc(invSlug).update({
+        _db.collection('watia_invitations').doc(invSlug).update({
           guests: guests
         }).catch(err => console.warn('[InvitApp] Failed to update guest view count:', err));
       })
@@ -1687,7 +1687,7 @@ function watchRsvpCounter() {
   if (!invSlug) return;
 
   initFirebase();
-  _db.collection('invitations').doc(invSlug).onSnapshot(doc => {
+  _db.collection('watia_invitations').doc(invSlug).onSnapshot(doc => {
     if (!doc.exists) return;
     const data = doc.data();
     

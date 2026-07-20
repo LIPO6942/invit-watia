@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -221,7 +221,7 @@ async function doLogin(){
   if(!pwd){errEl.textContent='⚠️ أدخل كلمة المرور';return}
   try{
     initFirebase();
-    const doc=await _db.collection('invitations').doc(_slug).get();
+    const doc=await _db.collection('watia_invitations').doc(_slug).get();
     if(!doc.exists){errEl.textContent='❌ الدعوة غير موجودة — تحقق من الرابط';return}
     _invData=doc.data();
     const correctPwd=(_invData.couplePassword||'').trim();
@@ -308,7 +308,7 @@ function deleteGuest(id){
 }
 async function saveGuests(){
   initFirebase();
-  await _db.collection('invitations').doc(_slug).update({guests:_guests.map(g=>({id:g.id,name:g.name,type:g.type,createdAt:g.createdAt,views:g.views||0}))});
+  await _db.collection('watia_invitations').doc(_slug).update({guests:_guests.map(g=>({id:g.id,name:g.name,type:g.type,createdAt:g.createdAt,views:g.views||0}))});
 }
 function filterGuests(){_filterQ=document.getElementById('search-input').value.trim().toLowerCase();renderGuestList()}
 function renderGuestList(){
