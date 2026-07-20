@@ -59,15 +59,13 @@ function fromB64(str) {
 }
 
 function applyConfigToDOM(cfg) {
-  const isFr = cfg.la === 'fr';
-
-  const groomDisplay = isFr ? (cfg.gf2 || cfg.ga) : cfg.ga;
-  const brideDisplay = isFr ? (cfg.bf2 || cfg.ba) : cfg.ba;
+  const groomDisplay = cfg.ga;
+  const brideDisplay = cfg.ba;
 
   const MAP = {
     groomAr:          groomDisplay,
     brideAr:          brideDisplay,
-    groomNameDisplay: groomDisplay,  // shown in the big animated names + envelope banner
+    groomNameDisplay: groomDisplay,
     brideNameDisplay: brideDisplay,
     groomFather: cfg.gf,
     groomMother: cfg.gm,
@@ -81,12 +79,12 @@ function applyConfigToDOM(cfg) {
     });
   });
 
-  // Apply language translations
-  applyLanguage(cfg.la || 'ar');
+  // Always Arabic
+  applyLanguage('ar');
 
   // Set page title dynamically (Watia: bride name only)
   if (brideDisplay) {
-    document.title = isFr ? `Watia de ${brideDisplay}` : `دعوة وطية - ${brideDisplay}`;
+    document.title = `دعوة وطية - ${brideDisplay}`;
   }
 
   // Initialize Photo Stack Widget
@@ -332,12 +330,11 @@ function formatTo24h(timeStr, ampmStr) {
 function rebuildTimelineFromConfig(events) {
   const timeline = document.getElementById('timeline');
   if (!timeline) return;
-  const isFr = document.body.classList.contains('lang-fr');
-  const pinLabel = isFr ? 'Localisation' : 'الموقع';
+  const pinLabel = 'الموقع';
   const pinIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`;
   timeline.innerHTML = events.map((ev, i) => {
     const isEven  = i % 2 === 0;
-    const evName  = (isFr && ev.nf) ? ev.nf : (ev.n || '');
+    const evName  = ev.n || '';
     const iconHTML = getTimelineIcon(ev.n);
     const infoHTML = `
       <span class="tl-date">${ev.d||''}</span>
@@ -910,12 +907,12 @@ window.submitWish = function() {
   const recipient = recipientSelect ? recipientSelect.value : 'both';
   
   if (rsvpSelect && rsvpSelect.value === "") {
-    alert(_currentLang === 'fr' ? 'Veuillez sélectionner votre réponse RSVP 🌹' : 'الرجاء تحديد تأكيد الحضور الخاص بك 🌹');
+    alert('الرجاء تحديد تأكيد الحضور الخاص بك 🌹');
     return;
   }
   
   if (!name || !msg) {
-    alert(_currentLang === 'fr' ? 'Veuillez saisir votre nom et valider votre choix 🌹' : 'الرجاء كتابة الاسم وتأكيد الحضور 🌹');
+    alert('الرجاء كتابة الاسم وتأكيد الحضور 🌹');
     return;
   }
 
@@ -940,7 +937,7 @@ window.submitWish = function() {
     nameInput.value = '';
     messageInput.value = '';
     if (rsvpSelect) rsvpSelect.value = '';
-    alert(_currentLang === 'fr' ? 'Votre réponse a été envoyée (Aperçu local) ✨' : 'تم إرسال ردك بنجاح (معاينة محلية) ✨');
+    alert('تم إرسال ردك بنجاح (معاينة محلية) ✨');
     return;
   }
 
@@ -974,7 +971,7 @@ window.submitWish = function() {
     nameInput.value = '';
     messageInput.value = '';
     if (rsvpSelect) rsvpSelect.value = '';
-    alert(_currentLang === 'fr' ? 'Merci ! Votre réponse a été transmise aux mariés ✨' : 'شكراً لك! تم إرسال ردك وتأكيد حضورك للعروسين ✨');
+    alert('شكراً لك! تم إرسال ردك وتأكيد حضورك ✨');
     
     // Add real-time update to _roleWishes if this wish matches the current role view
     const newWish = { name, message: msg, target: recipient, timestamp: new Date().toISOString() };
@@ -1192,12 +1189,11 @@ function applyEnvelopeDesign(cfg) {
           if (cfg.si) {
             initials = cfg.si;
           } else {
-            const isFr = cfg.la === 'fr';
-            const groomName = isFr ? (cfg.gf2 || cfg.ga) : cfg.ga;
-            const brideName = isFr ? (cfg.bf2 || cfg.ba) : cfg.ba;
-            const g = (groomName || '').trim().charAt(0).toUpperCase();
-            const b = (brideName || '').trim().charAt(0).toUpperCase();
-            initials = g && b ? `${g} & ${b}` : 'M & M';
+            const groomName = cfg.ga || '';
+            const brideName = cfg.ba || '';
+            const g = groomName.trim().charAt(0).toUpperCase();
+            const b = brideName.trim().charAt(0).toUpperCase();
+            initials = g && b ? `${g} & ${b}` : 'م & م';
           }
 
           // Dynamically adjust font-family for 3D look
@@ -1304,7 +1300,7 @@ const TRANSLATIONS = {
     gb_sug_label: '💡 اقتراحات جاهزة للتهنئة:',
     closing_tagline: 'يسعدنا مشاركتكم هذه الفرحة',
     closing_to: 'إلى',
-    closing_easel_header: 'حفل وطية',
+    closing_easel_header: 'وطية مبروكة',
     open_maps: 'افتح في خرائط جوجل',
     weather_title: 'حالة الطقس ليوم الحفل',
     weather_location: 'طبلبة، تونس',
@@ -1315,43 +1311,6 @@ const TRANSLATIONS = {
     photo_stack_subtitle: 'لحظات فرحتي',
     photo_stack_next: 'الصورة التالية',
   },
-  fr: {
-    basmala: 'Que Dieu les bénisse, les comble de bonheur et les réunisse.',
-    invite_title: 'Les familles',
-    mr: 'M.',
-    mrs: 'Mme',
-    and: 'et',
-    invite_desc: 'ont l\'honneur de vous inviter au mariage de leurs enfants',
-    and_char: '&',
-    scroll_hint: 'Faites défiler vers le bas',
-    countdown_title: 'Compte à rebours',
-    countdown_subtitle: 'Quelques instants nous séparent de ce grand jour',
-    days: 'Jours',
-    hours: 'Heures',
-    mins: 'Minutes',
-    secs: 'Secondes',
-    program_title: 'Programme de la Fête',
-    location_btn: 'Localisation',
-    guestbook_title: 'Livre d\'or',
-    guestbook_subtitle: 'Laissez un message de félicitations aux mariés',
-    gb_name_placeholder: 'Votre Nom',
-    gb_rsvp_label: '🗳️ Confirmation de présence (RSVP) :',
-    gb_msg_placeholder: 'Écrivez votre message ici...',
-    gb_submit: 'Envoyer les félicitations ✨',
-    gb_sug_label: '💡 Formules de vœux suggérées :',
-    closing_tagline: 'Nous sommes honorés de partager ce moment avec vous',
-    closing_to: 'À',
-    closing_easel_header: 'Mariage de',
-    open_maps: 'Ouvrir dans Google Maps',
-    weather_title: 'Météo prévue pour le Jour J',
-    weather_location: 'Teboulba, Tunisie',
-    weather_humidity: 'Humidité',
-    weather_wind: 'Vent',
-    weather_season_avg: 'Météo estivale idéale ☀️',
-    photo_stack_title: 'Notre album photo',
-    photo_stack_subtitle: 'Nos moments précieux ensemble',
-    photo_stack_next: 'Photo suivante',
-  }
 };
 
 /* ────────────────────────────────────────────────
@@ -1376,11 +1335,6 @@ function _applyGuestBanner(guestName, guestType) {
     case 'ar_woman':           title = 'إلى السيدة'; name = guestName; break;
     case 'ar_friend_m':        title = 'إلى عْشيري'; name = guestName; break;
     case 'ar_friend_f':        title = 'إلى عْشيرتي'; name = guestName; break;
-    case 'fr_couple':          title = 'Monsieur & Madame'; name = guestName; isLtr = true; break;
-    case 'fr_man':             title = 'Monsieur'; name = guestName; isLtr = true; break;
-    case 'fr_woman':           title = 'Madame'; name = guestName; isLtr = true; break;
-    case 'fr_friend_m':        title = 'Pour mon Ami'; name = guestName; isLtr = true; break;
-    case 'fr_friend_f':        title = 'Pour mon amie'; name = guestName; isLtr = true; break;
     default:                   title = 'إلى السيد'; name = `${guestName} وحرمه`;
   }
 
@@ -1432,26 +1386,12 @@ function _updatePersonalizedInviteDesc() {
     case 'ar_woman':           title = 'إلى السيدة'; name = guestName; break;
     case 'ar_friend_m':        title = 'إلى عْشيري'; name = guestName; break;
     case 'ar_friend_f':        title = 'إلى عْشيرتي'; name = guestName; break;
-    case 'fr_couple':          title = 'Monsieur & Madame'; name = guestName; break;
-    case 'fr_man':             title = 'Monsieur'; name = guestName; break;
-    case 'fr_woman':           title = 'Madame'; name = guestName; break;
-    case 'fr_friend_m':        title = 'Pour mon Ami'; name = guestName; break;
-    case 'fr_friend_f':        title = 'Pour mon amie'; name = guestName; break;
     default:                   title = 'إلى السيد'; name = `${guestName} وحرمه`;
   }
 
-  const isFr = document.documentElement.lang === 'fr';
-  if (isFr) {
-    let cleanTitle = title;
-    if (title.startsWith('Pour mon ')) {
-      cleanTitle = title.replace('Pour mon ', 'leur ami ').toLowerCase();
-    }
-    inviteDescEl.innerHTML = `ont l'honneur d'inviter <span class="invite-guest-name">${cleanTitle} ${name}</span> au mariage de leurs enfants`;
-  } else {
-    const cleanTitle = title.replace('إلى ', '').trim();
-    const titlePrefix = cleanTitle ? cleanTitle + ' ' : '';
-    inviteDescEl.innerHTML = `بدعوة <span class="invite-guest-name">${titlePrefix}${name}</span> لحضور زفاف نجليهما`;
-  }
+  const cleanTitle = title.replace('إلى ', '').trim();
+  const titlePrefix = cleanTitle ? cleanTitle + ' ' : '';
+  inviteDescEl.innerHTML = `بدعوة <span class="invite-guest-name">${titlePrefix}${name}</span> لحضور حفل الوطية`;
 }
 
 function readAndApplyGuestParam() {
@@ -1548,22 +1488,14 @@ window.selectSuggestion = function(text) {
 };
 
 function applyLanguage(lang) {
-  _currentLang = lang;
-  const dict = TRANSLATIONS[lang] || TRANSLATIONS.ar;
-  const isFr = lang === 'fr';
+  _currentLang = 'ar';
+  const dict = TRANSLATIONS.ar;
 
-  // Set html properties
-  document.documentElement.lang = lang;
-  document.documentElement.dir = isFr ? 'ltr' : 'rtl';
-
-  // Apply language class to body
-  if (isFr) {
-    document.body.classList.add('lang-fr');
-    document.body.classList.remove('lang-ar');
-  } else {
-    document.body.classList.add('lang-ar');
-    document.body.classList.remove('lang-fr');
-  }
+  // Set html properties — always RTL Arabic
+  document.documentElement.lang = 'ar';
+  document.documentElement.dir = 'rtl';
+  document.body.classList.add('lang-ar');
+  document.body.classList.remove('lang-fr');
 
   // Translate static texts
   document.querySelectorAll('[data-tr]').forEach(el => {
@@ -1584,19 +1516,17 @@ function applyLanguage(lang) {
   // Update circular text path around wax seal
   const circularText = document.querySelector('.seal-text-svg textPath');
   if (circularText) {
-    circularText.textContent = isFr
-      ? 'Cliquez pour ouvrir l\'invitation ✦ Cliquez pour ouvrir ✦'
-      : 'اضغط لفتح الدعوة ✦ اضغط لفتح الدعوة ✦';
+    circularText.textContent = 'اضغط لفتح الدعوة ✦ اضغط لفتح الدعوة ✦';
   }
 
   // Render suggestion pills
-  renderSuggestions(lang);
+  renderSuggestions('ar');
 
   // Render RSVP select options
-  renderRsvpOptions(lang);
+  renderRsvpOptions('ar');
 
   // Render Recipient select options
-  renderRecipientOptions(lang);
+  renderRecipientOptions('ar');
 
   // Apply dedicated role inscription for groom/bride private view
   if (window._pendingRoleView) {
@@ -1605,19 +1535,9 @@ function applyLanguage(lang) {
     const roleSubEl   = document.getElementById('role-inscription-sub');
     if (roleLabel && roleTitleEl && roleSubEl) {
       const isGroom = window._pendingRoleView === 'groom';
-      if (isFr) {
-        roleLabel.classList.add('ltr');
-        roleTitleEl.textContent = 'Invitation souvenir';
-        roleSubEl.textContent = isGroom
-          ? 'Pour le marié'
-          : 'Pour la mariée';
-      } else {
-        roleLabel.classList.remove('ltr');
-        roleTitleEl.textContent = 'دعوة خاصة';
-        roleSubEl.textContent = isGroom
-          ? 'بالعريس للتذكار'
-          : 'بالعروسة للتذكار';
-      }
+      roleLabel.classList.remove('ltr');
+      roleTitleEl.textContent = 'دعوة خاصة';
+      roleSubEl.textContent = isGroom ? 'بالعريس للتذكار' : 'بالعروسة للتذكار';
       roleLabel.style.display = 'flex';
     }
   }
@@ -1881,8 +1801,7 @@ function _weatherCodeToDesc(code) {
 }
 
 function _applyWeatherToDOM(temp, humidity, wind, code) {
-  const isFr = document.documentElement.lang === 'fr';
-  const { ar, fr, icon } = _weatherCodeToDesc(code);
+  const { ar, icon } = _weatherCodeToDesc(code);
 
   const tempVal    = document.getElementById('weather-temp-val');
   const descText   = document.getElementById('weather-desc-text');
@@ -1892,7 +1811,7 @@ function _applyWeatherToDOM(temp, humidity, wind, code) {
   const card       = document.querySelector('.weather-glass-card');
 
   if (tempVal)    tempVal.textContent    = `${temp}°C`;
-  if (descText)   descText.textContent   = isFr ? `${fr} ${icon}` : `${ar} ${icon}`;
+  if (descText)   descText.textContent   = `${ar} ${icon}`;
   if (humidityEl) humidityEl.textContent = `${humidity}%`;
   if (windEl)     windEl.textContent     = `${wind} km/h`;
   if (iconGlow)   iconGlow.textContent   = icon;
@@ -1902,7 +1821,6 @@ function _applyWeatherToDOM(temp, humidity, wind, code) {
 function loadWeatherForecast() {
   const lat  = _weatherLat;
   const lon  = _weatherLon;
-  const isFr = document.documentElement.lang === 'fr';
 
   // Determine if we should use daily forecast (future) or current conditions
   const today    = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
@@ -1948,9 +1866,9 @@ function loadWeatherForecast() {
         const windEl = document.getElementById('weather-wind-val');
         if (windEl) windEl.textContent = `${wind} km/h`;
 
-        const { ar, fr, icon } = _weatherCodeToDesc(code);
+        const { ar, icon } = _weatherCodeToDesc(code);
         const descText  = document.getElementById('weather-desc-text');
-        if (descText)   descText.textContent = isFr ? `${fr} ${icon}` : `${ar} ${icon}`;
+        if (descText)   descText.textContent = `${ar} ${icon}`;
         const iconGlow  = document.querySelector('.weather-icon-glow');
         if (iconGlow)   iconGlow.textContent = icon;
         const card = document.querySelector('.weather-glass-card');
@@ -1958,7 +1876,7 @@ function loadWeatherForecast() {
 
         // Short label for rain probability (fits in one line)
         document.querySelectorAll('[data-tr="weather_humidity"]').forEach(el => {
-          el.textContent = isFr ? 'Pluie' : 'مطر';
+          el.textContent = 'مطر';
         });
 
       } else {
@@ -1980,8 +1898,8 @@ function loadWeatherForecast() {
       const isSummer = month >= 5 && month <= 9;
       const fallbackTemp = isSummer ? '31°C' : '18°C';
       const fallbackDesc = isSummer
-        ? (isFr ? 'Estival et ensoleillé ☀️' : 'صيفي مشمس وجميل ☀️')
-        : (isFr ? 'Doux et agréable 🌤️' : 'معتدل وجميل 🌤️');
+        ? 'صيفي مشمس وجميل ☀️'
+        : 'معتدل وجميل 🌤️';
 
       const tempVal    = document.getElementById('weather-temp-val');
       const descText   = document.getElementById('weather-desc-text');
@@ -2036,12 +1954,10 @@ function initPhotoStack(cfg) {
     if (perGuest && Array.isArray(perGuest[view]) && perGuest[view].length > 0) {
       rawPhotos = perGuest[view];
     } else {
-      // Fallback: if no custom couple photos are configured, show the 3 default couple photos
-      const isFr = cfg.la === 'fr';
       rawPhotos = [
-        { url: 'assets/default_couple_1.jpg', caption: isFr ? '💍 Notre bonheur est complet' : '💍 فرحتنا اكتملت' },
-        { url: 'assets/default_couple_2.jpg', caption: isFr ? '✨ Le grand jour' : '✨ ليلة العمر' },
-        { url: 'assets/default_couple_3.jpg', caption: isFr ? '❤️ Amour infini' : '❤️ حب أبدي' }
+        { url: 'assets/default_couple_1.jpg', caption: '💍 فرحتنا اكتملت' },
+        { url: 'assets/default_couple_2.jpg', caption: '✨ ليلة العمر' },
+        { url: 'assets/default_couple_3.jpg', caption: '❤️ حب أبدي' }
       ];
     }
   } else {
@@ -2049,12 +1965,10 @@ function initPhotoStack(cfg) {
     if (Array.isArray(cfg.features.photoStackPhotos) && cfg.features.photoStackPhotos.length > 0) {
       rawPhotos = cfg.features.photoStackPhotos;
     } else {
-      // Fallback to default code-based general photo
-      const isFr = cfg.la === 'fr';
       rawPhotos = [
-        { url: 'assets/default_wedding_general.jpg', caption: isFr ? '💍 Notre bonheur est complet' : '💍 فرحتنا اكتملت' },
-        { url: 'assets/default_wedding_general.jpg', caption: isFr ? '✨ Le grand jour' : '✨ ليلة العمر' },
-        { url: 'assets/default_wedding_general.jpg', caption: isFr ? '❤️ Amour infini' : '❤️ حب أبدي' }
+        { url: 'assets/default_wedding_general.jpg', caption: '💍 فرحتنا اكتملت' },
+        { url: 'assets/default_wedding_general.jpg', caption: '✨ ليلة العمر' },
+        { url: 'assets/default_wedding_general.jpg', caption: '❤️ حب أبدي' }
       ];
     }
   }

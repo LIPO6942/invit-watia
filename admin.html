@@ -705,7 +705,7 @@ let _shortUrl      = '';
 let _longUrl       = '';
 window._selectedTheme = 'gold';
 
-function selectTheme(name) {
+function selectTheme(name, doSave = false) {
   window._selectedTheme = name;
   document.querySelectorAll('.theme-card').forEach(card => {
     if (card.dataset.theme === name) {
@@ -718,14 +718,14 @@ function selectTheme(name) {
       card.style.borderWidth = '1px';
     }
   });
-  saveAll();
+  if (doSave) saveAll();
 }
 
 /* ── Hall Photo Selector ── */
 window._selectedHallPhoto    = 'watia_hall_bg';
 window._selectedClosingPhoto = 'watia_closing_board';
 
-function selectHallPhoto(name, doSave = true) {
+function selectHallPhoto(name, doSave = false) {
   window._selectedHallPhoto = name;
   document.querySelectorAll('.photo-card:not(.closing-photo-card)').forEach(card => {
     if (card.dataset.photo === name) {
@@ -737,7 +737,7 @@ function selectHallPhoto(name, doSave = true) {
   if (doSave) saveAll();
 }
 
-function selectClosingPhoto(name, doSave = true) {
+function selectClosingPhoto(name, doSave = false) {
   window._selectedClosingPhoto = name;
   document.querySelectorAll('.closing-photo-card').forEach(card => {
     if (card.dataset.closingPhoto === name) {
@@ -753,7 +753,7 @@ function selectClosingPhoto(name, doSave = true) {
 window._selectedMusic = 'wedding_march';
 let _previewAudio = null;
 
-function selectMusic(name, doSave = true) {
+function selectMusic(name, doSave = false) {
   window._selectedMusic = name;
   ['wedding_march', 'ziad_gharsa', 'mabrouk_ramy_ayach'].forEach(m => {
     const el = document.getElementById('mo-' + m);
