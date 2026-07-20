@@ -142,7 +142,7 @@
         <div class="card-title">🌸 العروسة</div>
         <div class="form-row">
           <div class="field"><label>الاسم بالعربية</label><input id="brideAr" type="text" value="مريم"></div>
-          <div class="field"><label>Prénom en français</label><input id="brideFr" type="text" value="Mariam" dir="ltr"></div>
+          <div class="field"><label>الاسم باللاتينية (للرابط)</label><input id="brideFr" type="text" value="Mariam" dir="ltr"></div>
         </div>
       </div>
       <div class="card">
@@ -217,18 +217,15 @@
         <div class="form-row" style="margin-top:10px">
           <div class="field">
             <label>لغة الدعوة (Langue)</label>
-            <select id="invLanguage">
-              <option value="ar">العربية (Arabe)</option>
-              <option value="fr">الفرنسية (Français)</option>
+            <select id="invLanguage" style="display:none">
+              <option value="ar" selected>العربية</option>
             </select>
           </div>
           <div class="field">
             <label>نقشة الغلاف (Motif)</label>
             <select id="envPattern">
-              <option value="floral">🌸 أوراق ونباتات طبيعية (Floral)</option>
-              <option value="vintage">⚜️ إطار كلاسيكي مزخرف (Vintage)</option>
-              <option value="minimalist">🌊 بحري إبداعي (Bord de Mer)</option>
-              <option value="nature">🌿 طبيعة صيفية خضراء (Nature Estivale)</option>
+              <option value="vintage" selected>⚜️ إطار كلاسيكي مزخرف (Vintage)</option>
+              <option value="arabesque">🌙 عربسك مارقوم ذهبي (Arabesque)</option>
             </select>
           </div>
           <div class="field">
@@ -252,21 +249,9 @@
       <div class="card">
         <div class="card-title">📸 خلفية قاعة الأفراح (Image de la salle de fête)</div>
         <div class="photo-selector" style="display:flex; gap:12px; margin-top:10px; flex-wrap:wrap;">
-          <div class="photo-card selected" data-photo="luxury_wedding_hall" onclick="selectHallPhoto('luxury_wedding_hall')">
-            <img src="assets/luxury_wedding_hall.png" alt="Luxury Hall">
-            <div class="photo-card-label">قاعة فاخرة (Option 1)</div>
-          </div>
-          <div class="photo-card" data-photo="hall_royal" onclick="selectHallPhoto('hall_royal')">
-            <img src="assets/hall_royal.png" alt="Royal Entrance">
-            <div class="photo-card-label">مدخل ملكي (Option 2)</div>
-          </div>
-          <div class="photo-card" data-photo="hall_classic" onclick="selectHallPhoto('hall_classic')">
-            <img src="assets/hall_classic.png" alt="Classic Entrance">
-            <div class="photo-card-label">مدخل كلاسيكي (Option 3)</div>
-          </div>
-          <div class="photo-card" data-photo="hall_bridal_entrance" onclick="selectHallPhoto('hall_bridal_entrance')">
-            <img src="assets/hall_bridal_entrance.png" alt="Bridal Entrance">
-            <div class="photo-card-label">دخول العروسين (Option 4)</div>
+          <div class="photo-card selected" data-photo="watia_hall_bg" onclick="selectHallPhoto('watia_hall_bg')">
+            <img src="assets/watia_hall_bg.png" alt="Watia Hall">
+            <div class="photo-card-label">🌙 قاعة الوطية (الرئيسية)</div>
           </div>
         </div>
       </div>
@@ -275,13 +260,9 @@
         <div class="card-title">🖼️ صورة قسم الختام (Photo de fermeture)</div>
         <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:10px">تظهر هذه الصورة في القسم الأخير من الدعوة مع أسماء العروسين على اللوحة</div>
         <div class="photo-selector" style="display:flex; gap:12px; margin-top:10px; flex-wrap:wrap;">
-          <div class="photo-card closing-photo-card selected" data-closing-photo="wedding_hall_board" onclick="selectClosingPhoto('wedding_hall_board')">
-            <img src="assets/wedding_hall_board.png" alt="Salle classique">
-            <div class="photo-card-label">🏛️ سالة فاخرة + شيفالي</div>
-          </div>
-          <div class="photo-card closing-photo-card" data-closing-photo="wedding_beach_entrance" onclick="selectClosingPhoto('wedding_beach_entrance')">
-            <img src="assets/wedding_beach_entrance.png" alt="Bord de mer">
-            <div class="photo-card-label">🌊 مدخل بحري بوهيمي</div>
+          <div class="photo-card closing-photo-card selected" data-closing-photo="watia_closing_board" onclick="selectClosingPhoto('watia_closing_board')">
+            <img src="assets/watia_closing_board.png" alt="Watia Closing">
+            <div class="photo-card-label">🌙 ديكور الوطية</div>
           </div>
         </div>
       </div>
@@ -621,8 +602,8 @@
           <input id="qrDestUrl" type="text" readonly dir="ltr" style="font-family:monospace; font-size:0.85rem; width:100%; border:1px solid var(--border); padding:10px; border-radius:6px; background:rgba(0,0,0,0.25); color:var(--gold-light);">
         </div>
         <div class="form-row">
-          <div class="field"><label>عنوان الملصق (بالعربية)</label><input id="qrTitleAr" type="text" value="اكتشف دعوتنا الرقمية التفاعلية"></div>
-          <div class="field"><label>Titre de l'affiche (Français)</label><input id="qrTitleFr" type="text" value="Découvrez notre invitation numérique"></div>
+          <div class="field" style="grid-column: span 2"><label>عنوان الملصق (بالعربية)</label><input id="qrTitleAr" type="text" value="اكتشف دعوتنا الرقمية التفاعلية"></div>
+          <input id="qrTitleFr" type="hidden" value="">
         </div>
         <div style="display:flex; gap:10px; margin-top:12px; flex-wrap: wrap;">
           <button class="btn btn-primary" style="flex:1; min-width: 140px;" onclick="printQrFlyer()">🖨️ طباعة الملصق الدعائي</button>
@@ -636,15 +617,15 @@
           <div class="flyer-border">
             <div class="flyer-ornament">👑</div>
             <div class="flyer-title-ar" id="flyerTitleAr">اكتشف دعوتنا الرقمية التفاعلية</div>
-            <div class="flyer-title-fr" id="flyerTitleFr">Découvrez notre invitation numérique</div>
+            <div class="flyer-title-fr" id="flyerTitleFr" style="display:none">Découvrez notre invitation numérique</div>
             
             <div class="flyer-qr-wrapper">
               <canvas id="qrCanvas"></canvas>
             </div>
             
             <div class="flyer-instructions-ar">امسح رمز الـ QR أعلاه بالجوال لتجربة دعوتنا، الألوان، والموسيقى الافتتاحية!</div>
-            <div class="flyer-instructions-fr">Scannez le code QR ci-dessus pour découvrir notre invitation, ses thèmes et musiques !</div>
-            <div class="flyer-footer">💍 حفل زفاف العريس والعروس 💍</div>
+            <div class="flyer-instructions-fr" style="display:none">Scannez le code QR ci-dessus pour découvrir notre invitation, ses thèmes et musiques !</div>
+            <div class="flyer-footer">🌸 حفل وطية 🌸</div>
           </div>
         </div>
       </div>
@@ -741,8 +722,8 @@ function selectTheme(name) {
 }
 
 /* ── Hall Photo Selector ── */
-window._selectedHallPhoto    = 'luxury_wedding_hall';
-window._selectedClosingPhoto = 'wedding_hall_board';
+window._selectedHallPhoto    = 'watia_hall_bg';
+window._selectedClosingPhoto = 'watia_closing_board';
 
 function selectHallPhoto(name, doSave = true) {
   window._selectedHallPhoto = name;
@@ -1014,11 +995,10 @@ function generatePromoQr() {
 }
 
 function updateFlyerFooter() {
-  const g = val('groomAr') || 'العريس';
-  const b = val('brideAr') || 'العروس';
+  const b = val('brideAr') || 'العروسة';
   const footerEl = document.querySelector('.flyer-footer');
   if (footerEl) {
-    footerEl.textContent = `💍 حفل زفاف ${g} و ${b} 💍`;
+    footerEl.textContent = `🌸 حفل وطية ${b} 🌸`;
   }
 }
 
@@ -1890,11 +1870,9 @@ function set(id, v) {
 // ── Events ──
 const EMOJI_OPTIONS = ['💍','🏡','📷','🍽️','🎉','🌹','💐','🎊','🕌','🎶'];
 const DEFAULT_EVENTS = [
-  { nameAr:'مراسم العقد',   nameFr:'Cérémonie d\'alliance', date:'12/07/2026', time:'15:30', location:'فضاء الحبيب، طبلبة', lat:'35.632714', lng:'10.941811', emoji:'💍', active:true },
-  { nameAr:'استقبال الضيوف', nameFr:'Accueil des invités',  date:'13/07/2026', time:'16:30', location:'منزل العريس، طبلبة', lat:'35.642004', lng:'10.966089', emoji:'🏡', active:true },
-  { nameAr:'جلسة تصوير',   nameFr:'Séance photo',         date:'14/07/2026', time:'17:00', location:'برج الراس، المهدية', lat:'35.508971', lng:'11.081458', emoji:'📷', active:true },
-  { nameAr:'مأدبة العشاء', nameFr:'Dîner de gala',         date:'15/07/2026', time:'18:30', location:'منزل العريس، طبلبة', lat:'35.642004', lng:'10.966089', emoji:'🍽️', active:true },
-  { nameAr:'حفل الأفراح',  nameFr:'Fête de mariage',       date:'16/07/2026', time:'20:00', location:'فضاء موازين، قصر هلال', lat:'35.658203', lng:'10.880335', emoji:'🎉', active:true },
+  { nameAr:'استقبال الضيوف', nameFr:'', date:'12/07/2026', time:'16:30', location:'منزل العروسة، طبلبة', lat:'35.642004', lng:'10.966089', emoji:'🏡', active:true },
+  { nameAr:'حفل الوطية والجمال', nameFr:'', date:'12/07/2026', time:'19:00', location:'فضاء الأفراح، طبلبة', lat:'35.632714', lng:'10.941811', emoji:'🎉', active:true },
+  { nameAr:'مأدبة العشاء', nameFr:'', date:'12/07/2026', time:'21:30', location:'منزل العروسة، طبلبة', lat:'35.642004', lng:'10.966089', emoji:'🍽️', active:true },
 ];
 
 function renderEvents() {
@@ -1919,8 +1897,8 @@ function renderEvents() {
         </div>
       </div>
       <div class="form-row">
-        <div class="field"><label>اسم الحدث (عربي)</label><input class="ev-nameAr" type="text" value="${ev.nameAr||''}" ${!isActive?'disabled':''}></div>
-        <div class="field"><label>Nom (français)</label><input class="ev-nameFr" type="text" value="${ev.nameFr||''}" placeholder="ex: Fête de mariage" dir="ltr" ${!isActive?'disabled':''}></div>
+        <div class="field" style="grid-column: span 2"><label>اسم الحدث (عربي)</label><input class="ev-nameAr" type="text" value="${ev.nameAr||''}" ${!isActive?'disabled':''}></div>
+        <input class="ev-nameFr" type="hidden" value="${ev.nameFr||''}">
       </div>
       <div class="form-row">
         <div class="field"><label>التاريخ</label><input class="ev-date" type="text" value="${ev.date||''}" dir="ltr" ${!isActive?'disabled':''}></div>

@@ -148,6 +148,11 @@ body.night-mode .outeya-basmala-banner {
 .outeya-bride-name-only .bride-name {
   font-size: clamp(2.2rem, 11vw, 3.4rem);
   letter-spacing: 3px;
+  background: linear-gradient(135deg, #7a5c10 0%, #dfb75c 40%, #fff3ce 70%, #9e7515 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(-1.5px -2px 1px rgba(0, 0, 0, 0.95)) drop-shadow(1px 1px 0.5px rgba(255, 255, 255, 0.35));
+  font-weight: bold;
 }
 
 /* ── Bride-only family row (centered single block) ── */
@@ -731,14 +736,17 @@ body:not(.env-open) {
   z-index: 3;
 }
 .basmala {
-  font-size: clamp(0.85rem, 3.5vw, 1.1rem);
-  color: #faf5ef;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+  font-size: clamp(0.9rem, 3.8vw, 1.25rem);
   line-height: 1.7;
   padding: 10px 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.35);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+  border-top: 1.5px double rgba(201, 168, 76, 0.5);
+  border-bottom: 1.5px double rgba(201, 168, 76, 0.5);
   width: 100%;
+  background: linear-gradient(135deg, #7a5c10 0%, #dfb75c 40%, #fff3ce 70%, #9e7515 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(-1px -1.5px 0.8px rgba(0, 0, 0, 0.95)) drop-shadow(1px 1px 0.5px rgba(255, 255, 255, 0.3));
+  font-weight: bold;
 }
 
 .divider-ornament {
@@ -2682,7 +2690,18 @@ body.night-mode .guestbook-form {
 }
 
 /* Intro text elements */
-body.night-mode .basmala        { color: #f5e6c0; text-shadow: 0 2px 8px rgba(0,0,0,0.9); }
+body.night-mode .basmala {
+  background: linear-gradient(135deg, #8a6c1e 0%, #dfb75c 50%, #fff3ce 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(-1px -1.5px 0.8px rgba(0, 0, 0, 0.98)) drop-shadow(1px 1px 0.5px rgba(255, 255, 255, 0.15));
+}
+body.night-mode .outeya-bride-name-only .bride-name {
+  background: linear-gradient(135deg, #8a6c1e 0%, #dfb75c 50%, #fff3ce 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(-1.5px -2px 1px rgba(0, 0, 0, 0.98)) drop-shadow(1px 1px 0.5px rgba(255, 255, 255, 0.2));
+}
 body.night-mode .family-name    { color: #f5e6c0; text-shadow: 0 2px 8px rgba(0,0,0,0.9); }
 body.night-mode .family-label,
 body.night-mode .family-label-mrs { color: rgba(245,230,192,0.85); }

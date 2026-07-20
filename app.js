@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 
 /* ═══════════════════════════════════════════════════════════════════
    WEDDING INVITATION — app.js
@@ -1121,6 +1121,8 @@ function applyEnvelopeDesign(cfg) {
   const showMinimalist = pattern === 'minimalist';
   const showNature     = pattern === 'nature';
 
+  const showArabesque   = pattern === 'arabesque';
+
   document.querySelectorAll('.panel-branches').forEach(el => {
     el.style.display = showFloral ? '' : 'none';
   });
@@ -1132,6 +1134,9 @@ function applyEnvelopeDesign(cfg) {
   });
   document.querySelectorAll('.panel-nature').forEach(el => {
     el.style.display = showNature ? 'block' : 'none';
+  });
+  document.querySelectorAll('.panel-arabesque').forEach(el => {
+    el.style.display = showArabesque ? 'block' : 'none';
   });
 
   const invitationEl = document.getElementById('invitation');
@@ -1154,7 +1159,7 @@ function applyEnvelopeDesign(cfg) {
   });
 
   // ── Hall Photo Background (hp) ──
-  const hallPhoto = cfg.hp || 'luxury_wedding_hall';
+  const hallPhoto = cfg.hp || 'watia_hall_bg';
   const heroBg = document.querySelector('.hero-bg-parallax');
   if (heroBg) {
     heroBg.style.backgroundImage = `url('assets/${hallPhoto}.png')`;
@@ -1168,7 +1173,7 @@ function applyEnvelopeDesign(cfg) {
   // ── Closing Photo (cp): which hall image shows in closing section ──
   const closingImg = document.querySelector('.closing-easel-photo');
   if (closingImg) {
-    const closingPhoto = cfg.cp || 'wedding_hall_board';
+    const closingPhoto = cfg.cp || 'watia_closing_board';
     closingImg.src = `assets/${closingPhoto}.png`;
   }
 
