@@ -1115,8 +1115,7 @@ function applyEnvelopeDesign(cfg) {
   if (!cfg) return;
 
   // ── Motif (ep: 'floral' | 'vintage' | 'minimalist' | 'nature') ──
-  const pattern     = cfg.ep || 'floral';
-  const showFloral     = pattern === 'floral';
+  const pattern     = cfg.ep || 'vintage';
   const showVintage    = pattern === 'vintage';
   const showMinimalist = pattern === 'minimalist';
   const showNature     = pattern === 'nature';

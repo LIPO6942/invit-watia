@@ -1027,8 +1027,8 @@ function buildConfig() {
     ep: val('envPattern'),   // envelope pattern
     es: val('envSeal'),      // envelope seal
     si: val('envSealInitials'), // seal initials
-    hp: window._selectedHallPhoto   || 'luxury_wedding_hall', // hall photo background
-    cp: window._selectedClosingPhoto || 'wedding_hall_board',  // closing section photo
+    hp: window._selectedHallPhoto   || 'watia_hall_bg', // hall photo background
+    cp: window._selectedClosingPhoto || 'watia_closing_board',  // closing section photo
     la: 'ar',               // Watia: always Arabic
     ga: val('groomAr'),     // kept for data compatibility
     gf2:val('groomFr'),
@@ -1095,11 +1095,26 @@ async function saveAll() {
 
   try {
     initFirebase();
+    // 1. Save to settings/global
     await _db.collection('settings').doc('global').set({
       config: cfg,
       prodUrl: val('prodUrlInput'),
       updated: firebase.firestore.FieldValue.serverTimestamp()
     });
+
+    // 2. Propagate to current editing invitation
+    if (window._currentEditingSlug) {
+      const docRef = _db.collection('invitations').doc(window._currentEditingSlug);
+      const docSnap = await docRef.get();
+      if (docSnap.exists) {
+        await docRef.update({
+          config: cfg,
+          updated: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        console.log('Automatically propagated config to current editing invitation:', window._currentEditingSlug);
+      }
+    }
+
     const now = new Date().toLocaleTimeString('ar-TN');
     label.textContent = 'آخر حفظ (سيرفر): ' + now;
     showToast('✅ تم حفظ جميع البيانات على السيرفر');
@@ -1123,7 +1138,7 @@ function applyConfigToFields(c) {
   set('weddingDate',       c.wd  || '');
   autoFillDateDisplay(c.wd || ''); // regenerate date display from stored date
   set('weddingDateDisplay',c.wdd || ''); // fallback: also restore legacy saved text
-  set('envPattern',        c.ep  || 'floral');
+  set('envPattern',        c.ep  || 'vintage');
   set('envSeal',           c.es  || 'heart');
   set('envSealInitials',   c.si  || '');
   
@@ -1135,11 +1150,11 @@ function applyConfigToFields(c) {
   
   // Apply hall photo
   if (c.hp) selectHallPhoto(c.hp, false);
-  else selectHallPhoto('luxury_wedding_hall', false);
+  else selectHallPhoto('watia_hall_bg', false);
 
   // Apply closing photo
   if (c.cp) selectClosingPhoto(c.cp, false);
-  else selectClosingPhoto('wedding_hall_board', false);
+  else selectClosingPhoto('watia_closing_board', false);
   set('invLanguage', 'ar'); // Watia: always Arabic
   if (document.getElementById('invLanguage')) {
     document.getElementById('invLanguage').value = 'ar';
