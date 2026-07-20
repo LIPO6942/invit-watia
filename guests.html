@@ -158,7 +158,15 @@ details[open] .chevron{transform:rotate(180deg)}
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
 'use strict';
-const FIREBASE_CONFIG={apiKey:"AIzaSyDiX0BwIT9wQKnlNHk0ADLgtI5eOUwF-1E",authDomain:"invit-mar.firebaseapp.com",projectId:"invit-mar",storageBucket:"invit-mar.firebasestorage.app",messagingSenderId:"654872438284",appId:"1:654872438284:web:c11d6f3cdff82bf35ff029"};
+const FIREBASE_CONFIG = {
+  apiKey:            "AIzaSyAkG8p5RSk7HwmHGWB4Cf0EIEFYdICYSek",
+  authDomain:        "invit-outia.firebaseapp.com",
+  projectId:         "invit-outia",
+  storageBucket:     "invit-outia.firebasestorage.app",
+  messagingSenderId: "6331758985",
+  appId:             "1:6331758985:web:a4e9154e3f99c3fb840958",
+  measurementId:     "G-H23DLD87RM"
+};
 let _fbApp=null,_db=null;
 function initFirebase(){if(_fbApp)return;_fbApp=firebase.initializeApp(FIREBASE_CONFIG);_db=firebase.firestore()}
 let _slug='',_invData=null,_guests=[],_addFormula='ar_couple',_bulkFormula='ar_couple',_filterQ='';
@@ -221,7 +229,7 @@ async function doLogin(){
   if(!pwd){errEl.textContent='⚠️ أدخل كلمة المرور';return}
   try{
     initFirebase();
-    const doc=await _db.collection('watia_invitations').doc(_slug).get();
+    const doc=await _db.collection('invitations').doc(_slug).get();
     if(!doc.exists){errEl.textContent='❌ الدعوة غير موجودة — تحقق من الرابط';return}
     _invData=doc.data();
     const correctPwd=(_invData.couplePassword||'').trim();
@@ -308,7 +316,7 @@ function deleteGuest(id){
 }
 async function saveGuests(){
   initFirebase();
-  await _db.collection('watia_invitations').doc(_slug).update({guests:_guests.map(g=>({id:g.id,name:g.name,type:g.type,createdAt:g.createdAt,views:g.views||0}))});
+  await _db.collection('invitations').doc(_slug).update({guests:_guests.map(g=>({id:g.id,name:g.name,type:g.type,createdAt:g.createdAt,views:g.views||0}))});
 }
 function filterGuests(){_filterQ=document.getElementById('search-input').value.trim().toLowerCase();renderGuestList()}
 function renderGuestList(){

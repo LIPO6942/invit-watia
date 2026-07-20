@@ -31,12 +31,13 @@ let _weatherLocation = null;  // city name from first event
    Firebase config (shared with admin.html)
 ──────────────────────────────────────────────── */
 const FIREBASE_CONFIG = {
-  apiKey:            "AIzaSyDiX0BwIT9wQKnlNHk0ADLgtI5eOUwF-1E",
-  authDomain:        "invit-mar.firebaseapp.com",
-  projectId:         "invit-mar",
-  storageBucket:     "invit-mar.firebasestorage.app",
-  messagingSenderId: "654872438284",
-  appId:             "1:654872438284:web:c11d6f3cdff82bf35ff029"
+  apiKey:            "AIzaSyAkG8p5RSk7HwmHGWB4Cf0EIEFYdICYSek",
+  authDomain:        "invit-outia.firebaseapp.com",
+  projectId:         "invit-outia",
+  storageBucket:     "invit-outia.firebasestorage.app",
+  messagingSenderId: "6331758985",
+  appId:             "1:6331758985:web:a4e9154e3f99c3fb840958",
+  measurementId:     "G-H23DLD87RM"
 };
 
 let _fbApp = null, _db = null;
@@ -58,12 +59,18 @@ function fromB64(str) {
 }
 
 function applyConfigToDOM(cfg) {
-  // Watia: always Arabic, show only bride
-  const brideDisplay = cfg.ba;
+  const isFr = cfg.la === 'fr';
+
+  const groomDisplay = isFr ? (cfg.gf2 || cfg.ga) : cfg.ga;
+  const brideDisplay = isFr ? (cfg.bf2 || cfg.ba) : cfg.ba;
 
   const MAP = {
+    groomAr:          groomDisplay,
     brideAr:          brideDisplay,
+    groomNameDisplay: groomDisplay,  // shown in the big animated names + envelope banner
     brideNameDisplay: brideDisplay,
+    groomFather: cfg.gf,
+    groomMother: cfg.gm,
     brideFather: cfg.bf,
     brideMother: cfg.bm,
   };
@@ -74,12 +81,12 @@ function applyConfigToDOM(cfg) {
     });
   });
 
-  // Always Arabic for Watia
-  applyLanguage('ar');
+  // Apply language translations
+  applyLanguage(cfg.la || 'ar');
 
-  // Set page title dynamically
+  // Set page title dynamically (Watia: bride name only)
   if (brideDisplay) {
-    document.title = `حفل وطية ${brideDisplay}`;
+    document.title = isFr ? `Watia de ${brideDisplay}` : `دعوة وطية - ${brideDisplay}`;
   }
 
   // Initialize Photo Stack Widget
@@ -139,7 +146,7 @@ function loadConfigFromURL() {
     /* ── Firebase path ── */
     initFirebase();
     watchRsvpCounter();
-    _db.collection('watia_invitations').doc(invSlug).get()
+    _db.collection('invitations').doc(invSlug).get()
       .then(doc => {
         if (!doc.exists) {
           console.warn('[InvitApp] Invitation not found:', invSlug);
@@ -182,7 +189,7 @@ function loadConfigFromURL() {
 
         /* Atomic counter increment — only for generic (non-guest-specific) links */
         if (!hasGuestLink) {
-          _db.collection('watia_invitations').doc(invSlug).update({
+          _db.collection('invitations').doc(invSlug).update({
             count: firebase.firestore.FieldValue.increment(1)
           }).catch(e => console.warn('[InvitApp] Counter increment failed:', e));
         }
@@ -962,16 +969,18 @@ window.submitWish = function() {
   updateData.rsvpCount = guestCount;
   updateData.rsvpGuestName = name;
 
-  _db.collection('watia_invitations').doc(invSlug).update(updateData)
+  _db.collection('invitations').doc(invSlug).update(updateData)
   .then(() => {
     nameInput.value = '';
     messageInput.value = '';
     if (rsvpSelect) rsvpSelect.value = '';
-    alert('شكراً لك! تم إرسال ردك وتأكيد حضورك للعروسة ✨');
+    alert(_currentLang === 'fr' ? 'Merci ! Votre réponse a été transmise aux mariés ✨' : 'شكراً لك! تم إرسال ردك وتأكيد حضورك للعروسين ✨');
     
     // Add real-time update to _roleWishes if this wish matches the current role view
     const newWish = { name, message: msg, target: recipient, timestamp: new Date().toISOString() };
-    if (_currentRole === 'bride' && (recipient === 'bride' || recipient === 'both')) {
+    if (_currentRole === 'groom' && (recipient === 'groom' || recipient === 'both')) {
+      _roleWishes.unshift(newWish);
+    } else if (_currentRole === 'bride' && (recipient === 'bride' || recipient === 'both')) {
       _roleWishes.unshift(newWish);
     }
     const badge = document.getElementById('mailbox-badge');
@@ -994,7 +1003,7 @@ window.openWishesWall = function() {
   overlay.style.display = 'flex';
   
   if (titleEl) {
-    titleEl.textContent = 'صندوق تهاني العروسة 👰';
+    titleEl.textContent = _currentRole === 'groom' ? 'صندوق تهاني العريس 🤵' : 'صندوق تهاني العروسة 👰';
   }
 
   if (_roleWishes.length === 0) {
@@ -1003,7 +1012,7 @@ window.openWishesWall = function() {
   }
 
   listEl.innerHTML = _roleWishes.map(w => {
-    const targetLabel = w.target === 'bride' ? '👰 خاص بالعروسة' : '👰 للعروسة';
+    const targetLabel = w.target === 'groom' ? '🤵 خاص بالعريس' : w.target === 'bride' ? '👰 خاص بالعروسة' : '💑 للعروسين';
     const dateStr = w.timestamp ? new Date(w.timestamp).toLocaleString('ar-TN') : '';
     return `
       <div class="wishes-wall-card">
@@ -1028,7 +1037,7 @@ let wishesInterval = null;
 
 function loadAllWishes() {
   initFirebase();
-  _db.collection('watia_invitations').get()
+  _db.collection('invitations').get()
     .then(snapshot => {
       let wishes = [];
       snapshot.forEach(doc => {
@@ -1267,31 +1276,86 @@ function applyEnvelopeDesign(cfg) {
 const TRANSLATIONS = {
   ar: {
     basmala: 'بسم الله الرحمان الرحيم',
-    invite_title: 'تتش�/** Updates the invitation description text dynamically for personalized guests */
-function _updatePersonalizedInviteDesc() {
-  if (!_resolvedGuestName) return;
-  const inviteDescEl = document.querySelector('[data-tr="invite_desc"]');
-  if (!inviteDescEl) return;
-
-  const guestName = _resolvedGuestName;
-  const guestType = _resolvedGuestType || 'ar_couple';
-  
-  let title = '';
-  let name = guestName;
-  switch (guestType) {
-    case 'ar_couple':          title = 'إلى السيد'; name = `${guestName} وحرمه`; break;
-    case 'ar_couple_children': title = 'إلى السيد'; name = `${guestName} وحرمه وأبنائه`; break;
-    case 'ar_man':             title = 'إلى السيد'; name = guestName; break;
-    case 'ar_woman':           title = 'إلى السيدة'; name = guestName; break;
-    case 'ar_friend_m':        title = 'إلى عْشيري'; name = guestName; break;
-    case 'ar_friend_f':        title = 'إلى عْشيرتي'; name = guestName; break;
-    default:                   title = 'إلى السيد'; name = `${guestName} وحرمه`;
+    invite_title: 'تتشرف عائلة',
+    mr: 'السيد',
+    mrs: 'والسيدة',
+    and: 'و',
+    invite_desc: 'بدعوتكم لحضور حفل وطية ابنتهم',
+    and_char: '&',
+    scroll_hint: 'اسحب للأسفل',
+    countdown_title: 'العد التنازلي',
+    countdown_subtitle: 'لحظات تفصلنا عن اللقاء',
+    days: 'يوم',
+    hours: 'ساعة',
+    mins: 'دقيقة',
+    secs: 'ثانية',
+    program_title: 'برنامج الحفل',
+    location_btn: 'الموقع',
+    guestbook_title: 'دفتر التهاني',
+    guestbook_subtitle: 'شاركونا فرحتنا بكلمة طيبة للعروسة',
+    gb_name_placeholder: 'اسمك الكريم',
+    gb_rsvp_label: '🗳️ تأكيد الحضور (RSVP) :',
+    gb_msg_placeholder: 'أكتب تهنئتك هنا...',
+    gb_submit: 'إرسال التهنئة ✨',
+    gb_sug_label: '💡 اقتراحات جاهزة للتهنئة:',
+    closing_tagline: 'يسعدنا مشاركتكم هذه الفرحة',
+    closing_to: 'إلى',
+    closing_easel_header: 'حفل وطية',
+    open_maps: 'افتح في خرائط جوجل',
+    weather_title: 'حالة الطقس ليوم الحفل',
+    weather_location: 'طبلبة، تونس',
+    weather_humidity: 'الرطوبة',
+    weather_wind: 'الرياح',
+    weather_season_avg: 'معدل طقس صيفي مثالي ☀️',
+    photo_stack_title: 'ألبوم صوري',
+    photo_stack_subtitle: 'لحظات فرحتي',
+    photo_stack_next: 'الصورة التالية',
+  },
+  fr: {
+    basmala: 'Que Dieu les bénisse, les comble de bonheur et les réunisse.',
+    invite_title: 'Les familles',
+    mr: 'M.',
+    mrs: 'Mme',
+    and: 'et',
+    invite_desc: 'ont l\'honneur de vous inviter au mariage de leurs enfants',
+    and_char: '&',
+    scroll_hint: 'Faites défiler vers le bas',
+    countdown_title: 'Compte à rebours',
+    countdown_subtitle: 'Quelques instants nous séparent de ce grand jour',
+    days: 'Jours',
+    hours: 'Heures',
+    mins: 'Minutes',
+    secs: 'Secondes',
+    program_title: 'Programme de la Fête',
+    location_btn: 'Localisation',
+    guestbook_title: 'Livre d\'or',
+    guestbook_subtitle: 'Laissez un message de félicitations aux mariés',
+    gb_name_placeholder: 'Votre Nom',
+    gb_rsvp_label: '🗳️ Confirmation de présence (RSVP) :',
+    gb_msg_placeholder: 'Écrivez votre message ici...',
+    gb_submit: 'Envoyer les félicitations ✨',
+    gb_sug_label: '💡 Formules de vœux suggérées :',
+    closing_tagline: 'Nous sommes honorés de partager ce moment avec vous',
+    closing_to: 'À',
+    closing_easel_header: 'Mariage de',
+    open_maps: 'Ouvrir dans Google Maps',
+    weather_title: 'Météo prévue pour le Jour J',
+    weather_location: 'Teboulba, Tunisie',
+    weather_humidity: 'Humidité',
+    weather_wind: 'Vent',
+    weather_season_avg: 'Météo estivale idéale ☀️',
+    photo_stack_title: 'Notre album photo',
+    photo_stack_subtitle: 'Nos moments précieux ensemble',
+    photo_stack_next: 'Photo suivante',
   }
+};
 
-  const cleanTitle = title.replace('إلى ', '').trim();
-  const titlePrefix = cleanTitle ? cleanTitle + ' ' : '';
-  inviteDescEl.innerHTML = `بدعوة <span class="invite-guest-name">${titlePrefix}${name}</span> لحضور حفل وطية ابنتهم`;
-}�───────────────── */
+/* ────────────────────────────────────────────────
+   GUEST NOMINATIVE BANNER
+   Supports two modes:
+   • New short URL: ?inv=slug&gid=XXXX  → Firestore lookup by guest id
+   • Legacy URL:    ?guest=NAME&gt=TYPE → direct application (backward compat)
+──────────────────────────────────────────────── */
 
 /** Apply banner data once name + type are resolved */
 function _applyGuestBanner(guestName, guestType) {
@@ -1396,7 +1460,7 @@ function readAndApplyGuestParam() {
     const invSlug = params.get('inv');
     if (!invSlug) return;
     initFirebase();
-    _db.collection('watia_invitations').doc(invSlug).get()
+    _db.collection('invitations').doc(invSlug).get()
       .then(doc => {
         if (!doc.exists) return;
         const guests = doc.data().guests || [];
@@ -1407,7 +1471,7 @@ function readAndApplyGuestParam() {
 
         // Increment views counter
         guests[guestIdx].views = (guests[guestIdx].views || 0) + 1;
-        _db.collection('watia_invitations').doc(invSlug).update({
+        _db.collection('invitations').doc(invSlug).update({
           guests: guests
         }).catch(err => console.warn('[InvitApp] Failed to update guest view count:', err));
       })
@@ -1687,7 +1751,7 @@ function watchRsvpCounter() {
   if (!invSlug) return;
 
   initFirebase();
-  _db.collection('watia_invitations').doc(invSlug).onSnapshot(doc => {
+  _db.collection('invitations').doc(invSlug).onSnapshot(doc => {
     if (!doc.exists) return;
     const data = doc.data();
     

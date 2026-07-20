@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -564,13 +564,13 @@
           </div>
         </div>
 
-        <!-- Section 2: Management (Couple) -->
+        <!-- Section 2: Management (Bride Only) -->
         <div style="background: rgba(201,168,76,0.06); border: 1px solid rgba(201,168,76,0.25); border-radius: 10px; padding: 14px; margin-bottom: 16px;">
           <div class="link-section-label" style="font-weight: 700; color: var(--gold); margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-            <span>👑</span> لوحة تحكم وإدارة المدعوين للعروسين (Management)
+            <span>🌸</span> لوحة تحكم وإدارة المدعوين للعروسة (Management)
           </div>
           <div style="font-size: 0.76rem; color: var(--text-muted); margin-bottom: 8px;">
-            شارك هذا الرابط وكلمة المرور مع العروسين ليتمكna من إدارة قائمة مدعويهم وإضافة أسمائهم بأنفسهم.
+            شارك هذا الرابط وكلمة المرور مع العروسة لتتمكن من إدارة قائمة مدعويها وإضافة أسمائهم بنفسها.
           </div>
           <div class="short-link-url" id="guestsUrl" style="font-family: monospace; font-size: 0.74rem; color: #e8cc7a; background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: 6px; word-break: break-all; margin-bottom: 8px; border: 1px solid rgba(201,168,76,0.2);">جاري التوليد…</div>
           
@@ -582,7 +582,7 @@
 
           <div style="display:flex; gap:6px; flex-wrap:wrap;">
             <button class="btn btn-primary" style="flex:1.5; min-width:120px; background:linear-gradient(135deg,#c9a84c,#e8cc7a); color:#1a1000; border:none; padding:9px; font-size:0.8rem; font-weight:700;" onclick="copyGuestsLink()">📋 نسخ رابط الإدارة</button>
-            <button class="btn btn-outline" style="flex:1.5; min-width:120px; border-color:#25d366; color:#25d366; padding:9px; font-size:0.8rem;" onclick="shareGuestsLink(_guestsUrl, document.getElementById('guestsPwdDisplay').textContent, val('guestNameInput') || val('groomAr'))">💬 إرسال واتساب للعميل</button>
+            <button class="btn btn-outline" style="flex:1.5; min-width:120px; border-color:#25d366; color:#25d366; padding:9px; font-size:0.8rem;" onclick="shareGuestsLink(_guestsUrl, document.getElementById('guestsPwdDisplay').textContent, val('guestNameInput') || val('brideAr'))">💬 إرسال واتساب للعميل</button>
             <button class="btn btn-ghost" style="padding:9px 12px; font-size:0.8rem;" onclick="openGuestsLink()">🔗 فتح</button>
           </div>
         </div>
@@ -809,13 +809,13 @@ function toB64(str) {
 
 // ── Firebase configuration ──
 const FIREBASE_CONFIG = {
-  apiKey:            "AIzaSyDiX0BwIT9wQKnlNHk0ADLgtI5eOUwF-1E",
-  authDomain:        "invit-mar.firebaseapp.com",
-  projectId:         "invit-mar",
-  storageBucket:     "invit-mar.firebasestorage.app",
-  messagingSenderId: "654872438284",
-  appId:             "1:654872438284:web:c11d6f3cdff82bf35ff029",
-  measurementId:     "G-ZBMGME0PR2"
+  apiKey:            "AIzaSyAkG8p5RSk7HwmHGWB4Cf0EIEFYdICYSek",
+  authDomain:        "invit-outia.firebaseapp.com",
+  projectId:         "invit-outia",
+  storageBucket:     "invit-outia.firebasestorage.app",
+  messagingSenderId: "6331758985",
+  appId:             "1:6331758985:web:a4e9154e3f99c3fb840958",
+  measurementId:     "G-H23DLD87RM"
 };
 
 let _fbApp = null, _db = null;
@@ -840,7 +840,7 @@ function buildInvSlug(brideFr) {
 // ── Firebase Firestore operations ──
 async function saveInvitationToFirebase(slug, cfg, pack, guestName, couplePwd, isUpdate = false) {
   initFirebase();
-  const docRef = _db.collection('watia_invitations').doc(slug);
+  const docRef = _db.collection('invitations').doc(slug);
   const doc = await docRef.get();
   
   if (isUpdate && doc.exists) {
@@ -872,7 +872,7 @@ const _fbListeners = {};
 function watchInvitation(slug, callback) {
   if (_fbListeners[slug]) _fbListeners[slug](); // unsubscribe previous
   initFirebase();
-  _fbListeners[slug] = _db.collection('watia_invitations').doc(slug)
+  _fbListeners[slug] = _db.collection('invitations').doc(slug)
     .onSnapshot(doc => { if (doc.exists) callback(doc.data()); }, err => console.error(err));
 }
 
@@ -1487,7 +1487,7 @@ async function loadGuestDropdown() {
 
   try {
     initFirebase();
-    const snap = await _db.collection('watia_invitations').get();
+    const snap = await _db.collection('invitations').get();
 
     if (snap.empty) {
       weddingSel.innerHTML = '<option value="">لا توجد دعوات محفوظة بعد</option>';
@@ -1660,7 +1660,7 @@ async function onGuestPhotoSelect(slug) {
 
   try {
     initFirebase();
-    const doc = await _db.collection('watia_invitations').doc(slug).get();
+    const doc = await _db.collection('invitations').doc(slug).get();
     if (!doc.exists) {
       if (bannerText) bannerText.textContent = '⚠️ الدعوة غير موجودة في قاعدة البيانات';
       return;
@@ -1742,7 +1742,7 @@ async function savePhotosForGuest() {
 
     // 3. Check the invitation doc exists
     initFirebase();
-    const docRef = _db.collection('watia_invitations').doc(_selectedGuestSlug);
+    const docRef = _db.collection('invitations').doc(_selectedGuestSlug);
     const snap   = await docRef.get();
     if (!snap.exists) {
       showToast('❌ المدعو غير موجود في قاعدة البيانات');
@@ -2105,7 +2105,7 @@ async function renderLinksHistory() {
   c.innerHTML = '<div style="color:var(--text-muted);font-size:0.82rem;text-align:center;padding:20px"><span class="spinner"></span> جاري تحميل الروابط...</div>';
   try {
     initFirebase();
-    const querySnapshot = await _db.collection('watia_invitations').get();
+    const querySnapshot = await _db.collection('invitations').get();
     const hist = [];
     querySnapshot.forEach(doc => {
       const data = doc.data();
@@ -2197,7 +2197,7 @@ async function renderLinksHistory() {
           + '</div>'
           // ═══ GUESTS MANAGEMENT BLOCK ═══
           + '<div style="background:rgba(201,168,76,0.07);border:1px solid rgba(201,168,76,0.28);border-radius:10px;padding:12px 13px">'
-            + '<div style="font-size:0.78rem;color:var(--gold);font-weight:700;margin-bottom:8px">💌 إدارة المدعوين — للعروسين</div>'
+            + '<div style="font-size:0.78rem;color:var(--gold);font-weight:700;margin-bottom:8px">💌 إدارة المدعوين — للعروسة</div>'
             + '<div style="font-family:monospace;font-size:0.7rem;color:#e8cc7a;background:rgba(0,0,0,0.22);padding:7px 10px;border-radius:7px;word-break:break-all;margin-bottom:9px">' + guestsUrl + '</div>'
             + pwdBlock
             + '<div style="display:flex;gap:6px;flex-wrap:wrap">'
@@ -2213,7 +2213,6 @@ async function renderLinksHistory() {
             + '<div style="font-family:monospace;font-size:0.69rem;color:#aaa;word-break:break-all;margin:6px 0">' + invUrl + '</div>'
             + '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">'
               + '<button class="btn btn-outline" style="padding:4px 8px;font-size:0.72rem" onclick="quickCopy(\'' + invUrl + '\')">📋 نسخ</button>'
-              + '<button class="btn btn-outline" style="padding:4px 8px;font-size:0.72rem;border-color:#3498db;color:#3498db" onclick="quickCopy(\'' + invUrl + '&view=groom\')">🤵 رابط العريس</button>'
               + '<button class="btn btn-outline" style="padding:4px 8px;font-size:0.72rem;border-color:#e74c3c;color:#e74c3c" onclick="quickCopy(\'' + invUrl + '&view=bride\')">👰 رابط العروسة</button>'
               + '<button class="btn btn-ghost" style="padding:4px 8px;font-size:0.72rem" onclick="shareHistLink(\'' + invUrl + '\')">💬 واتساب</button>'
             + '</div>'
@@ -2271,7 +2270,7 @@ function updateCounter(slug, data) {
 async function updateLinkConfig(slug) {
   try {
     initFirebase();
-    const doc = await _db.collection('watia_invitations').doc(slug).get();
+    const doc = await _db.collection('invitations').doc(slug).get();
     if (!doc.exists) {
       showToast('❌ الدعوة غير موجودة');
       return;
@@ -2321,7 +2320,7 @@ async function updateClientPassword(id) {
   }
   try {
     initFirebase();
-    await _db.collection('watia_invitations').doc(id).update({
+    await _db.collection('invitations').doc(id).update({
       couplePassword: newPwd
     });
     showToast('✅ تم تحديث كلمة المرور بنجاح!');
@@ -2348,7 +2347,7 @@ async function deleteLink(id) {
   try {
     initFirebase();
     if (_fbListeners[id]) { _fbListeners[id](); delete _fbListeners[id]; }
-    await _db.collection('watia_invitations').doc(id).delete();
+    await _db.collection('invitations').doc(id).delete();
     showToast('🗑️ تم الحذف من السيرفر بنجاح');
     await renderLinksHistory();
   } catch (e) {
@@ -2364,7 +2363,7 @@ async function clearHistory() {
     // Stop all listeners
     Object.keys(_fbListeners).forEach(k => { _fbListeners[k](); delete _fbListeners[k]; });
     
-    const querySnapshot = await _db.collection('watia_invitations').get();
+    const querySnapshot = await _db.collection('invitations').get();
     const batch = _db.batch();
     querySnapshot.forEach(doc => {
       batch.delete(doc.ref);
