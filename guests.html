@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -321,12 +321,19 @@ function renderGuestList(){
   }
   list.innerHTML=filtered.map((g,idx)=>{
     const f=FORMULAS.find(f=>f.value===g.type)||FORMULAS[0];
+    const features = (_invData.config && _invData.config.features) || {};
+    const guestPhotos = features.guestPhotos || {};
+    const hasPhotos = Array.isArray(guestPhotos[g.id]) && guestPhotos[g.id].length > 0;
+    const photoBadge = hasPhotos 
+      ? `<span class="formula-badge" style="background:rgba(39,174,96,0.12);color:#27ae60;margin-right:5px;font-weight:bold;" title="تم إسناد صور لهذا المدعو">📸 صور</span>`
+      : '';
     return`<div class="guest-card">
       <div class="guest-num">${idx+1}</div>
       <div class="guest-info">
         <div class="guest-name">${escHtml(g.name)}</div>
         <span class="formula-badge ${f.badge}">${f.emoji} ${f.label}</span>
         <span class="formula-badge" style="background:rgba(255,255,255,0.08);color:var(--text);margin-right:5px;" title="عدد مرات فتح الدعوة">👁️ ${g.views || 0}</span>
+        ${photoBadge}
       </div>
       <div class="guest-actions">
         <button class="btn-icon" title="نسخ الرابط البسيط" onclick="copyLink('${g.id}')">

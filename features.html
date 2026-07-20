@@ -781,6 +781,15 @@
       background: rgba(255, 253, 245, 0.95);
     }
 
+    .vip-pack {
+      border: 2px solid #b8903c;
+      background: linear-gradient(145deg, #fffcf4 0%, #faf1db 100%) !important;
+      box-shadow: 0 15px 35px rgba(184, 144, 60, 0.15) !important;
+    }
+    .vip-pack:hover {
+      border-color: #876214 !important;
+    }
+
     .featured-pack::after {
       content: '★';
       position: absolute;
@@ -1006,6 +1015,19 @@
                 <span class="feature-desc" data-lang="fr">L'application gère et affiche l'enveloppe et l'invitation au nom propre de chaque invité, garantissant un accueil chaleureux et sur-mesure.</span>
                 <span class="feature-desc" data-lang="ar">يقوم التطبيق بإعداد وعرض المغلف والبطاقة بالاسم الشخصي المحدد لكل ضيف، مما يضمن ترحيباً راقياً وخاصاً بكل مدعو.</span>
                 <span class="feature-desc" data-lang="tn">السيستم يخرجلك استدعاء مخصص بالاسم لكل ضيف (مثال: السيد علي وسيدة حرمه) باش كل واحد يحس روحو عندو أنفيتاسيون سبيسيال ليه.</span>
+              </div>
+            </div>
+
+            <!-- Feature: Photo Stack (Photos personnalisées par invité) -->
+            <div class="feature-item">
+              <span class="feature-icon-box">📸</span>
+              <div class="feature-text">
+                <span class="feature-name" data-lang="fr">Album photo interactif personnalisé par invité (Pack VIP)</span>
+                <span class="feature-name" data-lang="ar">ألبوم صور تفاعلي مخصص لكل ضيف (باقة VIP)</span>
+                <span class="feature-name" data-lang="tn">ألبوم تصاور تفاعلي سبيسيال لكل ضيف (باقة VIP)</span>
+                <span class="feature-desc" data-lang="fr">Un magnifique album sous forme de cartes empilées (exclusivité Pack VIP). Les mariés peuvent associer des photos spécifiques à chaque invité pour qu'il découvre ses propres souvenirs directement dans son invitation. Si aucun média n'est associé, la section s'adapte et reste masquée.</span>
+                <span class="feature-desc" data-lang="ar">ألبوم صور مبتكر على شكل بطاقات منزلقة متراكمة (ميزة حصرية لباقة VIP). يمكن للعروسين تخصيص صور فريدة لكل ضيف ليرى ذكرياته الخاصة عند فتح الدعوة. وفي حال عدم إضافة صور لضيف معين، يتم إخفاء القسم تلقائيًا للحفاظ على تناسق العرض.</span>
+                <span class="feature-desc" data-lang="tn">ألبوم تصاور مزيان في شكل كارتات فوق بعضهم يتجبدو (خاصة بحزمة VIP). العرايس ينجمو يحطو تصاور خاصة بكل ضيف باش يلقى ذكرياتو مع العرايس ديريكت في دعوتو. وكان ما فماش تصاور مصبوبين للضيف هذاكا، القسم هذا يتخبى وحدو وما يظهرش جملة.</span>
               </div>
             </div>
 
@@ -1494,11 +1516,30 @@
           <h3 class="pack-name">Pack 100</h3>
           <div class="pack-shares">100 <span data-lang="fr">liens invités</span><span data-lang="ar">مدعو</span><span data-lang="tn">رابط ضيف</span></div>
           
-          <p class="pack-explanation" data-lang="fr">Conçu pour les grands mariages et les grands familles. Permet de générer jusqu'à 100 liens personnalisés sans aucune restriction pour inviter tout le monde.</p>
+          <p class="pack-explanation" data-lang="fr">Conçu pour les grands mariages et les grandes familles. Permet de générer jusqu'à 100 liens personnalisés sans aucune restriction pour inviter tout le monde.</p>
           <p class="pack-explanation" data-lang="ar">مخصصة للحفلات الكبيرة والأفراح التي تضم عائلات موسعة. تتيح توليد وإرسال حتى 100 رابط مخصص لدعوة الجميع بكل سهولة.</p>
           <p class="pack-explanation" data-lang="tn">مخصصة للأفراح الكبيرة والعائلات الموسعة. تعطيك حتى 100 رابط مخصص بالاسم باش تستدعى الناس الكل بلاش حتى قلق.</p>
         </div>
       </div>
+
+      <!-- Standing VIP Option Highlight -->
+      <div class="vip-highlight-card" style="margin-top: 35px; background: linear-gradient(145deg, #fffcf4 0%, #faf1db 100%); border: 2px solid #b8903c; border-radius: 20px; padding: 28px; box-shadow: 0 15px 35px rgba(184, 144, 60, 0.12); text-align: center; max-width: 850px; margin-left: auto; margin-right: auto; position: relative;">
+        <span class="pack-badge" style="background: linear-gradient(135deg, #FCF6BA 0%, #c9a84c 50%, #8a6010 100%); color: #1a1000; border: none; font-weight: 900; font-size: 0.76rem; padding: 4px 14px; border-radius: 14px;">👑 خيار الـ VIP المرن والاقتصادي</span>
+        <h3 style="font-size: 1.45rem; color: #4e2f0d; margin-top: 12px; margin-bottom: 12px; font-weight: 700;" data-lang="fr">Option "Invitations VIP" (Photos sur-mesure)</h3>
+        <h3 style="font-size: 1.45rem; color: #4e2f0d; margin-top: 12px; margin-bottom: 12px; font-weight: 700;" data-lang="ar">خيار "الدعوات الخاصة VIP" (ألبوم صور للمقربين)</h3>
+        <h3 style="font-size: 1.45rem; color: #4e2f0d; margin-top: 12px; margin-bottom: 12px; font-weight: 700;" data-lang="tn">خيار "الدعوات الخاصة VIP" (ألبوم تصاور للمقربين)</h3>
+        
+        <p style="font-size: 0.95rem; color: #7c4c1e; line-height: 1.6; max-width: 760px; margin: 0 auto 8px;" data-lang="fr">
+          Vous souhaitez choyer vos proches les plus intimes ? Activez l'option VIP uniquement pour les invitations de votre choix (par exemple, ajouter des photos personnalisées pour 10 invités spécifiques parmi vos 60). Seuls ces 10 liens sélectionnés feront l'objet d'une légère majoration sur le tarif de votre pack standard. Une solution sur-mesure et très économique !
+        </p>
+        <p style="font-size: 0.95rem; color: #7c4c1e; line-height: 1.6; max-width: 760px; margin: 0 auto 8px;" data-lang="ar">
+          هل ترغب في تمييز ضيوفك الأكثر قرباً وعاطفة؟ يمكنك تفعيل ميزة ألبوم الصور لعدد محدد فقط من اختياركم (مثلاً: إسناد صور خاصة لـ 10 مدعوين فقط من أصل باقة الـ 60). وسيتم احتساب زيادة بسيطة في السعر على هذه الروابط الـ 10 المختارة فقط فوق سعر باقتكم العادية. حل مرن وموفر جداً لميزانيتكم!
+        </p>
+        <p style="font-size: 0.95rem; color: #7c4c1e; line-height: 1.6; max-width: 760px; margin: 0 auto 8px;" data-lang="tn">
+          تحب تدلل العباد القراب ليك برشا؟ تنجم تزيد ميزة ألبوم التصاور التفاعلي للناس اللي تختارهم بركة (مثال: تزيد تصاور وذكريات لـ 10 ضياف بركة من باقة الـ 60). الزيادة في السوم تحسب كان على الـ 10 روابط هاذم بركة فوق سوم الباقة العادية متاعك. حل ساهل وسبيسيال يخليك تتحكم في ميزانيتك!
+        </p>
+      </div>
+
     </div>
 
     <!-- Footer -->

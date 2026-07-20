@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -98,7 +98,7 @@
   <div class="login-card">
     <div class="login-logo">👑</div>
     <div class="login-title">لوحة الإدارة</div>
-    <div class="login-sub">إدارة دعوة الوطية</div>
+    <div class="login-sub">إدارة دعوة الزفاف</div>
     <input id="pwdInput" class="login-input" type="password" placeholder="••••••••" dir="ltr" autocomplete="current-password">
     <button class="login-btn" onclick="doLogin()">دخول</button>
     <div class="login-error" id="loginError"></div>
@@ -117,6 +117,7 @@
     <div class="nav-item"         onclick="showPage('page-families')">  <span class="nav-icon">👨‍👩‍👦</span><span class="nav-label">العائلات</span></div>
     <div class="nav-item"         onclick="showPage('page-date')">      <span class="nav-icon">📅</span><span class="nav-label">التاريخ</span></div>
     <div class="nav-item"         onclick="showPage('page-programme')"> <span class="nav-icon">🗓️</span><span class="nav-label">البرنامج</span></div>
+    <div class="nav-item"         onclick="showPage('page-photos')">    <span class="nav-icon">📸</span><span class="nav-label">ألبوم الصور</span></div>
     <div class="nav-item"         onclick="showPage('page-links')">     <span class="nav-icon">🔗</span><span class="nav-label">الروابط</span></div>
     <div class="nav-item"         onclick="showPage('page-qrcode')">    <span class="nav-icon">🔳</span><span class="nav-label">رمز QR</span></div>
     <div class="sidebar-bottom">
@@ -140,7 +141,7 @@
       <div class="card">
         <div class="card-title">🌸 العروسة</div>
         <div class="form-row">
-          <div class="field"><label>اسم العروسة بالعربية</label><input id="brideAr" type="text" value="مريم"></div>
+          <div class="field"><label>الاسم بالعربية</label><input id="brideAr" type="text" value="مريم"></div>
           <div class="field"><label>Prénom en français</label><input id="brideFr" type="text" value="Mariam" dir="ltr"></div>
         </div>
       </div>
@@ -216,8 +217,9 @@
         <div class="form-row" style="margin-top:10px">
           <div class="field">
             <label>لغة الدعوة (Langue)</label>
-            <select id="invLanguage" disabled>
-              <option value="ar" selected>العربية — ثابت</option>
+            <select id="invLanguage">
+              <option value="ar">العربية (Arabe)</option>
+              <option value="fr">الفرنسية (Français)</option>
             </select>
           </div>
           <div class="field">
@@ -285,7 +287,7 @@
       </div>
     </div>
 
-    <!-- ▸ PAGE 2 — Families (bride only for Outeya) -->
+    <!-- ▸ PAGE 2 — Families -->
     <div class="page" id="page-families">
       <div class="page-title">👨‍👩‍👧 عائلة العروسة</div>
       <div class="page-subtitle">والدي العروسة</div>
@@ -297,7 +299,7 @@
         </div>
       </div>
       <div class="card">
-        <div class="card-title">👗 عائلة العروسة</div>
+        <div class="card-title">👰 والدا العروسة</div>
         <div class="form-row">
           <div class="field"><label>اسم الأب</label><input id="brideFather" type="text" value="خالد العمري"></div>
           <div class="field"><label>اسم الأم</label><input id="brideMother" type="text" value="عواطف بلقاسم"></div>
@@ -338,7 +340,176 @@
       </div>
     </div>
 
-    <!-- ▸ PAGE 5 — Links -->
+    <!-- ▸ PAGE 5 — Photos (Photo Stack) -->
+    <div class="page" id="page-photos">
+      <div class="page-title">📸 ألبوم الصور (Photo Stack)</div>
+      <div class="page-subtitle">تفعيل وإدارة ألبوم الصور التفاعلي المنزلق في أسفل الدعوة</div>
+      
+      <!-- Activation card -->
+      <div class="card">
+        <div class="card-title">⚙️ تفعيل الألبوم</div>
+        <div class="form-row" style="grid-template-columns: 1fr; margin-top: 10px;">
+          <div class="field">
+            <label>عرض قسم ألبوم الصور في الدعوة :</label>
+            <select id="photoStackActive" onchange="togglePhotoStackFields()">
+              <option value="false">❌ غير نشط (مخفي)</option>
+              <option value="true">✅ نشط (معروض)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cloudinary Config card -->
+      <div class="card photo-stack-setting-container" style="display:none; border-color: rgba(201,168,76,0.35); background: rgba(201,168,76,0.03);">
+        <div class="card-title">☁️ إعدادات Cloudinary (اختياري / لتفادي Base64)</div>
+        <div style="font-size:0.72rem; color:var(--text-muted); margin-bottom:12px;">
+          إذا تركت هذه الحقول فارغة، فسيتم حفظ الصور مباشرة في كود الدعوة (Base64) بحد أقصى 3 صور. لتخزين أسرع ومظهر أنظف، أدخل إعدادات حساب Cloudinary الخاص بك.
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>Cloud Name</label>
+            <input id="cloudinaryCloudName" type="text" placeholder="مثال: dqz12xyz" oninput="saveCloudinarySettings()" dir="ltr" style="background:rgba(0,0,0,0.25); color:white; border:1px solid var(--border); padding:10px; border-radius:6px;">
+          </div>
+          <div class="field">
+            <label>Upload Preset (Unsigned)</label>
+            <input id="cloudinaryUploadPreset" type="text" placeholder="مثال: my_preset" oninput="saveCloudinarySettings()" dir="ltr" style="background:rgba(0,0,0,0.25); color:white; border:1px solid var(--border); padding:10px; border-radius:6px;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Theme card -->
+      <div class="card photo-stack-setting-container" style="display:none;">
+        <div class="card-title">🎨 ثيم ألبوم الصور</div>
+        <div style="display:flex; gap:12px; margin-top:10px; flex-wrap:wrap;">
+          <div class="theme-card photo-stack-theme-card selected" data-theme="floral" onclick="selectPhotoStackTheme('floral')" style="flex:1; min-width:100px; text-align:center; padding:12px; border:2px solid var(--gold); border-radius:8px; cursor:pointer; background:rgba(0,0,0,0.3)">
+            <div style="font-size:1.5rem">🌸</div>
+            <div style="font-size:0.82rem; margin-top:4px; color:white; font-weight:700">Doré & Floral</div>
+          </div>
+          <div class="theme-card photo-stack-theme-card" data-theme="vintage" onclick="selectPhotoStackTheme('vintage')" style="flex:1; min-width:100px; text-align:center; padding:12px; border:1px solid var(--border); border-radius:8px; cursor:pointer; background:rgba(0,0,0,0.3)">
+            <div style="font-size:1.5rem">📻</div>
+            <div style="font-size:0.82rem; margin-top:4px; color:white; font-weight:700">Vintage</div>
+          </div>
+          <div class="theme-card photo-stack-theme-card" data-theme="royal" onclick="selectPhotoStackTheme('royal')" style="flex:1; min-width:100px; text-align:center; padding:12px; border:1px solid var(--border); border-radius:8px; cursor:pointer; background:rgba(0,0,0,0.3)">
+            <div style="font-size:1.5rem">💚</div>
+            <div style="font-size:0.82rem; margin-top:4px; color:white; font-weight:700">Émeraude & Or</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Per-guest photo assignment card -->
+      <div class="card photo-stack-setting-container" style="display:none;">
+        <div class="card-title">🖼️ إسناد الصور لمدعو</div>
+        <div style="font-size:0.72rem; color:var(--text-muted); margin-bottom:14px; line-height:1.5;">
+          اختر مدعواً من القائمة أدناه لتحميل صوره الحالية أو إضافة صور جديدة له.
+          <br>
+          ⓘ بالنسبة لـ <strong>الدعوة العامة للزفاف</strong>، إذا لم تقم برفع أي صور مخصصة، فسيتم تلقائياً عرض الصورة الافتراضية للزفاف المخزنة في النظام لتوفير مساحة التخزين.
+        </div>
+
+        <!-- Step 1: Wedding selector -->
+        <div style="margin-bottom:14px;">
+          <div style="display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap;">
+            <div style="flex:1; min-width:180px;">
+              <label style="font-size:0.78rem; color:var(--text-muted); margin-bottom:5px; display:block;">
+                💍 الخطوة 1 — اختر حفل الزفاف
+              </label>
+              <select id="weddingPhotoSelect" onchange="onWeddingPhotoSelect(this.value)"
+                style="width:100%; padding:10px; background:rgba(0,0,0,0.3); color:white; border:1px solid var(--border); border-radius:8px; font-size:0.9rem;">
+                <option value="">-- اختر الزفاف --</option>
+              </select>
+            </div>
+            <button onclick="loadGuestDropdown()" title="تحديث القائمة"
+              style="padding:10px 14px; background:rgba(201,168,76,0.1); border:1px solid rgba(201,168,76,0.3); color:var(--gold); border-radius:8px; cursor:pointer; font-size:1rem; flex-shrink:0; margin-bottom:1px;">🔄</button>
+          </div>
+        </div>
+
+        <!-- Step 2: Guest selector (populated after wedding is chosen) -->
+        <div style="margin-bottom:16px;">
+          <label style="font-size:0.78rem; color:var(--text-muted); margin-bottom:5px; display:block;">
+            👤 الخطوة 2 — اختر المدعو / المدعوة
+          </label>
+          <select id="guestPhotoSelect" onchange="onGuestPhotoSelect(this.value)"
+            style="width:100%; padding:10px; background:rgba(0,0,0,0.3); color:white; border:1px solid var(--border); border-radius:8px; font-size:0.9rem;">
+            <option value="">-- اختر الزفاف أولاً --</option>
+          </select>
+        </div>
+
+        <!-- Selected guest info banner -->
+        <div id="guestPhotoBanner" style="display:none; background:rgba(201,168,76,0.08); border:1px solid rgba(201,168,76,0.25); border-radius:8px; padding:10px 14px; margin-bottom:14px; font-size:0.82rem; color:var(--gold-light);">
+          <span id="guestPhotoBannerText"></span>
+        </div>
+
+        <!-- 3 photo slots -->
+        <div style="display:flex; flex-direction:column; gap:14px;">
+
+          <!-- Slot 0 -->
+          <div class="photo-slot-card" style="display:flex; gap:14px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); padding:14px; border-radius:8px; align-items:center;">
+            <div class="photo-slot-preview" id="preview-slot-0" style="width:70px; height:93px; border:2px dashed rgba(201,168,76,0.3); border-radius:6px; background:#0a0602; display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0;">
+              <span style="font-size:1.5rem; color:#444;">📸</span>
+            </div>
+            <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:8px;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-weight:bold; color:var(--gold-light); font-size:0.85rem;">الصورة الأولى (المقدمة)</span>
+                <button id="delete-btn-slot-0" onclick="clearPhotoSlot(0)" style="color:#ff6b6b; padding:3px 8px; font-size:0.72rem; display:none; border:none; background:none; cursor:pointer; flex-shrink:0;">✕ حذف</button>
+              </div>
+              <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                <input type="file" id="file-slot-0" accept="image/*" onchange="handleFileSelect(event, 0)" style="display:none;">
+                <button class="btn btn-outline" onclick="document.getElementById('file-slot-0').click()" style="padding:5px 10px; font-size:0.78rem;">📁 صورة</button>
+                <input type="text" id="caption-slot-0" placeholder="تسمية توضيحية..." style="flex:1; min-width:80px; padding:6px 8px; border-radius:6px; border:1px solid var(--border); background:rgba(0,0,0,0.25); color:white; font-size:0.78rem;">
+              </div>
+            </div>
+          </div>
+
+          <!-- Slot 1 -->
+          <div class="photo-slot-card" style="display:flex; gap:14px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); padding:14px; border-radius:8px; align-items:center;">
+            <div class="photo-slot-preview" id="preview-slot-1" style="width:70px; height:93px; border:2px dashed rgba(201,168,76,0.3); border-radius:6px; background:#0a0602; display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0;">
+              <span style="font-size:1.5rem; color:#444;">📸</span>
+            </div>
+            <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:8px;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-weight:bold; color:var(--gold-light); font-size:0.85rem;">الصورة الثانية (الوسط)</span>
+                <button id="delete-btn-slot-1" onclick="clearPhotoSlot(1)" style="color:#ff6b6b; padding:3px 8px; font-size:0.72rem; display:none; border:none; background:none; cursor:pointer; flex-shrink:0;">✕ حذف</button>
+              </div>
+              <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                <input type="file" id="file-slot-1" accept="image/*" onchange="handleFileSelect(event, 1)" style="display:none;">
+                <button class="btn btn-outline" onclick="document.getElementById('file-slot-1').click()" style="padding:5px 10px; font-size:0.78rem;">📁 صورة</button>
+                <input type="text" id="caption-slot-1" placeholder="تسمية توضيحية..." style="flex:1; min-width:80px; padding:6px 8px; border-radius:6px; border:1px solid var(--border); background:rgba(0,0,0,0.25); color:white; font-size:0.78rem;">
+              </div>
+            </div>
+          </div>
+
+          <!-- Slot 2 -->
+          <div class="photo-slot-card" style="display:flex; gap:14px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); padding:14px; border-radius:8px; align-items:center;">
+            <div class="photo-slot-preview" id="preview-slot-2" style="width:70px; height:93px; border:2px dashed rgba(201,168,76,0.3); border-radius:6px; background:#0a0602; display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0;">
+              <span style="font-size:1.5rem; color:#444;">📸</span>
+            </div>
+            <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:8px;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-weight:bold; color:var(--gold-light); font-size:0.85rem;">الصورة الثالثة (الخلف)</span>
+                <button id="delete-btn-slot-2" onclick="clearPhotoSlot(2)" style="color:#ff6b6b; padding:3px 8px; font-size:0.72rem; display:none; border:none; background:none; cursor:pointer; flex-shrink:0;">✕ حذف</button>
+              </div>
+              <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                <input type="file" id="file-slot-2" accept="image/*" onchange="handleFileSelect(event, 2)" style="display:none;">
+                <button class="btn btn-outline" onclick="document.getElementById('file-slot-2').click()" style="padding:5px 10px; font-size:0.78rem;">📁 صورة</button>
+                <input type="text" id="caption-slot-2" placeholder="تسمية توضيحية..." style="flex:1; min-width:80px; padding:6px 8px; border-radius:6px; border:1px solid var(--border); background:rgba(0,0,0,0.25); color:white; font-size:0.78rem;">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Save for this guest button -->
+        <div style="margin-top:18px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.07);">
+          <button id="saveGuestPhotosBtn" onclick="savePhotosForGuest()"
+            style="width:100%; padding:13px; background:linear-gradient(135deg,#c9a84c,#e8cc7a); color:#1a1000; border:none; border-radius:10px; font-size:0.95rem; font-weight:700; cursor:pointer; letter-spacing:0.5px; transition:opacity 0.2s;">
+            💾 حفظ الصور لهذا المدعو
+          </button>
+          <div style="margin-top:8px; font-size:0.7rem; color:var(--text-muted); text-align:center;">
+            سيتم تحديث دعوة هذا المدعو فقط — لا تؤثر على دعوات الآخرين
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ▸ PAGE 6 — Links -->
     <div class="page" id="page-links">
       <div class="page-title">🔗 إنشاء رابط الدعوة</div>
       <div class="page-subtitle">احفظ أولاً ثم اختر الباقة وأنشئ الرابط</div>
@@ -473,7 +644,7 @@
             
             <div class="flyer-instructions-ar">امسح رمز الـ QR أعلاه بالجوال لتجربة دعوتنا، الألوان، والموسيقى الافتتاحية!</div>
             <div class="flyer-instructions-fr">Scannez le code QR ci-dessus pour découvrir notre invitation, ses thèmes et musiques !</div>
-            <div class="flyer-footer">💍 حفل وطية العريس والعروس 💍</div>
+            <div class="flyer-footer">💍 حفل زفاف العريس والعروس 💍</div>
           </div>
         </div>
       </div>
@@ -496,10 +667,47 @@
     <div class="mbn-item"        onclick="showPage('page-families')"  data-page="page-families">  <span class="mbn-icon">👨‍👩‍👦</span><span class="mbn-label">العائلات</span></div>
     <div class="mbn-item"        onclick="showPage('page-date')"      data-page="page-date">      <span class="mbn-icon">📅</span><span class="mbn-label">التاريخ</span></div>
     <div class="mbn-item"        onclick="showPage('page-programme')" data-page="page-programme"> <span class="mbn-icon">🗓️</span><span class="mbn-label">البرنامج</span></div>
+    <div class="mbn-item"        onclick="showPage('page-photos')"    data-page="page-photos">    <span class="mbn-icon">📸</span><span class="mbn-label">الصور</span></div>
     <div class="mbn-item"        onclick="showPage('page-links')"     data-page="page-links">     <span class="mbn-icon">🔗</span><span class="mbn-label">الروابط</span></div>
     <div class="mbn-item"        onclick="showPage('page-qrcode')"    data-page="page-qrcode">    <span class="mbn-icon">🔳</span><span class="mbn-label">QR</span></div>
   </nav>
 
+</div>
+
+<!-- ══ CROPPER MODAL ══ -->
+<div id="cropper-modal" style="display:none; position:fixed; inset:0; z-index:10000; align-items:center; justify-content:center; direction:rtl;">
+  <div style="position:absolute; inset:0; background:rgba(10,6,2,0.85); backdrop-filter:blur(8px);" onclick="closeCropper()"></div>
+  <div style="position:relative; background:#1e1711; border:1.5px solid var(--gold); border-radius:20px; width:90%; max-width:420px; padding:24px; color:white; font-family:sans-serif; display:flex; flex-direction:column; align-items:center; gap:16px; box-shadow:0 10px 30px rgba(0,0,0,0.5); box-sizing:border-box;">
+    <div style="font-weight:bold; color:var(--gold-light); font-size:1.15rem; text-align:center; font-family:'Amiri', serif;">✂️ تعديل وقص الصورة (3:4)</div>
+    
+    <!-- Crop Workspace -->
+    <div id="cropper-workspace" style="position:relative; width:230px; height:300px; border:2px solid var(--gold); border-radius:8px; overflow:hidden; background:#000; cursor:move; display:flex; align-items:center; justify-content:center;">
+      <img id="cropper-image" src="" style="position:absolute; transform-origin:center center; user-select:none; pointer-events:none; max-width:none; display:block;">
+    </div>
+    
+    <div style="font-size:0.75rem; color:var(--text-muted); text-align:center; margin-top:-8px;">
+      💡 اسحب الصورة لتحريكها داخل المربع المذهب
+    </div>
+
+    <!-- Controls -->
+    <div style="width:100%; display:flex; flex-direction:column; gap:12px; box-sizing:border-box; padding:0 4px;">
+      <!-- Zoom -->
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+        <span style="font-size:0.85rem; color:var(--text-muted); flex-shrink:0;">🔍 التكبير</span>
+        <input type="range" id="crop-zoom" min="0.5" max="3" step="0.05" value="1" oninput="updateCropTransform()" style="flex:1; accent-color:var(--gold); height:6px; border-radius:3px; background:#443; cursor:pointer;">
+      </div>
+      <!-- Rotation -->
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+        <span style="font-size:0.85rem; color:var(--text-muted); flex-shrink:0;">🔄 التدوير</span>
+        <button class="btn btn-outline" onclick="rotateCrop(90)" style="padding:5px 15px; font-size:0.8rem; border-color:rgba(201,168,76,0.3); color:var(--gold); cursor:pointer; background:rgba(0,0,0,0.2); border-radius:6px; font-family:'Amiri', serif;">🔄 +90 درجة</button>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:10px; width:100%; margin-top:8px;">
+      <button class="btn btn-ghost" onclick="closeCropper()" style="flex:1; border:1px solid rgba(255,255,255,0.1); color:#ff6b6b; padding:10px; border-radius:6px; cursor:pointer; font-family:'Amiri', serif; font-size:0.9rem;">إلغاء</button>
+      <button class="btn btn-primary" onclick="applyCrop()" style="flex:2; padding:10px; border-radius:6px; cursor:pointer; font-family:'Amiri', serif; font-size:0.9rem;">✅ اعتماد الصورة</button>
+    </div>
+  </div>
 </div>
 
 <div id="toast"></div>
@@ -624,8 +832,7 @@ function buildInvSlug(brideFr) {
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // strip accents
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
-  // وطية: slug based on bride name only
-  const b = clean(brideFr || val('brideFr')).split('-')[0];
+  const b = clean(brideFr).split('-')[0];
   const year = new Date().getFullYear();
   return `${b}-watia-${year}`;
 }
@@ -693,7 +900,15 @@ function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  const map = { 'page-couple':0,'page-families':1,'page-date':2,'page-programme':3,'page-links':4,'page-qrcode':5 };
+  const map = {
+    'page-couple': 0,
+    'page-families': 1,
+    'page-date': 2,
+    'page-programme': 3,
+    'page-photos': 4,
+    'page-links': 5,
+    'page-qrcode': 6
+  };
   document.querySelectorAll('.nav-item')[map[id]].classList.add('active');
   // Sync mobile bottom nav
   document.querySelectorAll('.mbn-item').forEach(n => n.classList.remove('active'));
@@ -748,6 +963,10 @@ function initAdmin() {
   if (grAr) grAr.addEventListener('input', updateFlyerFooter);
   if (brAr) brAr.addEventListener('input', updateFlyerFooter);
 
+  // Photo Stack: load Cloudinary creds & init cropper drag
+  loadCloudinarySettings();
+  initCropperDrag();
+
   // Initial QR generation
   setTimeout(() => {
     generatePromoQr();
@@ -799,7 +1018,7 @@ function updateFlyerFooter() {
   const b = val('brideAr') || 'العروس';
   const footerEl = document.querySelector('.flyer-footer');
   if (footerEl) {
-    footerEl.textContent = `⬖ وطية ${b} ⬗`;
+    footerEl.textContent = `💍 حفل زفاف ${g} و ${b} 💍`;
   }
 }
 
@@ -820,6 +1039,7 @@ function downloadQrCode() {
 // ── Save / Load ──
 function buildConfig() {
   // Use COMPACT short keys to minimize URL length
+  const psActEl = document.getElementById('photoStackActive');
   return {
     v:  1,                   // version
     th: window._selectedTheme || 'gold', // theme
@@ -829,8 +1049,11 @@ function buildConfig() {
     si: val('envSealInitials'), // seal initials
     hp: window._selectedHallPhoto   || 'luxury_wedding_hall', // hall photo background
     cp: window._selectedClosingPhoto || 'wedding_hall_board',  // closing section photo
-    // Outeya: no groom fields
-    la: 'ar',
+    la: 'ar',               // Watia: always Arabic
+    ga: val('groomAr'),     // kept for data compatibility
+    gf2:val('groomFr'),
+    gf: val('groomFather'),
+    gm: val('groomMother'),
     ba: val('brideAr'),
     bf2:val('brideFr'),
     bf: val('brideFather'),
@@ -847,6 +1070,12 @@ function buildConfig() {
       lo: e.lng ? parseFloat(e.lng) : null,
       e:  e.emoji,
     })),
+    // ── Photo Stack ──
+    features: {
+      photoStack:       psActEl ? psActEl.value === 'true' : false,
+      photoStackTheme:  window._photoStackTheme || 'floral',
+      photoStackPhotos: getPhotoStackConfigPhotos()
+    }
   };
 }
 
@@ -856,11 +1085,33 @@ function val(id) {
 }
 
 async function saveAll() {
+  const label = document.getElementById('lastSavedLabel');
+
+  // ── Cloudinary upload step (only for new base64 photos) ──
+  const cloudName    = (document.getElementById('cloudinaryCloudName')    || {}).value || '';
+  const uploadPreset = (document.getElementById('cloudinaryUploadPreset') || {}).value || '';
+  if (cloudName.trim() && uploadPreset.trim()) {
+    for (let i = 0; i < 3; i++) {
+      const url = window._photoStackPhotos[i];
+      if (url && url.startsWith('data:image/')) {
+        try {
+          if (label) label.textContent = `⏳ جاري رفع الصورة ${i + 1} إلى Cloudinary...`;
+          const secureUrl = await uploadToCloudinary(url, cloudName.trim(), uploadPreset.trim());
+          window._photoStackPhotos[i] = secureUrl;
+          setSlotPreview(i, secureUrl);
+        } catch (err) {
+          console.error('Cloudinary upload error slot', i, err);
+          showToast(`⚠️ فشل رفع الصورة ${i + 1} – تم الاحتفاظ بـ Base64`);
+        }
+      }
+    }
+  }
+
+  // ── Build config (includes updated Cloudinary URLs) and save ──
   const cfg = buildConfig();
   localStorage.setItem('weddingAdminConfig', JSON.stringify(cfg));
   localStorage.setItem('weddingAdminProdUrl', val('prodUrlInput'));
-  const label = document.getElementById('lastSavedLabel');
-  label.textContent = '⏳ جاري حفظ الإعدادات...';
+  if (label) label.textContent = '⏳ جاري حفظ الإعدادات...';
 
   try {
     initFirebase();
@@ -881,13 +1132,12 @@ async function saveAll() {
 }
 
 function applyConfigToFields(c) {
+  set('groomAr',           c.ga  || '');
+  set('groomFr',           c.gf2 || '');   
   set('brideAr',           c.ba  || '');
   set('brideFr',           c.bf2 || '');
-  // Hidden groom fields for data compatibility
-  if (document.getElementById('groomAr')) set('groomAr', c.ga || '');
-  if (document.getElementById('groomFr')) set('groomFr', c.gf2 || '');
-  if (document.getElementById('groomFather')) set('groomFather', c.gf || '');
-  if (document.getElementById('groomMother')) set('groomMother', c.gm || '');
+  set('groomFather',       c.gf  || '');
+  set('groomMother',       c.gm  || '');
   set('brideFather',       c.bf  || '');
   set('brideMother',       c.bm  || '');
   set('weddingDate',       c.wd  || '');
@@ -910,7 +1160,7 @@ function applyConfigToFields(c) {
   // Apply closing photo
   if (c.cp) selectClosingPhoto(c.cp, false);
   else selectClosingPhoto('wedding_hall_board', false);
-  set('invLanguage', 'ar');
+  set('invLanguage', 'ar'); // Watia: always Arabic
   if (document.getElementById('invLanguage')) {
     document.getElementById('invLanguage').value = 'ar';
   }
@@ -946,6 +1196,629 @@ function applyConfigToFields(c) {
       }
     });
     renderEvents();
+  }
+
+  // ── Restore Photo Stack config if present ──
+  if (c.features) {
+    const ps = c.features;
+    const psActEl = document.getElementById('photoStackActive');
+    if (psActEl) psActEl.value = ps.photoStack ? 'true' : 'false';
+    selectPhotoStackTheme(ps.photoStackTheme || 'floral');
+    window._photoStackPhotos = [null, null, null];
+    if (Array.isArray(ps.photoStackPhotos)) {
+      ps.photoStackPhotos.forEach((p, i) => {
+        if (i >= 3) return;
+        const url     = typeof p === 'string' ? p : (p ? p.url     : '');
+        const caption = typeof p === 'string' ? '' : (p ? p.caption : '');
+        if (url) {
+          window._photoStackPhotos[i] = url;
+          setSlotPreview(i, url);
+          set(`caption-slot-${i}`, caption);
+          const db = document.getElementById(`delete-btn-slot-${i}`);
+          if (db) db.style.display = 'inline-block';
+        } else {
+          clearPhotoSlot(i);
+        }
+      });
+    } else {
+      for (let i = 0; i < 3; i++) clearPhotoSlot(i);
+    }
+  } else {
+    const psActEl = document.getElementById('photoStackActive');
+    if (psActEl) psActEl.value = 'false';
+    selectPhotoStackTheme('floral');
+    window._photoStackPhotos = [null, null, null];
+    for (let i = 0; i < 3; i++) clearPhotoSlot(i);
+  }
+  togglePhotoStackFields();
+}
+
+// ══════════════════════════════════════════════
+//  PHOTO STACK ADMIN STATE & HELPERS
+// ══════════════════════════════════════════════
+window._photoStackTheme  = 'floral';
+window._photoStackPhotos = [null, null, null];
+
+function selectPhotoStackTheme(theme) {
+  window._photoStackTheme = theme;
+  document.querySelectorAll('.photo-stack-theme-card').forEach(card => {
+    const sel = card.dataset.theme === theme;
+    card.style.borderColor = sel ? 'var(--gold)' : 'var(--border)';
+    card.style.borderWidth  = sel ? '2px' : '1px';
+  });
+}
+
+function togglePhotoStackFields() {
+  const active = document.getElementById('photoStackActive').value === 'true';
+  document.querySelectorAll('.photo-stack-setting-container').forEach(el => {
+    el.style.display = active ? 'block' : 'none';
+  });
+  if (active) loadGuestDropdown();
+}
+
+function setSlotPreview(index, url) {
+  const preview = document.getElementById(`preview-slot-${index}`);
+  if (!preview) return;
+  preview.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover;border-radius:4px;">`;
+  preview.style.borderStyle = 'solid';
+  preview.style.borderColor = 'var(--gold)';
+}
+
+function clearPhotoSlot(index) {
+  window._photoStackPhotos[index] = null;
+  const preview = document.getElementById(`preview-slot-${index}`);
+  if (preview) {
+    preview.innerHTML = `<span style="font-size:1.5rem;color:#444;">📸</span>`;
+    preview.style.borderStyle = 'dashed';
+    preview.style.borderColor = 'rgba(201,168,76,0.3)';
+  }
+  const db = document.getElementById(`delete-btn-slot-${index}`);
+  if (db) db.style.display = 'none';
+  const fi = document.getElementById(`file-slot-${index}`);
+  if (fi) fi.value = '';
+}
+
+function getPhotoStackConfigPhotos() {
+  const photos = [];
+  for (let i = 0; i < 3; i++) {
+    const url = window._photoStackPhotos[i];
+    const captionEl = document.getElementById(`caption-slot-${i}`);
+    const caption = captionEl ? captionEl.value.trim() : '';
+    if (url) photos.push({ url, caption });
+  }
+  return photos;
+}
+
+// ── Cloudinary settings (persisted in localStorage) ──
+function saveCloudinarySettings() {
+  const cn = document.getElementById('cloudinaryCloudName');
+  const up = document.getElementById('cloudinaryUploadPreset');
+  if (cn) localStorage.setItem('cloudinaryCloudName',    cn.value.trim());
+  if (up) localStorage.setItem('cloudinaryUploadPreset', up.value.trim());
+}
+
+function loadCloudinarySettings() {
+  const cn = localStorage.getItem('cloudinaryCloudName')    || '';
+  const up = localStorage.getItem('cloudinaryUploadPreset') || '';
+  const cnEl = document.getElementById('cloudinaryCloudName');
+  const upEl = document.getElementById('cloudinaryUploadPreset');
+  if (cnEl) cnEl.value = cn;
+  if (upEl) upEl.value = up;
+}
+
+async function uploadToCloudinary(base64Data, cloudName, uploadPreset) {
+  const fd = new FormData();
+  fd.append('file', base64Data);
+  fd.append('upload_preset', uploadPreset);
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+    method: 'POST',
+    body: fd
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error?.message || 'Cloudinary upload failed');
+  }
+  const data = await res.json();
+  return data.secure_url;
+}
+
+// ══════════════════════════════════════════════
+//  INTERACTIVE CROPPER
+// ══════════════════════════════════════════════
+const cropState = {
+  imgSrc: '', slotIndex: null,
+  zoom: 1, rotation: 0,
+  panX: 0, panY: 0,
+  dragging: false, dragStartX: 0, dragStartY: 0
+};
+
+function handleFileSelect(event, index) {
+  const file = event.target.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) {
+    showToast('⚠️ حجم الصورة كبير جداً (الأقصى 5 ميجابايت)');
+    event.target.value = '';
+    return;
+  }
+  if (!['image/jpeg','image/png','image/webp'].includes(file.type)) {
+    showToast('⚠️ صيغة الصورة غير مدعومة (JPG, PNG, WEBP فقط)');
+    event.target.value = '';
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = e => openCropper(e.target.result, index);
+  reader.readAsDataURL(file);
+}
+
+function openCropper(imgSrc, slotIndex) {
+  cropState.imgSrc    = imgSrc;
+  cropState.slotIndex = slotIndex;
+  cropState.zoom = 1; cropState.rotation = 0;
+  cropState.panX = 0; cropState.panY    = 0;
+
+  const modal      = document.getElementById('cropper-modal');
+  const img        = document.getElementById('cropper-image');
+  const zoomSlider = document.getElementById('crop-zoom');
+
+  img.src = imgSrc;
+  zoomSlider.value = 1;
+  modal.style.display = 'flex';
+
+  img.onload = () => {
+    const ws = document.getElementById('cropper-workspace');
+    const scale = Math.max(ws.clientWidth / img.naturalWidth, ws.clientHeight / img.naturalHeight);
+    cropState.zoom = scale;
+    zoomSlider.min   = String(scale * 0.5);
+    zoomSlider.max   = String(scale * 4);
+    zoomSlider.value = String(scale);
+    updateCropTransform();
+  };
+}
+
+function closeCropper() {
+  document.getElementById('cropper-modal').style.display = 'none';
+  if (cropState.slotIndex !== null) {
+    const fi = document.getElementById(`file-slot-${cropState.slotIndex}`);
+    if (fi) fi.value = '';
+  }
+}
+
+function rotateCrop(angle) {
+  cropState.rotation = (cropState.rotation + angle) % 360;
+  updateCropTransform();
+}
+
+function updateCropTransform() {
+  const img        = document.getElementById('cropper-image');
+  const zoomSlider = document.getElementById('crop-zoom');
+  if (!img || !zoomSlider) return;
+  cropState.zoom = parseFloat(zoomSlider.value);
+  img.style.left = '50%';
+  img.style.top  = '50%';
+  img.style.transform =
+    `translate(-50%,-50%) translate3d(${cropState.panX}px,${cropState.panY}px,0) ` +
+    `scale(${cropState.zoom}) rotate(${cropState.rotation}deg)`;
+}
+
+function initCropperDrag() {
+  const ws = document.getElementById('cropper-workspace');
+  if (!ws) return;
+
+  const startDrag = e => {
+    cropState.dragging  = true;
+    const cx = e.touches ? e.touches[0].clientX : e.clientX;
+    const cy = e.touches ? e.touches[0].clientY : e.clientY;
+    cropState.dragStartX = cx - cropState.panX;
+    cropState.dragStartY = cy - cropState.panY;
+  };
+  const moveDrag = e => {
+    if (!cropState.dragging) return;
+    if (e.cancelable) e.preventDefault();
+    const cx = e.touches ? e.touches[0].clientX : e.clientX;
+    const cy = e.touches ? e.touches[0].clientY : e.clientY;
+    cropState.panX = cx - cropState.dragStartX;
+    cropState.panY = cy - cropState.dragStartY;
+    updateCropTransform();
+  };
+  const stopDrag = () => { cropState.dragging = false; };
+
+  ws.addEventListener('mousedown',  startDrag);
+  window.addEventListener('mousemove', moveDrag);
+  window.addEventListener('mouseup',   stopDrag);
+  ws.addEventListener('touchstart', startDrag, { passive: true });
+  window.addEventListener('touchmove', moveDrag, { passive: false });
+  window.addEventListener('touchend',  stopDrag);
+}
+
+function applyCrop() {
+  const img = document.getElementById('cropper-image');
+  if (!img || cropState.slotIndex === null) return;
+
+  // Export at 2× resolution for Retina: 460×600
+  const canvas = document.createElement('canvas');
+  canvas.width  = 460;
+  canvas.height = 600;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#fffdf9';
+  ctx.fillRect(0, 0, 460, 600);
+
+  ctx.save();
+  ctx.translate(230, 300);
+  ctx.rotate(cropState.rotation * Math.PI / 180);
+  const scale = cropState.zoom * 2;
+  ctx.scale(scale, scale);
+  const dx = (cropState.panX * 2) / scale;
+  const dy = (cropState.panY * 2) / scale;
+  ctx.drawImage(img,
+    -img.naturalWidth  / 2 + dx,
+    -img.naturalHeight / 2 + dy,
+    img.naturalWidth, img.naturalHeight
+  );
+  ctx.restore();
+
+  const croppedUrl = canvas.toDataURL('image/jpeg', 0.85);
+  const idx = cropState.slotIndex;
+  window._photoStackPhotos[idx] = croppedUrl;
+  setSlotPreview(idx, croppedUrl);
+  const db = document.getElementById(`delete-btn-slot-${idx}`);
+  if (db) db.style.display = 'inline-block';
+  closeCropper();
+  showToast('✂️ تم قص وتعديل الصورة بنجاح');
+}
+
+// (Photo Stack logic integrated directly into buildConfig and saveAll above)
+
+// ══════════════════════════════════════════════
+//  PER-GUEST PHOTO MANAGEMENT
+// ══════════════════════════════════════════════
+let _selectedGuestSlug = null;   // parent invitation slug
+let _selectedGuestId   = null;   // sub-guest ID from guests[] array (null = general link)
+
+// grouped wedding data: Map< weddingKey → [{slug, guestName, hasPhotos, subGuests[]}] >
+window._weddingsMap = new Map();
+
+async function loadGuestDropdown() {
+  const weddingSel = document.getElementById('weddingPhotoSelect');
+  const guestSel   = document.getElementById('guestPhotoSelect');
+  if (!weddingSel || !guestSel) return;
+
+  weddingSel.innerHTML = '<option value="">⏳ جاري التحميل...</option>';
+  guestSel.innerHTML   = '<option value="">-- اختر الزفاف أولاً --</option>';
+
+  try {
+    initFirebase();
+    const snap = await _db.collection('invitations').get();
+
+    if (snap.empty) {
+      weddingSel.innerHTML = '<option value="">لا توجد دعوات محفوظة بعد</option>';
+      return;
+    }
+
+    // ── Group by wedding (groom + bride names from config) ──
+    window._weddingsMap = new Map();
+    snap.docs.forEach(doc => {
+      const d   = doc.data();
+      const cfg = d.config || {};
+
+      // Filter: only show weddings that have activated the photo stack feature
+      if (!cfg.features || cfg.features.photoStack !== true) {
+        return;
+      }
+
+      const groomAr = cfg.ga || cfg.gf2 || '';
+      const brideAr = cfg.ba || cfg.bf2 || '';
+      const weddingKey = groomAr && brideAr
+        ? `${groomAr} 💍 ${brideAr}`
+        : (groomAr || brideAr || doc.id.split('-').slice(0, 2).join(' & '));
+
+      if (!window._weddingsMap.has(weddingKey)) {
+        window._weddingsMap.set(weddingKey, []);
+      }
+
+      // subGuests = the guests[] array stored by guests.html
+      const subGuests  = Array.isArray(d.guests) ? d.guests : [];
+      const guestPhotos = cfg.features?.guestPhotos || {};
+
+      window._weddingsMap.get(weddingKey).push({
+        slug:      doc.id,
+        guestName: d.guestName || '',
+        // hasPhotos for general link
+        hasPhotosGeneral: (cfg.features?.photoStackPhotos?.length || 0) > 0,
+        subGuests,          // [{id, name, ...}]
+        guestPhotos,        // {guestId: [...photos]}
+        groomAr,
+        brideAr,
+      });
+    });
+
+    if (window._weddingsMap.size === 0) {
+      weddingSel.innerHTML = '<option value="">لا توجد حفلات مفعلة فيها ميزة الصور</option>';
+      return;
+    }
+
+    // ── Populate wedding dropdown ──
+    weddingSel.innerHTML = '<option value="">-- اختر الزفاف --</option>';
+    [...window._weddingsMap.entries()]
+      .sort(([a], [b]) => a.localeCompare(b))
+      .forEach(([key, invitations]) => {
+        // Count: sub-guests across all invitations of this wedding
+        const totalGuests = invitations.reduce((sum, inv) => {
+          return sum + (inv.subGuests.length > 0 ? inv.subGuests.length : 1);
+        }, 0);
+        const opt = document.createElement('option');
+        opt.value = key;
+        opt.textContent = `💍 ${key}  (${totalGuests} مدعو)`;
+        weddingSel.appendChild(opt);
+      });
+
+    const totalInv = snap.size;
+    showToast(`✅ ${window._weddingsMap.size} زفاف — ${totalInv} دعوة`);
+  } catch (err) {
+    console.error('loadGuestDropdown:', err);
+    weddingSel.innerHTML = '<option value="">⚠️ فشل التحميل</option>';
+    showToast('⚠️ تعذّر تحميل البيانات');
+  }
+}
+
+function onWeddingPhotoSelect(weddingKey) {
+  const guestSel = document.getElementById('guestPhotoSelect');
+  for (let i = 0; i < 3; i++) clearPhotoSlot(i);
+  _selectedGuestSlug = null;
+  _selectedGuestId   = null;
+  const banner = document.getElementById('guestPhotoBanner');
+  if (banner) banner.style.display = 'none';
+
+  if (!weddingKey || !window._weddingsMap.has(weddingKey)) {
+    guestSel.innerHTML = '<option value="">-- اختر الزفاف أولاً --</option>';
+    return;
+  }
+
+  const invitations = window._weddingsMap.get(weddingKey);
+  guestSel.innerHTML = '<option value="">-- اختر المدعو --</option>';
+
+  const rows = [];
+
+  invitations.forEach(({ slug, guestName, hasPhotosGeneral, subGuests, guestPhotos }) => {
+    // Always add the general invitation entry for this wedding link
+    const label = guestName && guestName !== 'عام'
+      ? guestName
+      : '📋 الدعوة العامة للزفاف';
+    rows.push({ slug, guestId: null, displayName: label, hasPhotos: hasPhotosGeneral, isSub: false });
+
+    // Then add any personalized sub-guests inside it
+    if (subGuests && subGuests.length > 0) {
+      subGuests.forEach(sg => {
+        const sgHasPhotos = Array.isArray(guestPhotos[sg.id]) && guestPhotos[sg.id].length > 0;
+        rows.push({
+          slug,
+          guestId:     sg.id,
+          displayName: sg.name,
+          hasPhotos:   sgHasPhotos,
+          isSub:       true,
+        });
+      });
+    }
+  });
+
+  // Sort guest rows alphabetically
+  rows.sort((a, b) => a.displayName.localeCompare(b.displayName));
+
+  // Prepend Groom and Bride at the top
+  const firstInv = invitations[0];
+  if (firstInv) {
+    const groomName = firstInv.groomAr || 'العريس';
+    const brideName = firstInv.brideAr || 'العروس';
+    const groomHasPhotos = Array.isArray(firstInv.guestPhotos?.['groom']) && firstInv.guestPhotos['groom'].length > 0;
+    const brideHasPhotos = Array.isArray(firstInv.guestPhotos?.['bride']) && firstInv.guestPhotos['bride'].length > 0;
+
+    rows.unshift(
+      {
+        slug: firstInv.slug,
+        guestId: 'groom',
+        displayName: `🤵 العريس (${groomName})`,
+        hasPhotos: groomHasPhotos,
+      },
+      {
+        slug: firstInv.slug,
+        guestId: 'bride',
+        displayName: `👰 العروس (${brideName})`,
+        hasPhotos: brideHasPhotos,
+      }
+    );
+  }
+
+  rows.forEach(({ slug, guestId, displayName, hasPhotos }) => {
+    const opt = document.createElement('option');
+    opt.value = slug;
+    if (guestId) opt.dataset.guestId = guestId;  // tag with sub-guest ID (includes 'groom' or 'bride')
+    opt.textContent = `${hasPhotos ? '📸' : '👤'} ${displayName}`;
+    guestSel.appendChild(opt);
+  });
+}
+async function onGuestPhotoSelect(slug) {
+  _selectedGuestSlug = slug;
+  const banner     = document.getElementById('guestPhotoBanner');
+  const bannerText = document.getElementById('guestPhotoBannerText');
+  for (let i = 0; i < 3; i++) clearPhotoSlot(i);
+
+  if (!slug) {
+    _selectedGuestId = null;
+    if (banner) banner.style.display = 'none';
+    return;
+  }
+
+  // Read guestId and display name from the selected option
+  const guestSel   = document.getElementById('guestPhotoSelect');
+  const selectedOpt = guestSel ? guestSel.options[guestSel.selectedIndex] : null;
+  _selectedGuestId  = selectedOpt?.dataset?.guestId || null;
+  const displayName = selectedOpt
+    ? selectedOpt.textContent.replace(/^[📸👤]\s*/, '').trim()
+    : slug;
+
+  if (banner) banner.style.display = 'block';
+  if (bannerText) bannerText.textContent = '⏳ جاري تحميل صور هذا المدعو...';
+
+  try {
+    initFirebase();
+    const doc = await _db.collection('invitations').doc(slug).get();
+    if (!doc.exists) {
+      if (bannerText) bannerText.textContent = '⚠️ الدعوة غير موجودة في قاعدة البيانات';
+      return;
+    }
+    const cfg = doc.data().config || {};
+    const ps  = cfg.features || {};
+    window._photoStackPhotos = [null, null, null];
+
+    // Load photos: per-guest if sub-guest, global if general link
+    let storedPhotos = null;
+    if (_selectedGuestId) {
+      // Sub-guest: load from config.features.guestPhotos[guestId]
+      storedPhotos = Array.isArray(ps.guestPhotos?.[_selectedGuestId])
+        ? ps.guestPhotos[_selectedGuestId]
+        : [];
+    } else {
+      // General link: load from config.features.photoStackPhotos
+      storedPhotos = Array.isArray(ps.photoStackPhotos) ? ps.photoStackPhotos : [];
+    }
+
+    if (storedPhotos.length > 0) {
+      storedPhotos.forEach((p, i) => {
+        if (i >= 3) return;
+        const url     = typeof p === 'string' ? p : (p?.url || '');
+        const caption = typeof p === 'string' ? '' : (p?.caption || '');
+        if (url) {
+          window._photoStackPhotos[i] = url;
+          setSlotPreview(i, url);
+          const capEl = document.getElementById(`caption-slot-${i}`);
+          if (capEl) capEl.value = caption;
+          const db = document.getElementById(`delete-btn-slot-${i}`);
+          if (db) db.style.display = 'inline-block';
+        }
+      });
+      if (bannerText) bannerText.textContent =
+        `✅ ${displayName} — ${storedPhotos.length} صورة محفوظة. عدّل كما تشاء ثم اضغط حفظ.`;
+    } else {
+      if (bannerText) bannerText.textContent =
+        `📭 ${displayName} — لا توجد صور مخصصة له بعد. أضف صورًا ثم اضغط حفظ.`;
+    }
+  } catch (err) {
+    console.error('onGuestPhotoSelect:', err);
+    if (bannerText) bannerText.textContent = '⚠️ فشل تحميل بيانات المدعو';
+  }
+}
+
+async function savePhotosForGuest() {
+  if (!_selectedGuestSlug) {
+    showToast('⚠️ اختر مدعواً من القائمة أولاً');
+    return;
+  }
+
+  const btn = document.getElementById('saveGuestPhotosBtn');
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ جاري الحفظ...'; }
+
+  try {
+    // 1. Cloudinary upload for any new base64 photos
+    const cloudName    = (document.getElementById('cloudinaryCloudName')    || {}).value?.trim() || '';
+    const uploadPreset = (document.getElementById('cloudinaryUploadPreset') || {}).value?.trim() || '';
+    if (cloudName && uploadPreset) {
+      for (let i = 0; i < 3; i++) {
+        const url = window._photoStackPhotos[i];
+        if (url && url.startsWith('data:image/')) {
+          try {
+            if (btn) btn.textContent = `⏳ رفع صورة ${i + 1} إلى Cloudinary...`;
+            const secureUrl = await uploadToCloudinary(url, cloudName, uploadPreset);
+            window._photoStackPhotos[i] = secureUrl;
+            setSlotPreview(i, secureUrl);
+          } catch (uploadErr) {
+            console.error('Cloudinary slot', i, uploadErr);
+            showToast(`⚠️ فشل رفع الصورة ${i + 1} — تم الاحتفاظ بـ Base64`);
+          }
+        }
+      }
+    }
+
+    // 2. Build photos array
+    const photos = getPhotoStackConfigPhotos();
+
+    // 3. Check the invitation doc exists
+    initFirebase();
+    const docRef = _db.collection('invitations').doc(_selectedGuestSlug);
+    const snap   = await docRef.get();
+    if (!snap.exists) {
+      showToast('❌ المدعو غير موجود في قاعدة البيانات');
+      return;
+    }
+
+    const psActEl = document.getElementById('photoStackActive');
+    const isActive = psActEl ? psActEl.value === 'true' : true;
+    const theme    = window._photoStackTheme || 'floral';
+
+    if (_selectedGuestId) {
+      // ── Sub-guest: write ONLY this guest's photos ──
+      // Dot-notation update touches only this key, preserving other guests
+      await docRef.update({
+        [`config.features.guestPhotos.${_selectedGuestId}`]: photos,
+        'config.features.photoStack':      isActive,
+        'config.features.photoStackTheme': theme,
+        updated: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    } else {
+      // ── General link: write global photoStackPhotos ──
+      await docRef.update({
+        'config.features.photoStackPhotos': photos,
+        'config.features.photoStack':       isActive,
+        'config.features.photoStackTheme':  theme,
+        updated: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
+
+    // Read display name from current dropdown selection
+    const guestSel   = document.getElementById('guestPhotoSelect');
+    const selOpt     = guestSel ? guestSel.options[guestSel.selectedIndex] : null;
+    const displayName = selOpt
+      ? selOpt.textContent.replace(/^[📸👤]\s*/, '').trim()
+      : (_selectedGuestId || _selectedGuestSlug);
+
+    showToast(`✅ تم حفظ ${photos.length} صورة لـ ${displayName}`);
+
+    const bannerText = document.getElementById('guestPhotoBannerText');
+    if (bannerText) bannerText.textContent =
+      `✅ ${displayName} — ${photos.length} صورة محفوظة بنجاح`;
+
+    // Refresh both dropdowns and restore selections
+    const savedSlug    = _selectedGuestSlug;
+    const savedGuestId = _selectedGuestId;
+    await loadGuestDropdown();
+
+    // Find which wedding this guest belongs to and re-select it
+    let restoredWedding = '';
+    for (const [wKey, invs] of window._weddingsMap.entries()) {
+      if (invs.some(inv => inv.slug === savedSlug)) {
+        restoredWedding = wKey;
+        break;
+      }
+    }
+    if (restoredWedding) {
+      document.getElementById('weddingPhotoSelect').value = restoredWedding;
+      onWeddingPhotoSelect(restoredWedding);
+
+      // Restore the specific option (match by slug + guestId)
+      const guestSel2 = document.getElementById('guestPhotoSelect');
+      for (const opt of guestSel2.options) {
+        if (opt.value === savedSlug && (opt.dataset.guestId || null) === savedGuestId) {
+          opt.selected = true;
+          break;
+        }
+      }
+      _selectedGuestSlug = savedSlug;
+      _selectedGuestId   = savedGuestId;
+    }
+
+  } catch (err) {
+    console.error('savePhotosForGuest:', err);
+    showToast('❌ فشل الحفظ: ' + (err.message || err));
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '💾 حفظ الصور لهذا المدعو'; }
   }
 }
 
@@ -1203,6 +2076,9 @@ async function generateLink() {
     document.getElementById('generateBtn').textContent = '✨ إنشاء الرابط';
 
     await renderLinksHistory();
+    if (typeof loadGuestDropdown === 'function') {
+      await loadGuestDropdown();
+    }
     showToast(existingSlug ? '✅ تم تحديث الدعوة!' : '🎉 تم إنشاء الرابط!');
 
   } catch(e) {
@@ -1218,7 +2094,7 @@ function copyShortLink()  { navigator.clipboard.writeText(_shortUrl).then(() => 
 function copyGuestsLink() { navigator.clipboard.writeText(_guestsUrl).then(() => showToast('📋 تم نسخ رابط الإدارة!')); }
 function openGuestsLink() { if (_guestsUrl) window.open(_guestsUrl, '_blank'); }
 function shareWhatsApp()  {
-  const msg = encodeURIComponent(`✨ *دعوة وطية إلكترونية* ✨\n\nيسعدنا دعوتكم لمشاركتنا فرحة العمر. لمشاهدة تفاصيل الدعوة الكاملة وتأكيد حضوركم، تفضلوا بفتح الرابط التالي:\n👇👇👇\n${_shortUrl}`);
+  const msg = encodeURIComponent(`✨ *دعوة وطية إلكترونية* ✨\n\nيسرّنا ويشرفنا دعوتكم لمشاركتنا فرحة الوطية. لمشاهدة تفاصيل الدعوة الكاملة وتأكيد حضوركم، تفضلوا بفتح الرابط التالي:\n👇👇👇\n${_shortUrl}`);
   window.open('https://wa.me/?text=' + msg, '_blank');
 }
 function openShortLink() { window.open(_shortUrl, '_blank'); }
@@ -1425,7 +2301,7 @@ async function updateLinkConfig(slug) {
 }
 
 function shareHistLink(url) {
-  const msg = encodeURIComponent(`✨ *دعوة وطية إلكترونية* ✨\n\nيسعدنا دعوتكم لمشاركتنا فرحة العمر. لمشاهدة تفاصيل الدعوة الكاملة وتأكيد حضوركم، تفضلوا بفتح الرابط التالي:\n👇👇👇\n${url}`);
+  const msg = encodeURIComponent(`✨ *دعوة وطية إلكترونية* ✨\n\nيسرّنا ويشرفنا دعوتكم لمشاركتنا فرحة العمر. لمشاهدة تفاصيل الدعوة الكاملة وتأكيد حضوركم، تفضلوا بفتح الرابط التالي:\n👇👇👇\n${url}`);
   window.open('https://wa.me/?text=' + msg, '_blank');
 }
 
@@ -1465,23 +2341,7 @@ function generateClientPassword(id) {
 }
 
 function quickCopy(url) { navigator.clipboard.writeText(url).then(() => showToast('\u{1F4CB} \u062A\u0645 \u0627\u0644\u0646\u0633\u062E!')); }
-async function updateLinkConfig(id) {
-  if (!confirm(`هل أنت متأكد من تحديث تفاصيل الدعوة الخاصة بالرابط (${id}) بالبيانات الحالية للنموذج؟`)) return;
-  try {
-    initFirebase();
-    const cfg = buildConfig();
-    cfg.id = id;
-    
-    await _db.collection('invitations').doc(id).update({
-      config: cfg
-    });
-    
-    showToast('✅ تم تحديث بيانات الدعوة بنجاح على السيرفر!');
-  } catch (e) {
-    console.error('Failed to update invitation config:', e);
-    showToast('❌ فشل التحديث: ' + e.message);
-  }
-}
+
 
 async function deleteLink(id) {
   if (!confirm(`هل أنت متأكد من حذف هذا الرابط (${id}) نهائياً من السيرفر؟`)) return;

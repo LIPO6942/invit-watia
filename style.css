@@ -77,7 +77,7 @@ body {
 .font-ruqaa  { font-family: 'Aref Ruqaa Ink', serif; }
 
 /* ═══════════════════════════════════════════════════════════════
-   وطية — OUTEYA-SPECIFIC STYLES
+   وطية — WATIA-SPECIFIC STYLES
    ═══════════════════════════════════════════════════════════════ */
 
 /* ── Basmala Banner at top of opened invitation card ── */
@@ -158,8 +158,6 @@ body.night-mode .outeya-basmala-banner {
 
 /* ── Hide French closing thanks line ── */
 .closing-thanks-fr { display: none !important; }
-
-
 
 /* ─────── 1. Envelope Section ─────── */
 #envelope-section {
@@ -2971,5 +2969,285 @@ body.lang-ar .animated-groom,
 body.lang-ar .animated-bride {
   font-size: clamp(1.4rem, 6.8vw, 2.6rem);
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   PHOTO STACK WIDGET & THEMES SYSTEM
+   ───────────────────────────────────────────────────────────────── */
+
+/* 1. Theme Variables & Scoping */
+.photo-stack-theme {
+  /* Default: "Doré & floral" (floral) */
+  --card-bg: linear-gradient(135deg, #fffdf9 0%, #f7f2e6 100%);
+  --card-border: 1.5px solid #C9A96A;
+  --card-border-inner: 1px solid rgba(201, 169, 106, 0.35);
+  --card-inner-offset: 8px;
+  --card-radius: 12px;
+  --card-shadow: 0 10px 25px rgba(78, 47, 13, 0.12);
+  
+  --filigree-display: block;
+  --filigree-size: 24px;
+  --filigree-stroke: #C9A96A;
+  --filigree-fill: #C9A96A;
+  
+  --medallion-display: flex;
+  --medallion-bg: #fffdf9;
+  --medallion-border: 1px solid #C9A96A;
+  --medallion-shadow: 0 2px 6px rgba(78, 47, 13, 0.15);
+  --medallion-color: #C9A96A;
+  
+  --photo-filter: none;
+  --photo-radius: 6px;
+  
+  --caption-font: 'Dancing Script', 'Amiri', cursive, serif;
+  --caption-color: #8c713f;
+  --caption-size: 1.3rem;
+  --caption-transform: none;
+  --caption-weight: 600;
+  
+  --grain-opacity: 0;
+}
+
+/* Theme 2: "Vintage" — Parchemin chaleureux & dorures */
+.photo-stack-theme[data-theme="vintage"] {
+  --card-bg: linear-gradient(160deg, #f8f0dc 0%, #ede0c0 40%, #e2d0a8 100%);
+  --card-border: 2px solid #8b6b3d;
+  --card-border-inner: 1.5px solid rgba(139, 107, 61, 0.45);
+  --card-inner-offset: 10px;
+  --card-radius: 5px;
+  --card-shadow:
+    0 6px 24px rgba(60, 35, 10, 0.28),
+    0 2px 6px rgba(60, 35, 10, 0.15),
+    inset 0 0 30px rgba(180, 140, 80, 0.08);
+
+  --filigree-display: block;
+  --filigree-size: 22px;
+  --filigree-stroke: #8b6b3d;
+  --filigree-fill: #a07840;
+
+  --medallion-display: flex;
+  --medallion-bg: linear-gradient(135deg, #f0e0b0 0%, #c9a050 60%, #8b6b3d 100%);
+  --medallion-border: 1px solid rgba(255,255,255,0.35);
+  --medallion-shadow: 0 2px 6px rgba(60,35,10,0.25);
+  --medallion-color: #3a2208;
+
+  --photo-filter: sepia(0.45) contrast(1.08) saturate(1.05) brightness(0.97);
+  --photo-radius: 3px;
+
+  --caption-font: 'Playfair Display', 'Amiri', 'Georgia', serif;
+  --caption-color: #5c3d10;
+  --caption-size: 1.15rem;
+  --caption-transform: none;
+  --caption-weight: 600;
+
+  --grain-opacity: 0.13;
+}
+
+/* Theme 3: "Émeraude & Or" (royal/emerald) */
+.photo-stack-theme[data-theme="royal"],
+.photo-stack-theme[data-theme="emerald"] {
+  --card-bg: linear-gradient(135deg, #052c1e 0%, #0a4430 100%);
+  --card-border: 2px solid #C9A96A;
+  --card-border-inner: 1.5px double rgba(201, 169, 106, 0.7);
+  --card-inner-offset: 10px;
+  --card-radius: 16px;
+  --card-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+  
+  --filigree-display: block;
+  --filigree-size: 28px;
+  --filigree-stroke: #C9A96A;
+  --filigree-fill: #C9A96A;
+  
+  --medallion-display: flex;
+  --medallion-bg: linear-gradient(135deg, #fce0ad 0%, #C9A96A 50%, #8c6a28 100%);
+  --medallion-border: 1px solid rgba(255, 255, 255, 0.4);
+  --medallion-shadow: 0 3px 8px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.5);
+  --medallion-color: #052c1e;
+  
+  --photo-filter: contrast(1.15) saturate(1.2);
+  --photo-radius: 10px;
+  
+  --caption-font: 'Playfair Display', 'Amiri', serif;
+  --caption-color: #f7e6c4;
+  --caption-size: 1.1rem;
+  --caption-transform: none;
+  --caption-weight: 500;
+  
+  --grain-opacity: 0;
+}
+
+/* 2. Photo Stack Card Ordering System */
+.photo-card-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--card-radius);
+  background: var(--card-bg);
+  border: var(--card-border);
+  box-shadow: var(--card-shadow);
+  box-sizing: border-box;
+  padding: var(--card-inner-offset);
+  transition: transform 0.58s cubic-bezier(0.25, 0.8, 0.25, 1.15), opacity 0.58s ease-in-out;
+  transform-origin: center center;
+  outline: none;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* Order States */
+.photo-card-item.card-top {
+  z-index: 3;
+  transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  opacity: 1;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+/* Click/Tap Micro-animation for Top Card */
+.photo-card-item.card-top:active {
+  transform: translate3d(0, 0, 0) rotate(0deg) scale(0.97);
+  transition: transform 0.1s ease;
+}
+
+.photo-card-item.card-mid {
+  z-index: 2;
+  transform: translate3d(24px, -8px, 0) rotate(9.5deg) scale(0.93);
+  opacity: 0.95;
+  cursor: default;
+  pointer-events: none;
+}
+
+.photo-card-item.card-back {
+  z-index: 1;
+  transform: translate3d(-24px, -8px, 0) rotate(-9.5deg) scale(0.93);
+  opacity: 0.95;
+  cursor: default;
+  pointer-events: none;
+}
+
+.photo-card-item.card-hidden {
+  z-index: 0;
+  transform: translate3d(0, 45px, 0) rotate(0deg) scale(0.8);
+  opacity: 0;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* 3. Card Elements Layout */
+.card-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: calc(var(--card-radius) - var(--card-inner-offset) + 2px);
+  border: var(--card-border-inner);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 10px 10px 10px;
+}
+
+.card-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  border-radius: var(--photo-radius);
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.card-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: var(--photo-filter);
+  transition: filter 0.3s ease;
+  display: block;
+}
+
+/* Top Medallion Decoration */
+.card-medallion {
+  display: var(--medallion-display);
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--medallion-bg);
+  border: var(--medallion-border);
+  box-shadow: var(--medallion-shadow);
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  color: var(--medallion-color);
+}
+
+.medallion-icon {
+  width: 14px;
+  height: 14px;
+  display: block;
+  fill: currentColor;
+}
+
+/* Corner Filigrees */
+.corner-filigree {
+  display: var(--filigree-display);
+  position: absolute;
+  width: var(--filigree-size);
+  height: var(--filigree-size);
+  z-index: 5;
+  color: var(--filigree-stroke);
+  opacity: 0.85;
+}
+
+.corner-tl { top: 4px; left: 4px; }
+.corner-tr { top: 4px; right: 4px; transform: scaleX(-1); }
+.corner-bl { bottom: 4px; left: 4px; transform: scaleY(-1); }
+.corner-br { bottom: 4px; right: 4px; transform: scale(-1, -1); }
+
+/* Caption / Legend under photo */
+.card-caption {
+  margin-top: auto;
+  font-family: var(--caption-font);
+  color: var(--caption-color);
+  font-size: var(--caption-size);
+  font-weight: var(--caption-weight);
+  font-style: italic;
+  text-align: center;
+  text-transform: var(--caption-transform);
+  width: 100%;
+  padding: 4px 6px 0;
+  box-sizing: border-box;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Grain Overlay (Vintage Noise) */
+.grain-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  z-index: 20;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* 4. Accessibility & Responsiveness */
+@media (prefers-reduced-motion: reduce) {
+  .photo-card-item {
+    transition: none !important;
+  }
+}
+
 
 

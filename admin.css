@@ -713,7 +713,7 @@ html, body {
     flex: 1 1 auto;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 14px 12px 8px;
+    padding: 14px 12px 140px; /* extra bottom so save-bar & mobile nav don't cover content */
     min-height: 0;
   }
 
@@ -957,5 +957,69 @@ html, body {
   
   .no-print {
     display: none !important;
+  }
+}
+
+/* ══════════════════════════════════════════════
+   PHOTO STACK ADMIN STYLES
+══════════════════════════════════════════════ */
+
+/* Photo slot cards */
+.photo-slot-card {
+  transition: background 0.2s;
+}
+.photo-slot-card:hover {
+  background: rgba(255,255,255,0.04) !important;
+}
+
+/* Slot preview thumbnail */
+.photo-slot-preview {
+  transition: border-color 0.25s;
+  flex-shrink: 0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.photo-slot-preview img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Photo stack theme cards */
+.photo-stack-theme-card {
+  transition: border-color 0.2s, transform 0.15s;
+  cursor: pointer;
+}
+.photo-stack-theme-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Setting containers fade-in animation */
+.photo-stack-setting-container {
+  animation: fadeInUp 0.25s ease;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+
+/* Cropper workspace – prevent scroll on touch drag */
+#cropper-workspace {
+  touch-action: none;
+}
+
+/* Mobile bottom nav – 7 items fit comfortably */
+@media (max-width: 768px) {
+  .mobile-bottom-nav .mbn-item {
+    min-width: 0;
+    padding: 8px 4px 6px;
+  }
+  .mbn-label {
+    font-size: 0.6rem;
+  }
+  .mbn-icon {
+    font-size: 1.1rem;
   }
 }
