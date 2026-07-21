@@ -1262,7 +1262,7 @@ let _sealApplied = false; // Flag to prevent seal from being changed multiple ti
 function applyEnvelopeDesign(cfg) {
   if (!cfg) return;
 
-  // ── Motif (ep: 'floral' | 'vintage' | 'minimalist' | 'nature' | 'arabesque' | 'crown') ──
+  // ── Motif (ep: 'floral' | 'vintage' | 'minimalist' | 'nature' | 'arabesque' | 'crown' | 'calligraphy') ──
   const pattern        = cfg.ep || 'vintage';
   const showFloral     = pattern === 'floral';
   const showVintage    = pattern === 'vintage';
@@ -1270,6 +1270,7 @@ function applyEnvelopeDesign(cfg) {
   const showNature     = pattern === 'nature';
   const showArabesque  = pattern === 'arabesque';
   const showCrown      = pattern === 'crown';
+  const showCalligraphy = pattern === 'calligraphy';
 
   document.querySelectorAll('.panel-branches').forEach(el => {
     el.style.display = showFloral ? '' : 'none';
@@ -1286,6 +1287,9 @@ function applyEnvelopeDesign(cfg) {
   document.querySelectorAll('.panel-arabesque').forEach(el => {
     el.style.display = showArabesque ? 'block' : 'none';
   });
+  document.querySelectorAll('.panel-calligraphy').forEach(el => {
+    el.style.display = showCalligraphy ? 'block' : 'none';
+  });
 
   const invitationEl = document.getElementById('invitation');
   if (invitationEl) {
@@ -1298,6 +1302,11 @@ function applyEnvelopeDesign(cfg) {
       invitationEl.classList.add('pattern-crown-active');
     } else {
       invitationEl.classList.remove('pattern-crown-active');
+    }
+    if (showCalligraphy) {
+      invitationEl.classList.add('pattern-calligraphy-active');
+    } else {
+      invitationEl.classList.remove('pattern-calligraphy-active');
     }
   }
 

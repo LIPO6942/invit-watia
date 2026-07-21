@@ -55,112 +55,101 @@
 
     <!-- ── ROYAL CROWN LASER-CUT FLAP (Motif Couronne) ── -->
     <div class="envelope-crown-header" id="envelopeCrownHeader">
-      <svg class="crown-svg" viewBox="0 0 430 160" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg">
+      <svg class="crown-svg" viewBox="0 0 430 90" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="crownMetalGrad" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%"   stop-color="#fff8e7"/>
-            <stop offset="20%"  stop-color="#f0d98a"/>
-            <stop offset="50%"  stop-color="#c9a84c"/>
-            <stop offset="80%"  stop-color="#a07830"/>
-            <stop offset="100%" stop-color="#7a5518"/>
+            <stop offset="15%"  stop-color="#f5e4a0"/>
+            <stop offset="40%"  stop-color="#d4b058"/>
+            <stop offset="70%"  stop-color="#b08830"/>
+            <stop offset="100%" stop-color="#8a6518"/>
           </linearGradient>
           <linearGradient id="crownFillGrad" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%"   stop-color="#fffef9" stop-opacity="1"/>
             <stop offset="100%" stop-color="#f8edd5" stop-opacity="0.97"/>
           </linearGradient>
-          <filter id="crownDrop" x="-5%" y="-5%" width="110%" height="115%">
-            <feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#3a1e05" flood-opacity="0.28"/>
+          <linearGradient id="crownJewelGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%"  stop-color="#fff8e7"/>
+            <stop offset="50%" stop-color="#f0d98a"/>
+            <stop offset="100%" stop-color="#c9a84c"/>
+          </linearGradient>
+          <filter id="crownDrop" x="-5%" y="-5%" width="110%" height="120%">
+            <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#3a1e05" flood-opacity="0.25"/>
+          </filter>
+          <filter id="crownGlow" x="-10%" y="-10%" width="120%" height="120%">
+            <feGaussianBlur stdDeviation="1.5" result="glow"/>
+            <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
           </filter>
         </defs>
 
-        <!-- Base ivory body of the crown flap (trapezoid) -->
-        <path d="M 0,160 L 0,100 Q 215,60 430,100 L 430,160 Z"
+        <!-- Base body — smooth arch that blends with envelope top -->
+        <path d="M 0,90 L 0,62 Q 60,52 130,46 Q 215,38 300,46 Q 370,52 430,62 L 430,90 Z"
               fill="url(#crownFillGrad)" filter="url(#crownDrop)"
-              stroke="url(#crownMetalGrad)" stroke-width="2"/>
+              stroke="url(#crownMetalGrad)" stroke-width="1.5"/>
 
-        <!-- Gold base line border -->
-        <path d="M 8,130 Q 215,90 422,130" fill="none" stroke="url(#crownMetalGrad)" stroke-width="3"/>
-        <path d="M 8,140 Q 215,100 422,140" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.2" opacity="0.5"/>
+        <!-- Elegant gold border arc -->
+        <path d="M 15,72 Q 215,48 415,72" fill="none" stroke="url(#crownMetalGrad)" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M 25,80 Q 215,58 405,80" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1" opacity="0.4"/>
 
-        <!-- ── CENTER CROWN PEAK ── -->
-        <!-- Central pointed arch -->
-        <path d="M 195,98 L 207,40 L 215,20 L 223,40 L 235,98" fill="url(#crownFillGrad)" stroke="url(#crownMetalGrad)" stroke-width="2" stroke-linejoin="round"/>
-        <!-- Central jewel -->
-        <ellipse cx="215" cy="22" rx="7" ry="9" fill="url(#crownMetalGrad)"/>
-        <ellipse cx="215" cy="22" rx="3.5" ry="4.5" fill="#fffdf4"/>
-        <!-- Filigree on center peak -->
-        <path d="M 210,60 Q 215,50 220,60 Q 215,70 210,60 Z" fill="url(#crownMetalGrad)" opacity="0.8"/>
-        <path d="M 207,75 L 223,75" stroke="url(#crownMetalGrad)" stroke-width="1.2"/>
-        <path d="M 205,82 L 225,82" stroke="url(#crownMetalGrad)" stroke-width="1.2"/>
+        <!-- ── CENTER TIARA PEAK — elegant pointed arch ── -->
+        <path d="M 200,44 Q 207,18 215,6 Q 223,18 230,44" fill="url(#crownFillGrad)" stroke="url(#crownMetalGrad)" stroke-width="1.8" stroke-linejoin="round"/>
+        <!-- Center jewel drop -->
+        <ellipse cx="215" cy="8" rx="5" ry="6" fill="url(#crownJewelGrad)" filter="url(#crownGlow)"/>
+        <ellipse cx="215" cy="8" rx="2.5" ry="3" fill="#fffdf4"/>
+        <!-- Center filigree -->
+        <path d="M 210,28 Q 215,22 220,28 Q 215,34 210,28 Z" fill="url(#crownMetalGrad)" opacity="0.7"/>
 
-        <!-- ── LEFT SUB-PEAK ── -->
-        <path d="M 130,106 L 140,65 L 148,50 L 156,65 L 166,106" fill="url(#crownFillGrad)" stroke="url(#crownMetalGrad)" stroke-width="1.8" stroke-linejoin="round"/>
-        <ellipse cx="148" cy="51" rx="5.5" ry="7" fill="url(#crownMetalGrad)"/>
-        <ellipse cx="148" cy="51" rx="2.5" ry="3.5" fill="#fffdf4"/>
-        <path d="M 143,78 Q 148,70 153,78 Q 148,86 143,78 Z" fill="url(#crownMetalGrad)" opacity="0.7"/>
+        <!-- ── LEFT ARCH ── -->
+        <path d="M 152,48 Q 158,28 165,20 Q 172,28 178,48" fill="url(#crownFillGrad)" stroke="url(#crownMetalGrad)" stroke-width="1.5" stroke-linejoin="round"/>
+        <ellipse cx="165" cy="21" rx="4" ry="5" fill="url(#crownJewelGrad)"/>
+        <ellipse cx="165" cy="21" rx="2" ry="2.5" fill="#fffdf4"/>
 
-        <!-- ── RIGHT SUB-PEAK ── -->
-        <path d="M 264,106 L 274,65 L 282,50 L 290,65 L 300,106" fill="url(#crownFillGrad)" stroke="url(#crownMetalGrad)" stroke-width="1.8" stroke-linejoin="round"/>
-        <ellipse cx="282" cy="51" rx="5.5" ry="7" fill="url(#crownMetalGrad)"/>
-        <ellipse cx="282" cy="51" rx="2.5" ry="3.5" fill="#fffdf4"/>
-        <path d="M 277,78 Q 282,70 287,78 Q 282,86 277,78 Z" fill="url(#crownMetalGrad)" opacity="0.7"/>
+        <!-- ── RIGHT ARCH ── -->
+        <path d="M 252,48 Q 258,28 265,20 Q 272,28 278,48" fill="url(#crownFillGrad)" stroke="url(#crownMetalGrad)" stroke-width="1.5" stroke-linejoin="round"/>
+        <ellipse cx="265" cy="21" rx="4" ry="5" fill="url(#crownJewelGrad)"/>
+        <ellipse cx="265" cy="21" rx="2" ry="2.5" fill="#fffdf4"/>
 
-        <!-- ── LEFT OUTER MINI PEAK ── -->
-        <path d="M 60,118 L 70,88 L 76,76 L 82,88 L 92,118" fill="url(#crownFillGrad)" stroke="url(#crownMetalGrad)" stroke-width="1.6" stroke-linejoin="round"/>
-        <circle cx="76" cy="77" r="4.5" fill="url(#crownMetalGrad)"/>
-        <circle cx="76" cy="77" r="2"   fill="#fffdf4"/>
+        <!-- ── LEFT OUTER SMALL ARCH ── -->
+        <path d="M 95,56 Q 100,40 107,34 Q 114,40 119,56" fill="url(#crownFillGrad)" stroke="url(#crownMetalGrad)" stroke-width="1.3" stroke-linejoin="round"/>
+        <circle cx="107" cy="35" r="3.2" fill="url(#crownJewelGrad)"/>
+        <circle cx="107" cy="35" r="1.5" fill="#fffdf4"/>
 
-        <!-- ── RIGHT OUTER MINI PEAK ── -->
-        <path d="M 338,118 L 348,88 L 354,76 L 360,88 L 370,118" fill="url(#crownFillGrad)" stroke="url(#crownMetalGrad)" stroke-width="1.6" stroke-linejoin="round"/>
-        <circle cx="354" cy="77" r="4.5" fill="url(#crownMetalGrad)"/>
-        <circle cx="354" cy="77" r="2"   fill="#fffdf4"/>
+        <!-- ── RIGHT OUTER SMALL ARCH ── -->
+        <path d="M 311,56 Q 316,40 323,34 Q 330,40 335,56" fill="url(#crownFillGrad)" stroke="url(#crownMetalGrad)" stroke-width="1.3" stroke-linejoin="round"/>
+        <circle cx="323" cy="35" r="3.2" fill="url(#crownJewelGrad)"/>
+        <circle cx="323" cy="35" r="1.5" fill="#fffdf4"/>
 
-        <!-- ── LASER-CUT FILIGREE BETWEEN PEAKS ── -->
-        <!-- Between center & left sub-peak -->
-        <path d="M 165,102 Q 180,90 195,98" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.4"/>
-        <path d="M 170,105 Q 182,96 194,103" fill="none" stroke="url(#crownMetalGrad)" stroke-width="0.8" opacity="0.5"/>
-        <circle cx="180" cy="96" r="3.5" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.2"/>
-        <circle cx="180" cy="96" r="1.5" fill="url(#crownMetalGrad)" opacity="0.7"/>
+        <!-- ── DELICATE FILIGREE ARCS BETWEEN PEAKS ── -->
+        <!-- Between center & left -->
+        <path d="M 178,46 Q 189,38 200,44" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.2"/>
+        <circle cx="189" cy="40" r="2" fill="url(#crownMetalGrad)" opacity="0.6"/>
+        <!-- Between center & right -->
+        <path d="M 230,44 Q 241,38 252,46" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.2"/>
+        <circle cx="241" cy="40" r="2" fill="url(#crownMetalGrad)" opacity="0.6"/>
+        <!-- Between left arch & left outer -->
+        <path d="M 119,54 Q 135,46 152,48" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1"/>
+        <circle cx="136" cy="47" r="1.5" fill="url(#crownMetalGrad)" opacity="0.5"/>
+        <!-- Between right arch & right outer -->
+        <path d="M 278,48 Q 295,46 311,54" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1"/>
+        <circle cx="294" cy="47" r="1.5" fill="url(#crownMetalGrad)" opacity="0.5"/>
 
-        <!-- Between center & right sub-peak -->
-        <path d="M 235,98 Q 250,90 265,102" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.4"/>
-        <path d="M 236,103 Q 248,96 260,105" fill="none" stroke="url(#crownMetalGrad)" stroke-width="0.8" opacity="0.5"/>
-        <circle cx="250" cy="96" r="3.5" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.2"/>
-        <circle cx="250" cy="96" r="1.5" fill="url(#crownMetalGrad)" opacity="0.7"/>
-
-        <!-- Between left sub-peak & left outer peak -->
-        <path d="M 92,118 Q 108,107 130,106" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.3"/>
-        <circle cx="111" cy="111" r="3" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.2"/>
-        <circle cx="111" cy="111" r="1.2" fill="url(#crownMetalGrad)" opacity="0.7"/>
-
-        <!-- Between right sub-peak & right outer peak -->
-        <path d="M 300,106 Q 322,107 338,118" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.3"/>
-        <circle cx="319" cy="111" r="3" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.2"/>
-        <circle cx="319" cy="111" r="1.2" fill="url(#crownMetalGrad)" opacity="0.7"/>
-
-        <!-- ── DECORATIVE SCROLLWORK BASE ── -->
+        <!-- ── ELEGANT SCROLLWORK AT EDGES ── -->
         <!-- Left scrolls -->
-        <path d="M 8,140 C 25,130 40,135 38,145" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.5"/>
-        <path d="M 38,145 C 36,155 20,152 22,143" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.2"/>
-        <circle cx="25" cy="140" r="2.5" fill="url(#crownMetalGrad)"/>
-
-        <path d="M 38,140 C 55,130 70,135 68,145" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.5"/>
-        <circle cx="53" cy="138" r="2" fill="url(#crownMetalGrad)"/>
-
+        <path d="M 20,75 C 35,65 50,68 48,76" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.3"/>
+        <path d="M 48,76 C 46,82 34,80 36,74" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1"/>
+        <circle cx="38" cy="72" r="1.5" fill="url(#crownMetalGrad)"/>
+        <path d="M 55,70 C 68,62 78,66 76,72" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.2"/>
         <!-- Right scrolls (mirrored) -->
-        <path d="M 422,140 C 405,130 390,135 392,145" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.5"/>
-        <path d="M 392,145 C 394,155 410,152 408,143" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.2"/>
-        <circle cx="405" cy="140" r="2.5" fill="url(#crownMetalGrad)"/>
+        <path d="M 410,75 C 395,65 380,68 382,76" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.3"/>
+        <path d="M 382,76 C 384,82 396,80 394,74" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1"/>
+        <circle cx="392" cy="72" r="1.5" fill="url(#crownMetalGrad)"/>
+        <path d="M 375,70 C 362,62 352,66 354,72" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.2"/>
 
-        <path d="M 392,140 C 375,130 360,135 362,145" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.5"/>
-        <circle cx="377" cy="138" r="2" fill="url(#crownMetalGrad)"/>
-
-        <!-- Repeating small diamond cuts along base -->
-        <path d="M 108,138 L 112,133 L 116,138 L 112,143 Z" fill="url(#crownMetalGrad)" opacity="0.6"/>
-        <path d="M 160,128 L 164,123 L 168,128 L 164,133 Z" fill="url(#crownMetalGrad)" opacity="0.6"/>
-        <path d="M 210,120 L 214,115 L 218,120 L 214,125 Z" fill="url(#crownMetalGrad)" opacity="0.6"/>
-        <path d="M 260,128 L 264,123 L 268,128 L 264,133 Z" fill="url(#crownMetalGrad)" opacity="0.6"/>
-        <path d="M 312,138 L 316,133 L 320,138 L 316,143 Z" fill="url(#crownMetalGrad)" opacity="0.6"/>
+        <!-- Small diamond accents along base arc -->
+        <path d="M 140,63 L 143,59 L 146,63 L 143,67 Z" fill="url(#crownMetalGrad)" opacity="0.5"/>
+        <path d="M 190,53 L 193,49 L 196,53 L 193,57 Z" fill="url(#crownMetalGrad)" opacity="0.5"/>
+        <path d="M 234,53 L 237,49 L 240,53 L 237,57 Z" fill="url(#crownMetalGrad)" opacity="0.5"/>
+        <path d="M 284,63 L 287,59 L 290,63 L 287,67 Z" fill="url(#crownMetalGrad)" opacity="0.5"/>
       </svg>
     </div>
 
@@ -617,6 +606,104 @@
 
       <!-- Motif Arabesque -->
       <img class="panel-arabesque" src="assets/arabesque_pattern.png" alt="Arabesque Motif" style="display:none; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none; mix-blend-mode:multiply; opacity:0.85;">
+
+      <!-- Motif Calligraphie Arabe -->
+      <svg class="panel-calligraphy" viewBox="0 0 215 760" xmlns="http://www.w3.org/2000/svg" style="display:none; position:absolute; inset:0; width:100%; height:100%; pointer-events:none;">
+        <defs>
+          <linearGradient id="calliGoldL" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%"  stop-color="#f5e6c0" stop-opacity="0.9"/>
+            <stop offset="50%" stop-color="#c9a84c" stop-opacity="0.85"/>
+            <stop offset="100%" stop-color="#a07830" stop-opacity="0.8"/>
+          </linearGradient>
+          <filter id="calliGlowL">
+            <feGaussianBlur stdDeviation="1.2" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- ── Upper Section: Flowing عين (Ain) inspired curves ── -->
+        <g opacity="0.75" filter="url(#calliGlowL)">
+          <!-- Large sweeping Ain-like curve -->
+          <path d="M 30,80 C 60,40 140,30 180,70 C 200,90 170,130 130,120 C 90,110 50,140 70,170" 
+                fill="none" stroke="url(#calliGoldL)" stroke-width="3.5" stroke-linecap="round"/>
+          <!-- Nested inner curve -->
+          <path d="M 50,65 C 80,45 130,50 155,75 C 165,85 150,110 125,105" 
+                fill="none" stroke="url(#calliGoldL)" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+          <!-- Decorative dots (nuqat) -->
+          <circle cx="100" cy="55" r="4" fill="url(#calliGoldL)" opacity="0.7"/>
+          <circle cx="115" cy="48" r="2.5" fill="url(#calliGoldL)" opacity="0.5"/>
+        </g>
+
+        <!-- ── Sad (ص) inspired bow shape ── -->
+        <g opacity="0.7" filter="url(#calliGlowL)">
+          <path d="M 20,200 C 40,170 100,155 160,170 C 200,180 195,220 160,230 C 120,240 60,235 40,210" 
+                fill="none" stroke="url(#calliGoldL)" stroke-width="3" stroke-linecap="round"/>
+          <path d="M 55,190 C 80,175 130,172 155,185" 
+                fill="none" stroke="url(#calliGoldL)" stroke-width="1.8" stroke-linecap="round" opacity="0.5"/>
+          <!-- Teeth marks of Sad -->
+          <circle cx="90" cy="168" r="3" fill="url(#calliGoldL)" opacity="0.6"/>
+          <circle cx="120" cy="165" r="2.5" fill="url(#calliGoldL)" opacity="0.5"/>
+          <circle cx="145" cy="170" r="2" fill="url(#calliGoldL)" opacity="0.4"/>
+        </g>
+
+        <!-- ── Waw (و) flowing connector ── -->
+        <g opacity="0.65" filter="url(#calliGlowL)">
+          <path d="M 140,250 C 170,260 190,290 175,320 C 160,350 120,340 100,310 C 80,280 50,290 30,310" 
+                fill="none" stroke="url(#calliGoldL)" stroke-width="3.2" stroke-linecap="round"/>
+          <path d="M 110,310 C 100,340 70,350 50,340" 
+                fill="none" stroke="url(#calliGoldL)" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+          <circle cx="170" cy="275" r="3.5" fill="url(#calliGoldL)" opacity="0.6"/>
+        </g>
+
+        <!-- ── Noon (ن) arc with dot ── -->
+        <g opacity="0.7" filter="url(#calliGlowL)">
+          <path d="M 10,380 C 30,350 90,340 150,355 C 190,365 200,395 175,410 C 150,425 80,420 50,400" 
+                fill="none" stroke="url(#calliGoldL)" stroke-width="3" stroke-linecap="round"/>
+          <!-- The iconic dot above Noon -->
+          <circle cx="105" cy="340" r="5" fill="url(#calliGoldL)" opacity="0.8"/>
+          <circle cx="105" cy="340" r="2.5" fill="#fffdf4" opacity="0.4"/>
+        </g>
+
+        <!-- ── Lam-Alif (لا) intertwined ── -->
+        <g opacity="0.65" filter="url(#calliGlowL)">
+          <!-- Rising Alif stroke -->
+          <path d="M 80,440 C 85,470 90,500 80,530 C 70,550 50,540 55,520" 
+                fill="none" stroke="url(#calliGoldL)" stroke-width="3.5" stroke-linecap="round"/>
+          <!-- Lam crossing curve -->
+          <path d="M 130,430 C 120,460 100,490 120,520 C 135,545 160,530 150,510" 
+                fill="none" stroke="url(#calliGoldL)" stroke-width="3" stroke-linecap="round"/>
+          <!-- Crossing point emphasis -->
+          <path d="M 95,480 C 105,475 115,478 110,488" 
+                fill="none" stroke="url(#calliGoldL)" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+          <circle cx="105" cy="460" r="3" fill="url(#calliGoldL)" opacity="0.5"/>
+        </g>
+
+        <!-- ── Ha (ح) heart-like base curve ── -->
+        <g opacity="0.7" filter="url(#calliGlowL)">
+          <path d="M 30,580 C 50,550 110,540 160,560 C 200,575 195,610 160,625 C 120,640 60,630 30,600" 
+                fill="none" stroke="url(#calliGoldL)" stroke-width="2.8" stroke-linecap="round"/>
+          <path d="M 60,575 C 90,560 140,558 165,575" 
+                fill="none" stroke="url(#calliGoldL)" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+        </g>
+
+        <!-- ── Lower decorative swirls ── -->
+        <g opacity="0.6" filter="url(#calliGlowL)">
+          <path d="M 50,680 C 80,660 140,665 170,690 C 190,710 160,735 130,725 C 100,715 70,730 80,750" 
+                fill="none" stroke="url(#calliGoldL)" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="140" cy="670" r="3" fill="url(#calliGoldL)" opacity="0.5"/>
+          <circle cx="160" cy="700" r="2" fill="url(#calliGoldL)" opacity="0.4"/>
+        </g>
+
+        <!-- ── Scattered ornamental dots throughout ── -->
+        <circle cx="25" cy="135" r="2" fill="url(#calliGoldL)" opacity="0.35"/>
+        <circle cx="180" cy="140" r="1.5" fill="url(#calliGoldL)" opacity="0.3"/>
+        <circle cx="15" cy="270" r="2" fill="url(#calliGoldL)" opacity="0.3"/>
+        <circle cx="195" cy="350" r="1.5" fill="url(#calliGoldL)" opacity="0.25"/>
+        <circle cx="30" cy="480" r="2" fill="url(#calliGoldL)" opacity="0.3"/>
+        <circle cx="190" cy="550" r="1.5" fill="url(#calliGoldL)" opacity="0.25"/>
+        <circle cx="20" cy="650" r="2" fill="url(#calliGoldL)" opacity="0.3"/>
+        <circle cx="170" cy="740" r="1.5" fill="url(#calliGoldL)" opacity="0.25"/>
+      </svg>
     </div>
 
     <div class="env-panel right-panel" id="rightPanel">
@@ -625,6 +712,96 @@
 
       <!-- Motif Arabesque -->
       <img class="panel-arabesque" src="assets/arabesque_pattern.png" alt="Arabesque Motif" style="display:none; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none; mix-blend-mode:multiply; opacity:0.85; transform:scaleX(-1);">
+
+      <!-- Motif Calligraphie Arabe (mirrored) -->
+      <svg class="panel-calligraphy" viewBox="0 0 215 760" xmlns="http://www.w3.org/2000/svg" style="display:none; position:absolute; inset:0; width:100%; height:100%; pointer-events:none; transform:scaleX(-1);">
+        <defs>
+          <linearGradient id="calliGoldR" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%"  stop-color="#f5e6c0" stop-opacity="0.9"/>
+            <stop offset="50%" stop-color="#c9a84c" stop-opacity="0.85"/>
+            <stop offset="100%" stop-color="#a07830" stop-opacity="0.8"/>
+          </linearGradient>
+          <filter id="calliGlowR">
+            <feGaussianBlur stdDeviation="1.2" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- ── Upper Section: Flowing عين (Ain) inspired curves ── -->
+        <g opacity="0.75" filter="url(#calliGlowR)">
+          <path d="M 30,80 C 60,40 140,30 180,70 C 200,90 170,130 130,120 C 90,110 50,140 70,170" 
+                fill="none" stroke="url(#calliGoldR)" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M 50,65 C 80,45 130,50 155,75 C 165,85 150,110 125,105" 
+                fill="none" stroke="url(#calliGoldR)" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+          <circle cx="100" cy="55" r="4" fill="url(#calliGoldR)" opacity="0.7"/>
+          <circle cx="115" cy="48" r="2.5" fill="url(#calliGoldR)" opacity="0.5"/>
+        </g>
+
+        <!-- ── Sad (ص) inspired bow shape ── -->
+        <g opacity="0.7" filter="url(#calliGlowR)">
+          <path d="M 20,200 C 40,170 100,155 160,170 C 200,180 195,220 160,230 C 120,240 60,235 40,210" 
+                fill="none" stroke="url(#calliGoldR)" stroke-width="3" stroke-linecap="round"/>
+          <path d="M 55,190 C 80,175 130,172 155,185" 
+                fill="none" stroke="url(#calliGoldR)" stroke-width="1.8" stroke-linecap="round" opacity="0.5"/>
+          <circle cx="90" cy="168" r="3" fill="url(#calliGoldR)" opacity="0.6"/>
+          <circle cx="120" cy="165" r="2.5" fill="url(#calliGoldR)" opacity="0.5"/>
+          <circle cx="145" cy="170" r="2" fill="url(#calliGoldR)" opacity="0.4"/>
+        </g>
+
+        <!-- ── Waw (و) flowing connector ── -->
+        <g opacity="0.65" filter="url(#calliGlowR)">
+          <path d="M 140,250 C 170,260 190,290 175,320 C 160,350 120,340 100,310 C 80,280 50,290 30,310" 
+                fill="none" stroke="url(#calliGoldR)" stroke-width="3.2" stroke-linecap="round"/>
+          <path d="M 110,310 C 100,340 70,350 50,340" 
+                fill="none" stroke="url(#calliGoldR)" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+          <circle cx="170" cy="275" r="3.5" fill="url(#calliGoldR)" opacity="0.6"/>
+        </g>
+
+        <!-- ── Noon (ن) arc with dot ── -->
+        <g opacity="0.7" filter="url(#calliGlowR)">
+          <path d="M 10,380 C 30,350 90,340 150,355 C 190,365 200,395 175,410 C 150,425 80,420 50,400" 
+                fill="none" stroke="url(#calliGoldR)" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="105" cy="340" r="5" fill="url(#calliGoldR)" opacity="0.8"/>
+          <circle cx="105" cy="340" r="2.5" fill="#fffdf4" opacity="0.4"/>
+        </g>
+
+        <!-- ── Lam-Alif (لا) intertwined ── -->
+        <g opacity="0.65" filter="url(#calliGlowR)">
+          <path d="M 80,440 C 85,470 90,500 80,530 C 70,550 50,540 55,520" 
+                fill="none" stroke="url(#calliGoldR)" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M 130,430 C 120,460 100,490 120,520 C 135,545 160,530 150,510" 
+                fill="none" stroke="url(#calliGoldR)" stroke-width="3" stroke-linecap="round"/>
+          <path d="M 95,480 C 105,475 115,478 110,488" 
+                fill="none" stroke="url(#calliGoldR)" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+          <circle cx="105" cy="460" r="3" fill="url(#calliGoldR)" opacity="0.5"/>
+        </g>
+
+        <!-- ── Ha (ح) heart-like base curve ── -->
+        <g opacity="0.7" filter="url(#calliGlowR)">
+          <path d="M 30,580 C 50,550 110,540 160,560 C 200,575 195,610 160,625 C 120,640 60,630 30,600" 
+                fill="none" stroke="url(#calliGoldR)" stroke-width="2.8" stroke-linecap="round"/>
+          <path d="M 60,575 C 90,560 140,558 165,575" 
+                fill="none" stroke="url(#calliGoldR)" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+        </g>
+
+        <!-- ── Lower decorative swirls ── -->
+        <g opacity="0.6" filter="url(#calliGlowR)">
+          <path d="M 50,680 C 80,660 140,665 170,690 C 190,710 160,735 130,725 C 100,715 70,730 80,750" 
+                fill="none" stroke="url(#calliGoldR)" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="140" cy="670" r="3" fill="url(#calliGoldR)" opacity="0.5"/>
+          <circle cx="160" cy="700" r="2" fill="url(#calliGoldR)" opacity="0.4"/>
+        </g>
+
+        <!-- ── Scattered ornamental dots ── -->
+        <circle cx="25" cy="135" r="2" fill="url(#calliGoldR)" opacity="0.35"/>
+        <circle cx="180" cy="140" r="1.5" fill="url(#calliGoldR)" opacity="0.3"/>
+        <circle cx="15" cy="270" r="2" fill="url(#calliGoldR)" opacity="0.3"/>
+        <circle cx="195" cy="350" r="1.5" fill="url(#calliGoldR)" opacity="0.25"/>
+        <circle cx="30" cy="480" r="2" fill="url(#calliGoldR)" opacity="0.3"/>
+        <circle cx="190" cy="550" r="1.5" fill="url(#calliGoldR)" opacity="0.25"/>
+        <circle cx="20" cy="650" r="2" fill="url(#calliGoldR)" opacity="0.3"/>
+        <circle cx="170" cy="740" r="1.5" fill="url(#calliGoldR)" opacity="0.25"/>
+      </svg>
     </div>
 
     <!-- ⑦ Nominative Guest Card — visible only when ?guest= URL param is present -->

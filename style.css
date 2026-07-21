@@ -3220,8 +3220,8 @@ body.lang-ar .animated-bride {
 
 .invitation.pattern-crown-active:not(.open) {
   overflow: visible !important;
-  margin-top: 120px !important;
-  min-height: calc(100dvh - 120px) !important;
+  margin-top: 55px !important;
+  min-height: calc(100dvh - 55px) !important;
 }
 .invitation.pattern-crown-active.open {
   overflow: visible !important;
@@ -3232,10 +3232,10 @@ body.lang-ar .animated-bride {
 .envelope-crown-header {
   display: none;
   position: absolute;
-  top: -118px;
+  top: -58px;
   left: 0;
   width: 100%;
-  height: 125px;
+  height: 65px;
   z-index: 15;
   pointer-events: none;
   transform-origin: bottom center;
@@ -3248,7 +3248,7 @@ body.lang-ar .animated-bride {
 
 /* When the invitation opens, lift/rotate the crown flap gracefully */
 .invitation.open.pattern-crown-active .envelope-crown-header {
-  transform: perspective(700px) rotateX(-140deg) translateY(-30px);
+  transform: perspective(700px) rotateX(-140deg) translateY(-15px);
   opacity: 0;
 }
 
@@ -3262,6 +3262,59 @@ body.lang-ar .animated-bride {
 .pattern-crown-active .right-panel {
   background: linear-gradient(180deg, #fffdf8 0%, #f7eed7 100%);
   border-top: 1px solid rgba(201, 168, 76, 0.4);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   🖋️ ARABIC CALLIGRAPHY ENVELOPE DESIGN (Pattern Calligraphy)
+   ════════════════════════════════════════════════════════════════ */
+
+.pattern-calligraphy-active .left-panel,
+.pattern-calligraphy-active .right-panel {
+  background:
+    /* Subtle paper grain texture */
+    repeating-linear-gradient(
+      -35deg,
+      transparent 0px, transparent 4px,
+      rgba(201, 168, 76, 0.03) 4px, rgba(201, 168, 76, 0.03) 5px
+    ),
+    /* Deep emerald green gradient */
+    linear-gradient(170deg, #0a3220 0%, #0d3621 30%, #072815 70%, #051d11 100%);
+  border-top: 1px solid rgba(201, 168, 76, 0.35);
+}
+
+/* Gold inner edge stripe for calligraphy theme */
+.pattern-calligraphy-active .left-panel::after,
+.pattern-calligraphy-active .right-panel::after {
+  background: linear-gradient(to bottom, transparent 0%, #c9a84c 15%, #f5e6c0 50%, #c9a84c 85%, transparent 100%);
+}
+
+/* Elegant shadow on calligraphy panels */
+.pattern-calligraphy-active .left-panel {
+  box-shadow:
+    inset -4px 0 16px rgba(0, 0, 0, 0.25),
+    inset 0 0 40px rgba(201, 168, 76, 0.06);
+}
+
+.pattern-calligraphy-active .right-panel {
+  box-shadow:
+    -6px 0 20px rgba(0, 0, 0, 0.4),
+    inset 4px 0 16px rgba(0, 0, 0, 0.25),
+    inset 0 0 40px rgba(201, 168, 76, 0.06);
+}
+
+/* Calligraphy SVG panels display */
+.panel-calligraphy {
+  display: none;
+}
+
+.pattern-calligraphy-active .panel-calligraphy {
+  display: block !important;
+}
+
+/* Envelope section background for calligraphy theme (emerald) */
+.pattern-calligraphy-active ~ .env-panel,
+.invitation.pattern-calligraphy-active {
+  /* subtle emerald tint on the invitation background */
 }
 
 /* ════════════════════════════════════════════════════════════════
