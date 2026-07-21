@@ -1039,6 +1039,88 @@ window.closeWishesWall = function() {
   if (overlay) overlay.style.display = 'none';
 };
 
+/* 🎙️ Voice Recording Functions (MediaRecorder API with 30s limit) */
+window._recordedVoiceData = null;
+let _mediaRecorder = null;
+let _audioChunks = [];
+let _voiceTimerInterval = null;
+let _voiceSeconds = 0;
+
+window.startVoiceRecording = async function() {
+  try {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      alert('عذراً، متصفحك لا يدعم تسجيل الصوت.');
+      return;
+    }
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    _audioChunks = [];
+    _mediaRecorder = new MediaRecorder(stream);
+
+    _mediaRecorder.ondataavailable = e => {
+      if (e.data.size > 0) _audioChunks.push(e.data);
+    };
+
+    _mediaRecorder.onstop = () => {
+      const audioBlob = new Blob(_audioChunks, { type: _mediaRecorder.mimeType || 'audio/webm' });
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        window._recordedVoiceData = reader.result;
+        const preview = document.getElementById('voiceAudioPreview');
+        if (preview) preview.src = reader.result;
+        document.getElementById('voiceControlsActive').style.display = 'none';
+        document.getElementById('voicePreviewBox').style.display = 'block';
+      };
+      reader.readAsDataURL(audioBlob);
+      stream.getTracks().forEach(track => track.stop());
+    };
+
+    _mediaRecorder.start();
+
+    document.getElementById('voiceControlsInitial').style.display = 'none';
+    document.getElementById('voiceControlsActive').style.display = 'block';
+    document.getElementById('voicePreviewBox').style.display = 'none';
+
+    _voiceSeconds = 0;
+    const timerEl = document.getElementById('voiceTimer');
+    if (timerEl) timerEl.textContent = '00:00 / 00:30';
+
+    clearInterval(_voiceTimerInterval);
+    _voiceTimerInterval = setInterval(() => {
+      _voiceSeconds++;
+      const secs = _voiceSeconds < 10 ? '0' + _voiceSeconds : _voiceSeconds;
+      if (timerEl) timerEl.textContent = `00:${secs} / 00:30`;
+
+      if (_voiceSeconds >= 30) {
+        window.stopVoiceRecording();
+      }
+    }, 1000);
+
+  } catch (err) {
+    console.error('Error accessing microphone:', err);
+    alert('تعذر الوصول إلى الميكروفون. يرجى السماح بالإذن لتسجيل الرسالة الصوتية.');
+  }
+};
+
+window.stopVoiceRecording = function() {
+  clearInterval(_voiceTimerInterval);
+  if (_mediaRecorder && _mediaRecorder.state !== 'inactive') {
+    _mediaRecorder.stop();
+  }
+};
+
+window.resetVoiceRecording = function() {
+  clearInterval(_voiceTimerInterval);
+  window._recordedVoiceData = null;
+  _audioChunks = [];
+  const preview = document.getElementById('voiceAudioPreview');
+  if (preview) preview.src = '';
+  document.getElementById('voiceControlsInitial').style.display = 'block';
+  document.getElementById('voiceControlsActive').style.display = 'none';
+  document.getElementById('voicePreviewBox').style.display = 'none';
+  const timerEl = document.getElementById('voiceTimer');
+  if (timerEl) timerEl.textContent = '00:00 / 00:30';
+};
+
 let allWishes = [];
 let wishesInterval = null;
 
@@ -1121,8 +1203,9 @@ let _sealApplied = false; // Flag to prevent seal from being changed multiple ti
 function applyEnvelopeDesign(cfg) {
   if (!cfg) return;
 
-  // ── Motif (ep: 'floral' | 'vintage' | 'minimalist' | 'nature') ──
+  // ── Motif (ep: 'floral' | 'vintage' | 'minimalist' | 'nature' | 'arabesque' | 'crown') ──
   const pattern        = cfg.ep || 'vintage';
+  const showFloral     = pattern === 'floral';
   const showVintage    = pattern === 'vintage';
   const showMinimalist = pattern === 'minimalist';
   const showNature     = pattern === 'nature';
