@@ -936,6 +936,7 @@ window.submitWish = function() {
     timestamp: new Date().toISOString()
   };
   if (window._recordedVoiceData) {
+    wishPayload.audioData = window._recordedVoiceData;
     wishPayload.voice = window._recordedVoiceData;
   }
 
@@ -956,13 +957,19 @@ window.submitWish = function() {
   const gidRaw = params.get('gid') || params.get('guest');
   const guestKey = gidRaw || ('anon_' + Math.random().toString(36).substr(2, 9));
 
+  const newWish = {
+    name: name,
+    message: msg || (window._recordedVoiceData ? '🎤 [رسالة صوتية]' : ''),
+    target: recipient,
+    timestamp: new Date().toISOString()
+  };
+  if (window._recordedVoiceData) {
+    newWish.audioData = window._recordedVoiceData;
+    newWish.voice = window._recordedVoiceData;
+  }
+
   const updateData = {
-    wishes: firebase.firestore.FieldValue.arrayUnion({
-      name: name,
-      message: msg,
-      target: recipient,
-      timestamp: new Date().toISOString()
-    })
+    wishes: firebase.firestore.FieldValue.arrayUnion(newWish)
   };
 
   updateData["rsvps." + guestKey] = {
@@ -981,10 +988,10 @@ window.submitWish = function() {
     nameInput.value = '';
     messageInput.value = '';
     if (rsvpSelect) rsvpSelect.value = '';
+    if (window.resetVoiceRecording) window.resetVoiceRecording();
     alert('شكراً لك! تم إرسال ردك وتأكيد حضورك ✨');
     
     // Add real-time update to _roleWishes if this wish matches the current role view
-    const newWish = { name, message: msg, target: recipient, timestamp: new Date().toISOString() };
     if (_currentRole === 'groom' && (recipient === 'groom' || recipient === 'both')) {
       _roleWishes.unshift(newWish);
     } else if (_currentRole === 'bride' && (recipient === 'bride' || recipient === 'both')) {
@@ -1004,30 +1011,62 @@ window.submitWish = function() {
 window.openWishesWall = function() {
   const overlay = document.getElementById('wishes-wall-overlay');
   const titleEl = document.getElementById('wishes-wall-title');
+  const subtitleEl = document.getElementById('wishes-wall-subtitle');
   const listEl = document.getElementById('wishes-wall-list');
   if (!overlay || !listEl) return;
 
   overlay.style.display = 'flex';
-  
+
   if (titleEl) {
     titleEl.textContent = _currentRole === 'groom' ? 'صندوق تهاني العريس 🤵' : 'صندوق تهاني العروسة 👰';
   }
+  if (subtitleEl) {
+    subtitleEl.textContent = `${_roleWishes.length} رسالة وصلت إليك من ضيوفك`;
+  }
 
   if (_roleWishes.length === 0) {
-    listEl.innerHTML = `<div style="text-align:center;color:var(--brown-light);padding:40px;font-style:italic">لا توجد رسائل موجهة لك بعد 💌</div>`;
+    listEl.innerHTML = `
+      <div style="text-align:center;color:var(--brown-light);padding:40px 20px;font-style:italic;direction:rtl;">
+        <div style="font-size:2.5rem;margin-bottom:10px;">💌</div>
+        <div style="font-size:1rem;color:var(--brown-mid);">لا توجد رسائل موجهة لك بعد</div>
+        <div style="font-size:0.8rem;color:var(--brown-light);margin-top:6px;">سيُبلَّغك حين يرسل ضيفك تهنئته</div>
+      </div>`;
     return;
   }
 
-  listEl.innerHTML = _roleWishes.map(w => {
-    const targetLabel = w.target === 'groom' ? '🤵 خاص بالعريس' : w.target === 'bride' ? '👰 خاص بالعروسة' : '💑 للعروسين';
+  listEl.innerHTML = _roleWishes.map((w, idx) => {
     const dateStr = w.timestamp ? new Date(w.timestamp).toLocaleString('ar-TN') : '';
+    const hasText  = w.message && w.message.trim() !== '';
+    const hasAudio = w.audioData && w.audioData.trim() !== '';
+
+    const textBlock = hasText ? `
+      <div class="wishes-wall-msg" style="margin-bottom:${hasAudio ? '10px' : '0'};white-space:pre-wrap;">"${w.message}"</div>
+    ` : '';
+
+    const audioBlock = hasAudio ? `
+      <div class="wishes-wall-audio-block">
+        <div style="display:flex;align-items:center;gap:8px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.25);border-radius:12px;padding:8px 12px;">
+          <span style="font-size:1.2rem;">🎙️</span>
+          <div style="flex:1;">
+            <div style="font-size:0.72rem;color:var(--brown-light);margin-bottom:4px;">رسالة صوتية</div>
+            <audio controls style="width:100%;height:28px;border-radius:6px;accent-color:var(--gold);"
+                   src="${w.audioData}" preload="none">
+            </audio>
+          </div>
+        </div>
+      </div>
+    ` : '';
+
     return `
-      <div class="wishes-wall-card">
+      <div class="wishes-wall-card" style="animation-delay:${idx * 0.06}s">
         <div class="wishes-wall-guest">
           <span>👤 ${w.name}</span>
-          <span style="font-size:0.7rem;background:rgba(201,168,76,0.15);color:var(--brown);padding:2px 8px;border-radius:10px">${targetLabel}</span>
+          <span style="font-size:0.7rem;background:rgba(201,168,76,0.15);color:var(--brown);padding:2px 8px;border-radius:10px;white-space:nowrap;">
+            ${hasAudio && hasText ? '💌🎙️ نص + صوت' : hasAudio ? '🎙️ رسالة صوتية' : '💌 رسالة نصية'}
+          </span>
         </div>
-        <div class="wishes-wall-msg">"${w.message}"</div>
+        ${textBlock}
+        ${audioBlock}
         <div class="wishes-wall-date">📅 ${dateStr}</div>
       </div>
     `;
@@ -1046,10 +1085,30 @@ let _audioChunks = [];
 let _voiceTimerInterval = null;
 let _voiceSeconds = 0;
 
+window.handleVoiceFileSelect = function(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onloadend = () => {
+    window._recordedVoiceData = reader.result;
+    const preview = document.getElementById('voiceAudioPreview');
+    if (preview) preview.src = reader.result;
+    document.getElementById('voiceControlsInitial').style.display = 'none';
+    document.getElementById('voiceControlsActive').style.display = 'none';
+    document.getElementById('voicePreviewBox').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+};
+
 window.startVoiceRecording = async function() {
   try {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      alert('عذراً، متصفحك لا يدعم تسجيل الصوت.');
+      const fileInput = document.getElementById('voiceFileInput');
+      if (fileInput) {
+        fileInput.click();
+      } else {
+        alert('عذراً، متصفحك لا يدعم تسجيل الصوت.');
+      }
       return;
     }
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });

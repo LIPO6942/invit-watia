@@ -55,49 +55,112 @@
 
     <!-- ── ROYAL CROWN LASER-CUT FLAP (Motif Couronne) ── -->
     <div class="envelope-crown-header" id="envelopeCrownHeader">
-      <svg class="crown-svg" viewBox="0 0 500 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <svg class="crown-svg" viewBox="0 0 430 160" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <linearGradient id="crownGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#fff8e7" />
-            <stop offset="35%" stop-color="#e2c56e" />
-            <stop offset="70%" stop-color="#c9a84c" />
-            <stop offset="100%" stop-color="#8c6a21" />
+          <linearGradient id="crownMetalGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%"   stop-color="#fff8e7"/>
+            <stop offset="20%"  stop-color="#f0d98a"/>
+            <stop offset="50%"  stop-color="#c9a84c"/>
+            <stop offset="80%"  stop-color="#a07830"/>
+            <stop offset="100%" stop-color="#7a5518"/>
           </linearGradient>
-          <linearGradient id="crownBgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="#fffdf8" stop-opacity="0.98" />
-            <stop offset="100%" stop-color="#f5ead0" stop-opacity="0.95" />
+          <linearGradient id="crownFillGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%"   stop-color="#fffef9" stop-opacity="1"/>
+            <stop offset="100%" stop-color="#f8edd5" stop-opacity="0.97"/>
           </linearGradient>
-          <filter id="crownShadow" x="-10%" y="-10%" width="120%" height="130%">
-            <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#4a2c0a" flood-opacity="0.3" />
+          <filter id="crownDrop" x="-5%" y="-5%" width="110%" height="115%">
+            <feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#3a1e05" flood-opacity="0.28"/>
           </filter>
         </defs>
-        <!-- Crown base outline shape -->
-        <path d="M 0,200 L 0,160 Q 50,150 100,110 Q 150,70 200,60 Q 230,20 250,5 Q 270,20 300,60 Q 350,70 400,110 Q 450,150 500,160 L 500,200 Z" fill="url(#crownBgGrad)" filter="url(#crownShadow)" stroke="url(#crownGrad)" stroke-width="2.5"/>
-        
-        <!-- Intricate Floral Laser Cut Lattice Details -->
-        <circle cx="250" cy="22" r="8" fill="url(#crownGrad)"/>
-        <circle cx="250" cy="22" r="4" fill="#fffdf8"/>
-        
-        <path d="M 250,30 Q 230,55 210,75 Q 230,95 250,105 Q 270,95 290,75 Q 270,55 250,30 Z" fill="none" stroke="url(#crownGrad)" stroke-width="2" stroke-dasharray="6,3"/>
-        <circle cx="250" cy="68" r="10" fill="none" stroke="url(#crownGrad)" stroke-width="1.8"/>
-        <circle cx="250" cy="68" r="5" fill="url(#crownGrad)"/>
-        
-        <!-- Left Wing Floral Mandalas -->
-        <path d="M 180,75 C 160,50 120,60 110,85 C 130,100 160,95 180,75 Z" fill="none" stroke="url(#crownGrad)" stroke-width="1.8"/>
-        <circle cx="145" cy="75" r="6" fill="url(#crownGrad)"/>
-        <path d="M 120,110 C 90,90 60,115 50,140 C 75,150 105,135 120,110 Z" fill="none" stroke="url(#crownGrad)" stroke-width="1.8"/>
-        <circle cx="85" cy="122" r="5" fill="url(#crownGrad)"/>
-        
-        <!-- Right Wing Floral Mandalas -->
-        <path d="M 320,75 C 340,50 380,60 390,85 C 370,100 340,95 320,75 Z" fill="none" stroke="url(#crownGrad)" stroke-width="1.8"/>
-        <circle cx="355" cy="75" r="6" fill="url(#crownGrad)"/>
-        <path d="M 380,110 C 410,90 440,115 450,140 C 425,150 395,135 380,110 Z" fill="none" stroke="url(#crownGrad)" stroke-width="1.8"/>
-        <circle cx="415" cy="122" r="5" fill="url(#crownGrad)"/>
 
-        <!-- Laser Cut Teardrop Pattern Dots & Leaves -->
-        <path d="M 200,90 Q 250,125 300,90" fill="none" stroke="url(#crownGrad)" stroke-width="2"/>
-        <path d="M 150,120 Q 250,165 350,120" fill="none" stroke="url(#crownGrad)" stroke-width="1.5"/>
-        <path d="M 50,160 L 450,160" stroke="url(#crownGrad)" stroke-width="2" stroke-dasharray="8,4"/>
+        <!-- Base ivory body of the crown flap (trapezoid) -->
+        <path d="M 0,160 L 0,100 Q 215,60 430,100 L 430,160 Z"
+              fill="url(#crownFillGrad)" filter="url(#crownDrop)"
+              stroke="url(#crownMetalGrad)" stroke-width="2"/>
+
+        <!-- Gold base line border -->
+        <path d="M 8,130 Q 215,90 422,130" fill="none" stroke="url(#crownMetalGrad)" stroke-width="3"/>
+        <path d="M 8,140 Q 215,100 422,140" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.2" opacity="0.5"/>
+
+        <!-- ── CENTER CROWN PEAK ── -->
+        <!-- Central pointed arch -->
+        <path d="M 195,98 L 207,40 L 215,20 L 223,40 L 235,98" fill="url(#crownFillGrad)" stroke="url(#crownMetalGrad)" stroke-width="2" stroke-linejoin="round"/>
+        <!-- Central jewel -->
+        <ellipse cx="215" cy="22" rx="7" ry="9" fill="url(#crownMetalGrad)"/>
+        <ellipse cx="215" cy="22" rx="3.5" ry="4.5" fill="#fffdf4"/>
+        <!-- Filigree on center peak -->
+        <path d="M 210,60 Q 215,50 220,60 Q 215,70 210,60 Z" fill="url(#crownMetalGrad)" opacity="0.8"/>
+        <path d="M 207,75 L 223,75" stroke="url(#crownMetalGrad)" stroke-width="1.2"/>
+        <path d="M 205,82 L 225,82" stroke="url(#crownMetalGrad)" stroke-width="1.2"/>
+
+        <!-- ── LEFT SUB-PEAK ── -->
+        <path d="M 130,106 L 140,65 L 148,50 L 156,65 L 166,106" fill="url(#crownFillGrad)" stroke="url(#crownMetalGrad)" stroke-width="1.8" stroke-linejoin="round"/>
+        <ellipse cx="148" cy="51" rx="5.5" ry="7" fill="url(#crownMetalGrad)"/>
+        <ellipse cx="148" cy="51" rx="2.5" ry="3.5" fill="#fffdf4"/>
+        <path d="M 143,78 Q 148,70 153,78 Q 148,86 143,78 Z" fill="url(#crownMetalGrad)" opacity="0.7"/>
+
+        <!-- ── RIGHT SUB-PEAK ── -->
+        <path d="M 264,106 L 274,65 L 282,50 L 290,65 L 300,106" fill="url(#crownFillGrad)" stroke="url(#crownMetalGrad)" stroke-width="1.8" stroke-linejoin="round"/>
+        <ellipse cx="282" cy="51" rx="5.5" ry="7" fill="url(#crownMetalGrad)"/>
+        <ellipse cx="282" cy="51" rx="2.5" ry="3.5" fill="#fffdf4"/>
+        <path d="M 277,78 Q 282,70 287,78 Q 282,86 277,78 Z" fill="url(#crownMetalGrad)" opacity="0.7"/>
+
+        <!-- ── LEFT OUTER MINI PEAK ── -->
+        <path d="M 60,118 L 70,88 L 76,76 L 82,88 L 92,118" fill="url(#crownFillGrad)" stroke="url(#crownMetalGrad)" stroke-width="1.6" stroke-linejoin="round"/>
+        <circle cx="76" cy="77" r="4.5" fill="url(#crownMetalGrad)"/>
+        <circle cx="76" cy="77" r="2"   fill="#fffdf4"/>
+
+        <!-- ── RIGHT OUTER MINI PEAK ── -->
+        <path d="M 338,118 L 348,88 L 354,76 L 360,88 L 370,118" fill="url(#crownFillGrad)" stroke="url(#crownMetalGrad)" stroke-width="1.6" stroke-linejoin="round"/>
+        <circle cx="354" cy="77" r="4.5" fill="url(#crownMetalGrad)"/>
+        <circle cx="354" cy="77" r="2"   fill="#fffdf4"/>
+
+        <!-- ── LASER-CUT FILIGREE BETWEEN PEAKS ── -->
+        <!-- Between center & left sub-peak -->
+        <path d="M 165,102 Q 180,90 195,98" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.4"/>
+        <path d="M 170,105 Q 182,96 194,103" fill="none" stroke="url(#crownMetalGrad)" stroke-width="0.8" opacity="0.5"/>
+        <circle cx="180" cy="96" r="3.5" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.2"/>
+        <circle cx="180" cy="96" r="1.5" fill="url(#crownMetalGrad)" opacity="0.7"/>
+
+        <!-- Between center & right sub-peak -->
+        <path d="M 235,98 Q 250,90 265,102" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.4"/>
+        <path d="M 236,103 Q 248,96 260,105" fill="none" stroke="url(#crownMetalGrad)" stroke-width="0.8" opacity="0.5"/>
+        <circle cx="250" cy="96" r="3.5" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.2"/>
+        <circle cx="250" cy="96" r="1.5" fill="url(#crownMetalGrad)" opacity="0.7"/>
+
+        <!-- Between left sub-peak & left outer peak -->
+        <path d="M 92,118 Q 108,107 130,106" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.3"/>
+        <circle cx="111" cy="111" r="3" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.2"/>
+        <circle cx="111" cy="111" r="1.2" fill="url(#crownMetalGrad)" opacity="0.7"/>
+
+        <!-- Between right sub-peak & right outer peak -->
+        <path d="M 300,106 Q 322,107 338,118" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.3"/>
+        <circle cx="319" cy="111" r="3" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.2"/>
+        <circle cx="319" cy="111" r="1.2" fill="url(#crownMetalGrad)" opacity="0.7"/>
+
+        <!-- ── DECORATIVE SCROLLWORK BASE ── -->
+        <!-- Left scrolls -->
+        <path d="M 8,140 C 25,130 40,135 38,145" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.5"/>
+        <path d="M 38,145 C 36,155 20,152 22,143" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.2"/>
+        <circle cx="25" cy="140" r="2.5" fill="url(#crownMetalGrad)"/>
+
+        <path d="M 38,140 C 55,130 70,135 68,145" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.5"/>
+        <circle cx="53" cy="138" r="2" fill="url(#crownMetalGrad)"/>
+
+        <!-- Right scrolls (mirrored) -->
+        <path d="M 422,140 C 405,130 390,135 392,145" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.5"/>
+        <path d="M 392,145 C 394,155 410,152 408,143" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.2"/>
+        <circle cx="405" cy="140" r="2.5" fill="url(#crownMetalGrad)"/>
+
+        <path d="M 392,140 C 375,130 360,135 362,145" fill="none" stroke="url(#crownMetalGrad)" stroke-width="1.5"/>
+        <circle cx="377" cy="138" r="2" fill="url(#crownMetalGrad)"/>
+
+        <!-- Repeating small diamond cuts along base -->
+        <path d="M 108,138 L 112,133 L 116,138 L 112,143 Z" fill="url(#crownMetalGrad)" opacity="0.6"/>
+        <path d="M 160,128 L 164,123 L 168,128 L 164,133 Z" fill="url(#crownMetalGrad)" opacity="0.6"/>
+        <path d="M 210,120 L 214,115 L 218,120 L 214,125 Z" fill="url(#crownMetalGrad)" opacity="0.6"/>
+        <path d="M 260,128 L 264,123 L 268,128 L 264,133 Z" fill="url(#crownMetalGrad)" opacity="0.6"/>
+        <path d="M 312,138 L 316,133 L 320,138 L 316,143 Z" fill="url(#crownMetalGrad)" opacity="0.6"/>
       </svg>
     </div>
 
@@ -364,6 +427,7 @@
                 <button type="button" class="voice-record-btn" id="startVoiceRecordBtn" onclick="startVoiceRecording()">
                   <span class="mic-icon">🎙️</span> اضغط للتسجيل (30 ثانية max)
                 </button>
+                <input type="file" id="voiceFileInput" accept="audio/*" capture="microphone" style="display:none;" onchange="handleVoiceFileSelect(event)">
               </div>
 
               <!-- State 2: Active Recording State -->
