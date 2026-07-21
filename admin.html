@@ -225,6 +225,7 @@
             <label>نقشة الغلاف (Motif)</label>
             <select id="envPattern">
               <option value="vintage" selected>⚜️ إطار كلاسيكي مزخرف (Vintage)</option>
+              <option value="crown">👑 تاج ملوكي مزخرف (Crown Laser-Cut)</option>
               <option value="arabesque">🌙 عربسك مارقوم ذهبي (Arabesque)</option>
             </select>
           </div>
@@ -246,23 +247,70 @@
         </div>
       </div>
 
+      <!-- Quick Swap Photos Button -->
+      <div style="text-align:center; margin: 15px 0 5px 0;">
+        <button type="button" onclick="swapPhotos()" style="background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.45);color:var(--gold);padding:8px 18px;border-radius:20px;font-family:'Amiri',serif;cursor:pointer;font-weight:bold;font-size:0.88rem;box-shadow:0 4px 12px rgba(0,0,0,0.15);transition:all 0.2s;">
+          🔄 تبادل الصور (Permuter l'image du haut et du bas)
+        </button>
+      </div>
+
       <div class="card">
-        <div class="card-title">📸 خلفية قاعة الأفراح (Image de la salle de fête)</div>
-        <div class="photo-selector" style="display:flex; gap:12px; margin-top:10px; flex-wrap:wrap;">
-          <div class="photo-card selected" data-photo="watia_hall_bg" onclick="selectHallPhoto('watia_hall_bg')">
+        <div class="card-title">📸 خلفية قاعة الأفراح (Image de la salle de fête - Haut)</div>
+        <div class="photo-selector" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap:10px; margin-top:10px;">
+          <div class="photo-card selected" data-photo="watia_hall_bg" onclick="selectHallPhoto('watia_hall_bg', true)">
             <img src="assets/watia_hall_bg.png" alt="Watia Hall">
-            <div class="photo-card-label">🌙 قاعة الوطية (الرئيسية)</div>
+            <div class="photo-card-label">🌙 قاعة الوطية</div>
+          </div>
+          <div class="photo-card" data-photo="watia_closing_board" onclick="selectHallPhoto('watia_closing_board', true)">
+            <img src="assets/watia_closing_board.png" alt="Watia Closing">
+            <div class="photo-card-label">🌙 ديكور الوطية</div>
+          </div>
+          <div class="photo-card" data-photo="wedding_hall_board" onclick="selectHallPhoto('wedding_hall_board', true)">
+            <img src="assets/wedding_hall_board.png" alt="Wedding Hall">
+            <div class="photo-card-label">✨ قاعة الأفراح</div>
+          </div>
+          <div class="photo-card" data-photo="wedding_boheme_board" onclick="selectHallPhoto('wedding_boheme_board', true)">
+            <img src="assets/wedding_boheme_board.png" alt="Boheme Board">
+            <div class="photo-card-label">🌿 ديكور بوهيمي</div>
+          </div>
+          <div class="photo-card" data-photo="hall_royal" onclick="selectHallPhoto('hall_royal', true)">
+            <img src="assets/hall_royal.png" alt="Royal Hall">
+            <div class="photo-card-label">👑 قاعة ملكية</div>
+          </div>
+          <div class="photo-card" data-photo="hall_classic" onclick="selectHallPhoto('hall_classic', true)">
+            <img src="assets/hall_classic.png" alt="Classic Hall">
+            <div class="photo-card-label">🏛️ قاعة كلاسيكية</div>
           </div>
         </div>
       </div>
 
       <div class="card">
-        <div class="card-title">🖼️ صورة قسم الختام (Photo de fermeture)</div>
-        <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:10px">تظهر هذه الصورة في القسم الأخير من الدعوة مع أسماء العروسين على اللوحة</div>
-        <div class="photo-selector" style="display:flex; gap:12px; margin-top:10px; flex-wrap:wrap;">
-          <div class="photo-card closing-photo-card selected" data-closing-photo="watia_closing_board" onclick="selectClosingPhoto('watia_closing_board')">
+        <div class="card-title">🖼️ صورة قسم الختام (Photo de fermeture - Bas)</div>
+        <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:10px">تظهر هذه الصورة في القسم الأخير من الدعوة مع أسماء العروسين على اللوحة الإلكتونية</div>
+        <div class="photo-selector" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap:10px; margin-top:10px;">
+          <div class="photo-card closing-photo-card selected" data-closing-photo="watia_closing_board" onclick="selectClosingPhoto('watia_closing_board', true)">
             <img src="assets/watia_closing_board.png" alt="Watia Closing">
             <div class="photo-card-label">🌙 ديكور الوطية</div>
+          </div>
+          <div class="photo-card closing-photo-card" data-closing-photo="watia_hall_bg" onclick="selectClosingPhoto('watia_hall_bg', true)">
+            <img src="assets/watia_hall_bg.png" alt="Watia Hall">
+            <div class="photo-card-label">🌙 قاعة الوطية</div>
+          </div>
+          <div class="photo-card closing-photo-card" data-closing-photo="wedding_hall_board" onclick="selectClosingPhoto('wedding_hall_board', true)">
+            <img src="assets/wedding_hall_board.png" alt="Wedding Hall">
+            <div class="photo-card-label">✨ قاعة الأفراح</div>
+          </div>
+          <div class="photo-card closing-photo-card" data-closing-photo="wedding_boheme_board" onclick="selectClosingPhoto('wedding_boheme_board', true)">
+            <img src="assets/wedding_boheme_board.png" alt="Boheme Board">
+            <div class="photo-card-label">🌿 ديكور بوهيمي</div>
+          </div>
+          <div class="photo-card closing-photo-card" data-closing-photo="hall_royal" onclick="selectClosingPhoto('hall_royal', true)">
+            <img src="assets/hall_royal.png" alt="Royal Hall">
+            <div class="photo-card-label">👑 قاعة ملكية</div>
+          </div>
+          <div class="photo-card closing-photo-card" data-closing-photo="hall_classic" onclick="selectClosingPhoto('hall_classic', true)">
+            <img src="assets/hall_classic.png" alt="Classic Hall">
+            <div class="photo-card-label">🏛️ قاعة كلاسيكية</div>
           </div>
         </div>
       </div>
@@ -747,6 +795,13 @@ function selectClosingPhoto(name, doSave = false) {
     }
   });
   if (doSave) saveAll();
+}
+
+function swapPhotos() {
+  const currentHall = window._selectedHallPhoto;
+  const currentClosing = window._selectedClosingPhoto;
+  selectHallPhoto(currentClosing, false);
+  selectClosingPhoto(currentHall, true);
 }
 
 /* ── Music selector ── */
@@ -2147,7 +2202,8 @@ async function renderLinksHistory() {
           + h.wishes.map(w => {
               const tc = w.target==='groom'?'#3498db':w.target==='bride'?'#e74c3c':'#2ecc71';
               const tl = w.target==='groom'?'🤵 العريس':w.target==='bride'?'👰 العروسة':'💑 كلاهما';
-              return '<div style="border-bottom:1px solid rgba(255,255,255,0.05);padding-bottom:5px"><strong>'+w.name+'</strong> <span style="color:'+tc+';font-size:0.68rem">'+tl+'</span>: "'+w.message+'"</div>';
+              const voicePlayer = w.voice ? '<div style="margin-top:4px"><audio controls src="' + w.voice + '" style="height:32px;width:100%;max-width:240px"></audio></div>' : '';
+              return '<div style="border-bottom:1px solid rgba(255,255,255,0.05);padding-bottom:5px"><strong>'+w.name+'</strong> <span style="color:'+tc+';font-size:0.68rem">'+tl+'</span>: "'+w.message+'"'+voicePlayer+'</div>';
             }).join('')
           + '</div></details>';
       }

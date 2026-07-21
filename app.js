@@ -911,8 +911,8 @@ window.submitWish = function() {
     return;
   }
   
-  if (!name || !msg) {
-    alert('الرجاء كتابة الاسم وتأكيد الحضور 🌹');
+  if (!name || (!msg && !window._recordedVoiceData)) {
+    alert('الرجاء كتابة الاسم أو تسجيل رسالة صوتية وتأكيد الحضور 🌹');
     return;
   }
 
@@ -929,14 +929,24 @@ window.submitWish = function() {
   const params = new URLSearchParams(window.location.search);
   const invSlug = params.get('inv');
 
+  const wishPayload = {
+    name: name,
+    message: msg || (window._recordedVoiceData ? '🎤 [رسالة صوتية]' : ''),
+    target: recipient,
+    timestamp: new Date().toISOString()
+  };
+  if (window._recordedVoiceData) {
+    wishPayload.voice = window._recordedVoiceData;
+  }
+
   if (!invSlug) {
     // Local preview fallback
-    const localWish = { name, message: msg, target: recipient, timestamp: new Date().toISOString() };
-    allWishes.unshift(localWish);
+    allWishes.unshift(wishPayload);
     renderWishesScroller();
     nameInput.value = '';
     messageInput.value = '';
     if (rsvpSelect) rsvpSelect.value = '';
+    if (window.resetVoiceRecording) window.resetVoiceRecording();
     alert('تم إرسال ردك بنجاح (معاينة محلية) ✨');
     return;
   }
@@ -1112,18 +1122,18 @@ function applyEnvelopeDesign(cfg) {
   if (!cfg) return;
 
   // ── Motif (ep: 'floral' | 'vintage' | 'minimalist' | 'nature') ──
-  const pattern     = cfg.ep || 'vintage';
+  const pattern        = cfg.ep || 'vintage';
   const showVintage    = pattern === 'vintage';
   const showMinimalist = pattern === 'minimalist';
   const showNature     = pattern === 'nature';
-
-  const showArabesque   = pattern === 'arabesque';
+  const showArabesque  = pattern === 'arabesque';
+  const showCrown      = pattern === 'crown';
 
   document.querySelectorAll('.panel-branches').forEach(el => {
     el.style.display = showFloral ? '' : 'none';
   });
   document.querySelectorAll('.panel-vintage').forEach(el => {
-    el.style.display = showVintage ? 'block' : 'none';
+    el.style.display = showVintage || showCrown ? 'block' : 'none';
   });
   document.querySelectorAll('.panel-minimalist').forEach(el => {
     el.style.display = showMinimalist ? 'block' : 'none';
@@ -1141,6 +1151,11 @@ function applyEnvelopeDesign(cfg) {
       invitationEl.classList.add('pattern-minimalist-active');
     } else {
       invitationEl.classList.remove('pattern-minimalist-active');
+    }
+    if (showCrown) {
+      invitationEl.classList.add('pattern-crown-active');
+    } else {
+      invitationEl.classList.remove('pattern-crown-active');
     }
   }
 

@@ -53,6 +53,54 @@
 
   <div class="invitation" id="invitation">
 
+    <!-- ── ROYAL CROWN LASER-CUT FLAP (Motif Couronne) ── -->
+    <div class="envelope-crown-header" id="envelopeCrownHeader">
+      <svg class="crown-svg" viewBox="0 0 500 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="crownGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#fff8e7" />
+            <stop offset="35%" stop-color="#e2c56e" />
+            <stop offset="70%" stop-color="#c9a84c" />
+            <stop offset="100%" stop-color="#8c6a21" />
+          </linearGradient>
+          <linearGradient id="crownBgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#fffdf8" stop-opacity="0.98" />
+            <stop offset="100%" stop-color="#f5ead0" stop-opacity="0.95" />
+          </linearGradient>
+          <filter id="crownShadow" x="-10%" y="-10%" width="120%" height="130%">
+            <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#4a2c0a" flood-opacity="0.3" />
+          </filter>
+        </defs>
+        <!-- Crown base outline shape -->
+        <path d="M 0,200 L 0,160 Q 50,150 100,110 Q 150,70 200,60 Q 230,20 250,5 Q 270,20 300,60 Q 350,70 400,110 Q 450,150 500,160 L 500,200 Z" fill="url(#crownBgGrad)" filter="url(#crownShadow)" stroke="url(#crownGrad)" stroke-width="2.5"/>
+        
+        <!-- Intricate Floral Laser Cut Lattice Details -->
+        <circle cx="250" cy="22" r="8" fill="url(#crownGrad)"/>
+        <circle cx="250" cy="22" r="4" fill="#fffdf8"/>
+        
+        <path d="M 250,30 Q 230,55 210,75 Q 230,95 250,105 Q 270,95 290,75 Q 270,55 250,30 Z" fill="none" stroke="url(#crownGrad)" stroke-width="2" stroke-dasharray="6,3"/>
+        <circle cx="250" cy="68" r="10" fill="none" stroke="url(#crownGrad)" stroke-width="1.8"/>
+        <circle cx="250" cy="68" r="5" fill="url(#crownGrad)"/>
+        
+        <!-- Left Wing Floral Mandalas -->
+        <path d="M 180,75 C 160,50 120,60 110,85 C 130,100 160,95 180,75 Z" fill="none" stroke="url(#crownGrad)" stroke-width="1.8"/>
+        <circle cx="145" cy="75" r="6" fill="url(#crownGrad)"/>
+        <path d="M 120,110 C 90,90 60,115 50,140 C 75,150 105,135 120,110 Z" fill="none" stroke="url(#crownGrad)" stroke-width="1.8"/>
+        <circle cx="85" cy="122" r="5" fill="url(#crownGrad)"/>
+        
+        <!-- Right Wing Floral Mandalas -->
+        <path d="M 320,75 C 340,50 380,60 390,85 C 370,100 340,95 320,75 Z" fill="none" stroke="url(#crownGrad)" stroke-width="1.8"/>
+        <circle cx="355" cy="75" r="6" fill="url(#crownGrad)"/>
+        <path d="M 380,110 C 410,90 440,115 450,140 C 425,150 395,135 380,110 Z" fill="none" stroke="url(#crownGrad)" stroke-width="1.8"/>
+        <circle cx="415" cy="122" r="5" fill="url(#crownGrad)"/>
+
+        <!-- Laser Cut Teardrop Pattern Dots & Leaves -->
+        <path d="M 200,90 Q 250,125 300,90" fill="none" stroke="url(#crownGrad)" stroke-width="2"/>
+        <path d="M 150,120 Q 250,165 350,120" fill="none" stroke="url(#crownGrad)" stroke-width="1.5"/>
+        <path d="M 50,160 L 450,160" stroke="url(#crownGrad)" stroke-width="2" stroke-dasharray="8,4"/>
+      </svg>
+    </div>
+
     <!-- ─── wedding content (revealed on open) ─── -->
     <div class="env-card">
 
@@ -302,7 +350,43 @@
             </select>
             <div style="font-size:0.75rem; color:var(--brown-mid); text-align:right; margin: 8px 4px 6px 4px; display:flex; justify-content:space-between; align-items:center;" id="gb-sug-label" data-tr="gb_sug_label">💡 اقتراحات جاهزة للتهنئة:</div>
             <div class="suggestions-scroller" id="gb-suggestions-list"></div>
-            <textarea id="gb-message" class="guestbook-textarea" placeholder="أكتب تهنئتك هنا..." data-tr-placeholder="gb_msg_placeholder" rows="3" required></textarea>
+            <textarea id="gb-message" class="guestbook-textarea" placeholder="أكتب تهنئتك هنا..." data-tr-placeholder="gb_msg_placeholder" rows="3"></textarea>
+            
+            <!-- 🎙️ Voice Message Recording Block (Max 30s) -->
+            <div class="voice-recorder-container" id="voiceRecorderBox">
+              <div class="voice-recorder-header">
+                <span class="voice-recorder-title">🎙️ رسالة صوتية للعروسة</span>
+                <span class="voice-timer" id="voiceTimer">00:00 / 00:30</span>
+              </div>
+              
+              <!-- State 1: Initial Recording Button -->
+              <div class="voice-controls-row" id="voiceControlsInitial">
+                <button type="button" class="voice-record-btn" id="startVoiceRecordBtn" onclick="startVoiceRecording()">
+                  <span class="mic-icon">🎙️</span> اضغط للتسجيل (30 ثانية max)
+                </button>
+              </div>
+
+              <!-- State 2: Active Recording State -->
+              <div class="voice-controls-row" id="voiceControlsActive" style="display:none;">
+                <div class="voice-wave-anim">
+                  <span class="vbar"></span><span class="vbar"></span><span class="vbar"></span><span class="vbar"></span><span class="vbar"></span>
+                </div>
+                <button type="button" class="voice-stop-btn" onclick="stopVoiceRecording()">
+                  ⏹️ إيقاف التسجيل
+                </button>
+              </div>
+
+              <!-- State 3: Recorded Audio Preview -->
+              <div class="voice-preview-container" id="voicePreviewBox" style="display:none;">
+                <audio id="voiceAudioPreview" controls style="width:100%; height:38px; border-radius:8px; margin-bottom:6px;"></audio>
+                <div class="voice-preview-actions">
+                  <button type="button" class="voice-re-record-btn" onclick="resetVoiceRecording()">
+                    🗑️ حذف وإعادة التسجيل
+                  </button>
+                </div>
+              </div>
+            </div>
+
             <button class="guestbook-submit-btn" onclick="submitWish()" data-tr="gb_submit">إرسال التهنئة ✨</button>
           </div>
 
