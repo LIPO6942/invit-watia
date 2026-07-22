@@ -3314,7 +3314,9 @@ body .invitation.pattern-crown-active .right-panel {
 
 .panel-zellige {
   display: none;
-  object-position: center 38.5% !important;
+  top: -9.5% !important;
+  height: 119% !important;
+  bottom: auto !important;
 }
 
 .pattern-zellige-active .panel-zellige,
