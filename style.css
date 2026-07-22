@@ -2862,20 +2862,20 @@ body.night-mode .p1-invite-text { color: #d4b87a; }
 
 /* Names overlaid directly inside the blank easel cardboard area.
    Locked to invariant coordinates thanks to fixed 3:4 aspect ratio. */
-/* Sublimated Glassmorphism Badge overlaid directly on the wedding hall easel photo */
+/* Calligraphy overlaid directly on the wooden easel canvas board (no floating CSS box) */
 .closing-easel-txts {
   position: absolute;
-  top: 36%;
+  top: 40%;
   left: 6%;
   width: 38%;
   max-width: 155px;
-  padding: 8px 6px;
-  background: rgba(255, 252, 245, 0.94);
-  backdrop-filter: blur(12px) saturate(140%);
-  -webkit-backdrop-filter: blur(12px) saturate(140%);
-  border: 1.5px solid rgba(201, 168, 76, 0.85);
-  box-shadow: 0 0 0 2.5px rgba(255, 255, 255, 0.6), 0 8px 24px rgba(60, 36, 12, 0.28);
-  border-radius: 10px;
+  padding: 4px 2px;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-radius: 0;
   z-index: 2;
   display: flex;
   flex-direction: column;
@@ -2896,20 +2896,21 @@ body.night-mode .p1-invite-text { color: #d4b87a; }
 .closing-easel-header {
   font-family: 'Amiri', serif;
   font-size: clamp(0.75rem, 2.8vw, 0.95rem) !important;
-  color: var(--gold-dark) !important;
+  color: #926d15 !important;
   display: block !important;
   margin-bottom: 2px;
   font-weight: bold;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9);
 }
 
 .closing-easel-groom,
 .closing-easel-bride {
   font-family: 'Aref Ruqaa Ink', 'Amiri', serif;
-  font-size: clamp(1.05rem, 4.2vw, 1.35rem) !important;
+  font-size: clamp(1.2rem, 4.5vw, 1.6rem) !important;
   font-weight: bold;
-  color: #3e220a !important;
+  color: #3b200a !important;
   line-height: 1.15;
-  text-shadow: 0 1px 0px rgba(255,255,255,0.7);
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9), 0 0 1px rgba(100, 60, 20, 0.4);
   width: 100%;
   display: block;
 }
@@ -2935,7 +2936,7 @@ body.night-mode .p1-invite-text { color: #d4b87a; }
     flex: 1 1 50%;
   }
   .closing-easel-txts {
-    top: 36%;
+    top: 40%;
     left: 6%;
     width: 38%;
   }
@@ -2955,9 +2956,9 @@ body.night-mode .closing-easel-photo {
   filter: brightness(0.72) saturate(0.8) contrast(0.95);
 }
 body.night-mode .closing-easel-txts {
-  background: linear-gradient(135deg, #1c1005 0%, #2b1a0b 100%);
-  border-color: #a08040;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.5);
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 body.night-mode .closing-easel-header {
   color: #ebd7b3 !important;
