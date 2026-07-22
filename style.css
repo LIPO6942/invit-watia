@@ -394,6 +394,17 @@ body:not(.env-open) {
   margin: 0 1px;
 }
 
+#seal-3d-monogram-text .lock-bride-name {
+  color: #fff4d0;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-shadow:
+    -1px -1.5px 2px rgba(0, 0, 0, 0.95),
+    1.5px 1.5px 2px rgba(255, 235, 170, 0.85),
+    0 0 8px rgba(255, 215, 100, 0.5);
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+}
+
 
 /* Golden halo behind the seal - enhanced for more golden glow */
 .seal-halo {
@@ -681,11 +692,11 @@ body:not(.env-open) {
 /* ─────── 5. Intro / Hero Section ─────── */
 .hero-bg-parallax {
   position: absolute;
-  inset: -12%;
+  inset: -15%;
   background-image: url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80');
   background-size: cover;
   background-position: center;
-  animation: kenBurns 12s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
+  animation: kenBurns 18s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
   z-index: 0;
   will-change: transform, filter;
   transition: filter 0.6s ease;
@@ -693,10 +704,10 @@ body:not(.env-open) {
 }
 
 @keyframes kenBurns {
-  0%   { transform: scale(1.02) translate(0, 0); filter: brightness(1.06) contrast(1.04) saturate(1.05); }
-  35%  { transform: scale(1.24) translate(-2.5%, -1.8%); filter: brightness(1.20) contrast(1.12) saturate(1.15); }
-  70%  { transform: scale(1.12) translate(2%, -1%); filter: brightness(1.08) contrast(1.06) saturate(1.08); }
-  100% { transform: scale(1.32) translate(-1%, -2.5%); filter: brightness(1.25) contrast(1.14) saturate(1.18); }
+  0%   { transform: scale(1.0) translate(0, 0); filter: brightness(1.04) contrast(1.03) saturate(1.05); }
+  35%  { transform: scale(1.28) translate(-3%, -2.2%); filter: brightness(1.22) contrast(1.14) saturate(1.18); }
+  70%  { transform: scale(1.15) translate(2.5%, -1.2%); filter: brightness(1.08) contrast(1.06) saturate(1.08); }
+  100% { transform: scale(1.42) translate(-1.5%, -3%); filter: brightness(1.26) contrast(1.16) saturate(1.20); }
 }
 
 .petals-layer {
@@ -1947,11 +1958,11 @@ body.lang-ar .wd-val {
 /* ── CUSTOM REGENERATED BACKGROUND ── */
 .hero-bg-parallax {
   position: absolute;
-  inset: -12%;
+  inset: -15%;
   background-image: url('assets/luxury_wedding_hall.png');
   background-size: cover;
   background-position: center;
-  animation: kenBurns 12s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
+  animation: kenBurns 18s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
   z-index: 0;
   will-change: transform, filter;
   transition: filter 0.6s ease;
@@ -3261,6 +3272,42 @@ body .invitation.pattern-crown-active .right-panel {
 
 .pattern-zellige-active .panel-zellige,
 .pattern-crown-active .panel-zellige {
+  display: block !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   🚪 TUNISIAN MEDITERRANEAN BLUE DOOR DESIGN (Pattern Door)
+   ════════════════════════════════════════════════════════════════ */
+
+body .invitation.pattern-door-active .left-panel,
+body .invitation.pattern-door-active .right-panel {
+  background: #0d3b66 !important;
+  border-top: 1px solid rgba(201, 168, 76, 0.4);
+}
+
+.pattern-door-active .left-panel::after,
+.pattern-door-active .right-panel::after {
+  background: linear-gradient(to bottom, transparent 0%, #111 20%, #c9a84c 50%, #111 80%, transparent 100%);
+}
+
+.pattern-door-active .left-panel {
+  box-shadow:
+    inset -5px 0 18px rgba(0, 0, 0, 0.5),
+    inset 0 0 30px rgba(0, 0, 0, 0.2);
+}
+
+.pattern-door-active .right-panel {
+  box-shadow:
+    -7px 0 24px rgba(0, 0, 0, 0.6),
+    inset 5px 0 18px rgba(0, 0, 0, 0.5),
+    inset 0 0 30px rgba(0, 0, 0, 0.2);
+}
+
+.panel-door {
+  display: none;
+}
+
+.pattern-door-active .panel-door {
   display: block !important;
 }
 
