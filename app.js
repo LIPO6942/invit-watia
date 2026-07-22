@@ -1262,21 +1262,21 @@ let _sealApplied = false; // Flag to prevent seal from being changed multiple ti
 function applyEnvelopeDesign(cfg) {
   if (!cfg) return;
 
-  // ── Motif (ep: 'floral' | 'vintage' | 'minimalist' | 'nature' | 'arabesque' | 'crown' | 'calligraphy') ──
+  // ── Motif (ep: 'floral' | 'vintage' | 'minimalist' | 'nature' | 'arabesque' | 'zellige' | 'calligraphy') ──
   const pattern        = cfg.ep || 'vintage';
   const showFloral     = pattern === 'floral';
   const showVintage    = pattern === 'vintage';
   const showMinimalist = pattern === 'minimalist';
   const showNature     = pattern === 'nature';
   const showArabesque  = pattern === 'arabesque';
-  const showCrown      = pattern === 'crown';
+  const showZellige    = pattern === 'zellige' || pattern === 'crown';
   const showCalligraphy = pattern === 'calligraphy';
 
   document.querySelectorAll('.panel-branches').forEach(el => {
     el.style.display = showFloral ? '' : 'none';
   });
   document.querySelectorAll('.panel-vintage').forEach(el => {
-    el.style.display = showVintage || showCrown ? 'block' : 'none';
+    el.style.display = showVintage ? 'block' : 'none';
   });
   document.querySelectorAll('.panel-minimalist').forEach(el => {
     el.style.display = showMinimalist ? 'block' : 'none';
@@ -1286,6 +1286,9 @@ function applyEnvelopeDesign(cfg) {
   });
   document.querySelectorAll('.panel-arabesque').forEach(el => {
     el.style.display = showArabesque ? 'block' : 'none';
+  });
+  document.querySelectorAll('.panel-zellige').forEach(el => {
+    el.style.display = showZellige ? 'block' : 'none';
   });
   document.querySelectorAll('.panel-calligraphy').forEach(el => {
     el.style.display = showCalligraphy ? 'block' : 'none';
@@ -1298,10 +1301,10 @@ function applyEnvelopeDesign(cfg) {
     } else {
       invitationEl.classList.remove('pattern-minimalist-active');
     }
-    if (showCrown) {
-      invitationEl.classList.add('pattern-crown-active');
+    if (showZellige) {
+      invitationEl.classList.add('pattern-zellige-active');
     } else {
-      invitationEl.classList.remove('pattern-crown-active');
+      invitationEl.classList.remove('pattern-zellige-active');
     }
     if (showCalligraphy) {
       invitationEl.classList.add('pattern-calligraphy-active');
