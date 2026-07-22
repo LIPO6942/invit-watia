@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Scheherazade+New:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@600;700&family=Aref+Ruqaa+Ink:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<link rel="stylesheet" href="style.css?v=24">
+<link rel="stylesheet" href="style.css?v=26">
 </head>
 <body>
 
@@ -63,11 +63,12 @@
         </div>
       </div>
       <div id="wedding-content">
+        <!-- Global fixed background layer for continuous particles (stardust/petals) across all sections -->
+        <div class="petals-layer" id="petals"></div>
 
         <!-- ── INTRO ── -->
         <section class="w-section" id="intro">
           <div class="hero-bg-parallax"></div>
-          <div class="petals-layer" id="petals"></div>
           <div class="intro-overlay">
             <div class="divider-ornament">✦✦✦</div>
             <p class="p1-invite-text families-main-title" data-tr="invite_title">تتشرف عائلة</p>
@@ -94,7 +95,6 @@
         <!-- ── COUNTDOWN ── -->
         <section class="w-section" id="countdown-section">
           <div class="countdown-bg-image"></div>
-          <div class="cd-section-petals" id="cdPetals"></div>
           <div class="countdown-content">
             <div class="section-title font-amiri" data-tr="countdown_title">العد التنازلي</div>
             <div class="section-subtitle font-amiri" data-tr="countdown_subtitle">لحظات تفصلنا عن اللقاء</div>
@@ -790,6 +790,6 @@
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<script src="app.js?v=25"></script>
+<script src="app.js?v=26"></script>
 </body>
 </html>

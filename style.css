@@ -742,10 +742,10 @@ body:not(.env-open) {
 }
 
 .petals-layer {
-  position: absolute;
+  position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 2;
+  z-index: 3;
   overflow: hidden;
 }
 
