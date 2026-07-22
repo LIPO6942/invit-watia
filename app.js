@@ -1385,7 +1385,7 @@ function applyEnvelopeDesign(cfg) {
 
     if (sealImg) {
       if (seal === 'monogram') {
-        sealImg.src = 'assets/monogram_wax_seal_bg.png';
+        sealImg.src = 'assets/monogram_wax_seal_bg.png?v=25';
         if (sealMonoText) {
           sealMonoText.style.display = 'flex';
           let initials = '';
@@ -1457,7 +1457,7 @@ function applyEnvelopeDesign(cfg) {
           }
         }
       } else if (seal === 'lock') {
-        sealImg.src = 'assets/lock_wax_seal.png';
+        sealImg.src = 'assets/lock_wax_seal.png?v=25';
         if (sealMonoText) {
           sealMonoText.style.display = 'flex';
           const brideName = (cfg.ba || 'العروسة').trim();
@@ -1472,7 +1472,7 @@ function applyEnvelopeDesign(cfg) {
           sealMonoText.appendChild(nameSpan);
         }
       } else if (seal === 'amazigh' || seal === 'zellige') {
-        sealImg.src = seal === 'amazigh' ? 'assets/amazigh_wax_seal.png' : 'assets/zellige_wax_seal.png';
+        sealImg.src = seal === 'amazigh' ? 'assets/amazigh_wax_seal.png?v=25' : 'assets/zellige_wax_seal.png?v=25';
         if (sealMonoText) {
           sealMonoText.style.display = 'flex';
           sealMonoText.style.flexDirection = 'column';
@@ -1487,7 +1487,7 @@ function applyEnvelopeDesign(cfg) {
           `;
         }
       } else {
-        sealImg.src = `assets/${seal}_wax_seal.png`;
+        sealImg.src = `assets/${seal}_wax_seal.png?v=25`;
         if (sealMonoText) {
           sealMonoText.style.display = 'none';
         }
