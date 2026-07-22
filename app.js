@@ -1624,7 +1624,7 @@ function _updatePersonalizedInviteDesc() {
 
   const cleanTitle = title.replace('إلى ', '').trim();
   const titlePrefix = cleanTitle ? cleanTitle + ' ' : '';
-  inviteDescEl.innerHTML = `بدعوة <span class="invite-guest-name">${titlePrefix}${name}</span> لحضور حفل الوطية`;
+  inviteDescEl.innerHTML = `بدعوة <span class="invite-guest-name">${titlePrefix}${name}</span> لحضور حفل وطية`;
 }
 
 function readAndApplyGuestParam() {
