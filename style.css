@@ -3219,9 +3219,9 @@ body.lang-ar .animated-bride {
    ════════════════════════════════════════════════════════════════ */
 
 .invitation.pattern-crown-active:not(.open) {
-  overflow: visible !important;
-  margin-top: 55px !important;
-  min-height: calc(100dvh - 55px) !important;
+  overflow: hidden !important;
+  margin-top: 0 !important;
+  min-height: 100dvh !important;
 }
 .invitation.pattern-crown-active.open {
   overflow: visible !important;
@@ -3232,14 +3232,15 @@ body.lang-ar .animated-bride {
 .envelope-crown-header {
   display: none;
   position: absolute;
-  top: -58px;
+  top: 0;
   left: 0;
   width: 100%;
-  height: 65px;
+  height: 80px;
   z-index: 15;
   pointer-events: none;
-  transform-origin: bottom center;
+  transform-origin: top center;
   transition: transform 1.1s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.7s ease;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
 }
 
 .pattern-crown-active .envelope-crown-header {
@@ -3248,7 +3249,7 @@ body.lang-ar .animated-bride {
 
 /* When the invitation opens, lift/rotate the crown flap gracefully */
 .invitation.open.pattern-crown-active .envelope-crown-header {
-  transform: perspective(700px) rotateX(-140deg) translateY(-15px);
+  transform: perspective(700px) rotateX(-140deg) translateY(-20px);
   opacity: 0;
 }
 
@@ -3258,9 +3259,9 @@ body.lang-ar .animated-bride {
   display: block;
 }
 
-.pattern-crown-active .left-panel,
-.pattern-crown-active .right-panel {
-  background: linear-gradient(180deg, #fffdf8 0%, #f7eed7 100%);
+body .invitation.pattern-crown-active .left-panel,
+body .invitation.pattern-crown-active .right-panel {
+  background: linear-gradient(180deg, #fffdf8 0%, #f7eed7 100%) !important;
   border-top: 1px solid rgba(201, 168, 76, 0.4);
 }
 
@@ -3268,17 +3269,15 @@ body.lang-ar .animated-bride {
    🖋️ ARABIC CALLIGRAPHY ENVELOPE DESIGN (Pattern Calligraphy)
    ════════════════════════════════════════════════════════════════ */
 
-.pattern-calligraphy-active .left-panel,
-.pattern-calligraphy-active .right-panel {
+body .invitation.pattern-calligraphy-active .left-panel,
+body .invitation.pattern-calligraphy-active .right-panel {
   background:
-    /* Subtle paper grain texture */
     repeating-linear-gradient(
       -35deg,
       transparent 0px, transparent 4px,
       rgba(201, 168, 76, 0.03) 4px, rgba(201, 168, 76, 0.03) 5px
     ),
-    /* Deep emerald green gradient */
-    linear-gradient(170deg, #0a3220 0%, #0d3621 30%, #072815 70%, #051d11 100%);
+    linear-gradient(170deg, #0a3220 0%, #0d3621 30%, #072815 70%, #051d11 100%) !important;
   border-top: 1px solid rgba(201, 168, 76, 0.35);
 }
 
@@ -3291,18 +3290,18 @@ body.lang-ar .animated-bride {
 /* Elegant shadow on calligraphy panels */
 .pattern-calligraphy-active .left-panel {
   box-shadow:
-    inset -4px 0 16px rgba(0, 0, 0, 0.25),
+    inset -4px 0 16px rgba(0, 0, 0, 0.35),
     inset 0 0 40px rgba(201, 168, 76, 0.06);
 }
 
 .pattern-calligraphy-active .right-panel {
   box-shadow:
-    -6px 0 20px rgba(0, 0, 0, 0.4),
-    inset 4px 0 16px rgba(0, 0, 0, 0.25),
+    -6px 0 20px rgba(0, 0, 0, 0.5),
+    inset 4px 0 16px rgba(0, 0, 0, 0.35),
     inset 0 0 40px rgba(201, 168, 76, 0.06);
 }
 
-/* Calligraphy SVG panels display */
+/* Calligraphy panels display */
 .panel-calligraphy {
   display: none;
 }
