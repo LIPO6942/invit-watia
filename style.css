@@ -3284,26 +3284,26 @@ body .invitation.pattern-crown-active .right-panel {
 
 body .invitation.pattern-door-active .left-panel,
 body .invitation.pattern-door-active .right-panel {
-  background: #0d3b66 !important;
-  border-top: 1px solid rgba(201, 168, 76, 0.4);
+  background: #005a9c !important;
+  border-top: 1px solid rgba(201, 168, 76, 0.45);
 }
 
 .pattern-door-active .left-panel::after,
 .pattern-door-active .right-panel::after {
-  background: linear-gradient(to bottom, transparent 0%, #111 20%, #c9a84c 50%, #111 80%, transparent 100%);
+  background: linear-gradient(to bottom, transparent 0%, rgba(201, 168, 76, 0.8) 15%, #ffd700 50%, rgba(201, 168, 76, 0.8) 85%, transparent 100%);
 }
 
 .pattern-door-active .left-panel {
   box-shadow:
-    inset -5px 0 18px rgba(0, 0, 0, 0.5),
-    inset 0 0 30px rgba(0, 0, 0, 0.2);
+    inset -6px 0 20px rgba(0, 0, 0, 0.6),
+    inset 0 0 35px rgba(0, 0, 0, 0.25);
 }
 
 .pattern-door-active .right-panel {
   box-shadow:
-    -7px 0 24px rgba(0, 0, 0, 0.6),
-    inset 5px 0 18px rgba(0, 0, 0, 0.5),
-    inset 0 0 30px rgba(0, 0, 0, 0.2);
+    -8px 0 26px rgba(0, 0, 0, 0.65),
+    inset 6px 0 20px rgba(0, 0, 0, 0.6),
+    inset 0 0 35px rgba(0, 0, 0, 0.25);
 }
 
 .panel-door {
@@ -3312,6 +3312,16 @@ body .invitation.pattern-door-active .right-panel {
 
 .pattern-door-active .panel-door {
   display: block !important;
+}
+
+.pattern-door-active .seal-halo {
+  background: radial-gradient(circle, rgba(212, 163, 115, 0.55) 0%, rgba(201, 168, 76, 0.2) 50%, transparent 70%) !important;
+  filter: blur(8px);
+}
+
+.pattern-door-active .seal-text-svg text {
+  fill: #ffe699 !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
 }
 
 /* ════════════════════════════════════════════════════════════════
