@@ -509,10 +509,76 @@
       <img class="panel-calligraphy" src="assets/arabic_calligraphy_pattern.png" alt="Calligraphy Motif" style="display:none; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none; opacity:0.95;">
 
       <!-- Motif Zellige & Faïence Arch (4K Ultra-Centered Image - Left Half) -->
-      <img class="panel-zellige" src="assets/zellige_pattern.png" alt="Zellige Motif" style="display:none; position:absolute; top:0; bottom:0; left:0; width:200%; max-width:none; height:100%; object-fit:cover; object-position:left center; pointer-events:none; opacity:0.98;">
+      <img class="panel-zellige" src="assets/zellige_pattern.png?v=3" alt="Zellige Motif" style="display:none; position:absolute; top:0; bottom:0; left:0; width:200%; max-width:none; height:100%; object-fit:cover; object-position:left center; pointer-events:none; opacity:0.98;">
 
       <!-- Motif Porte Tunisienne Méditerranéenne (4K Ultra-Centered Image - Left Leaf) -->
-      <img class="panel-door" src="assets/tunisian_door_pattern.png" alt="Porte Tunisienne" style="display:none; position:absolute; top:0; bottom:0; left:0; width:200%; max-width:none; height:100%; object-fit:cover; object-position:left center; pointer-events:none; opacity:1;">
+      <img class="panel-door" src="assets/tunisian_door_pattern.png?v=3" alt="Porte Tunisienne" style="display:none; position:absolute; top:0; bottom:0; left:0; width:200%; max-width:none; height:100%; object-fit:cover; object-position:left center; pointer-events:none; opacity:1;">
+
+      <!-- Motif Amazigh Berbère (Pure SVG Amazigh Craftsmanship - Left Half) -->
+      <svg class="panel-amazigh" viewBox="0 0 215 760" xmlns="http://www.w3.org/2000/svg" style="display:none; position:absolute; inset:0; width:100%; height:100%; pointer-events:none;">
+        <defs>
+          <linearGradient id="amazBgL" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#120c06"/>
+            <stop offset="50%" stop-color="#24160a"/>
+            <stop offset="100%" stop-color="#0c0704"/>
+          </linearGradient>
+          <linearGradient id="amazGoldL" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ffe58f"/>
+            <stop offset="50%" stop-color="#d4af37"/>
+            <stop offset="100%" stop-color="#996515"/>
+          </linearGradient>
+          <linearGradient id="amazTerracottaL" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#e05a47"/>
+            <stop offset="100%" stop-color="#b83826"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Base Background -->
+        <rect x="0" y="0" width="215" height="760" fill="url(#amazBgL)"/>
+
+        <!-- Outer Border Filigree Strip -->
+        <line x1="15" y1="0" x2="15" y2="760" stroke="url(#amazGoldL)" stroke-width="2"/>
+        <line x1="24" y1="0" x2="24" y2="760" stroke="url(#amazTerracottaL)" stroke-width="1.5" stroke-dasharray="4 6"/>
+
+        <!-- ── Central Amazigh Yaz Symbol (ⵣ - Symbol of Freedom & Joy) ── -->
+        <g transform="translate(135, 200)">
+          <!-- Yaz Symbol Center Branch -->
+          <line x1="0" y1="-50" x2="0" y2="50" stroke="url(#amazGoldL)" stroke-width="5" stroke-linecap="round"/>
+          <!-- Top Horn Curve -->
+          <path d="M -30,-45 C -15,-65 15,-65 30,-45" fill="none" stroke="url(#amazGoldL)" stroke-width="4.5" stroke-linecap="round"/>
+          <!-- Bottom Horn Curve -->
+          <path d="M -30,45 C -15,65 15,65 30,45" fill="none" stroke="url(#amazGoldL)" stroke-width="4.5" stroke-linecap="round"/>
+          <!-- Center Diamond Ring -->
+          <polygon points="0,-18 18,0 0,18 -18,0" fill="url(#amazTerracottaL)" stroke="url(#amazGoldL)" stroke-width="2"/>
+          <circle cx="0" cy="0" r="4" fill="#ffffff"/>
+        </g>
+
+        <!-- ── Middle Amazigh Diamond Weave Motif (التطريز والمرقوم الأمازيغي) ── -->
+        <g transform="translate(135, 380)">
+          <!-- Large Outer Diamond -->
+          <polygon points="0,-85 65,0 0,85 -65,0" fill="none" stroke="url(#amazGoldL)" stroke-width="3"/>
+          <polygon points="0,-72 54,0 0,72 -54,0" fill="none" stroke="url(#amazTerracottaL)" stroke-width="2" stroke-dasharray="3 5"/>
+          <!-- Inner Diamond -->
+          <polygon points="0,-48 36,0 0,48 -36,0" fill="url(#amazTerracottaL)" stroke="url(#amazGoldL)" stroke-width="2"/>
+          <polygon points="0,-25 18,0 0,25 -18,0" fill="url(#amazBgL)" stroke="url(#amazGoldL)" stroke-width="1.5"/>
+          <!-- Eye of Protection Stud -->
+          <circle cx="0" cy="0" r="6" fill="url(#amazGoldL)"/>
+          <!-- Corner Chevron Arrows -->
+          <path d="M -45,-30 L -58,-30 L -58,-43" fill="none" stroke="url(#amazGoldL)" stroke-width="2"/>
+          <path d="M 45,-30 L 58,-30 L 58,-43" fill="none" stroke="url(#amazGoldL)" stroke-width="2"/>
+          <path d="M -45,30 L -58,30 L -58,43" fill="none" stroke="url(#amazGoldL)" stroke-width="2"/>
+          <path d="M 45,30 L 58,30 L 58,43" fill="none" stroke="url(#amazGoldL)" stroke-width="2"/>
+        </g>
+
+        <!-- ── Lower Amazigh Yaz Symbol (ⵣ) ── -->
+        <g transform="translate(135, 560)">
+          <line x1="0" y1="-50" x2="0" y2="50" stroke="url(#amazGoldL)" stroke-width="5" stroke-linecap="round"/>
+          <path d="M -30,-45 C -15,-65 15,-65 30,-45" fill="none" stroke="url(#amazGoldL)" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M -30,45 C -15,65 15,65 30,45" fill="none" stroke="url(#amazGoldL)" stroke-width="4.5" stroke-linecap="round"/>
+          <polygon points="0,-18 18,0 0,18 -18,0" fill="url(#amazTerracottaL)" stroke="url(#amazGoldL)" stroke-width="2"/>
+          <circle cx="0" cy="0" r="4" fill="#ffffff"/>
+        </g>
+      </svg>
     </div>
 
     <div class="env-panel right-panel" id="rightPanel">
@@ -526,10 +592,63 @@
       <img class="panel-calligraphy" src="assets/arabic_calligraphy_pattern.png" alt="Calligraphy Motif" style="display:none; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none; opacity:0.95; transform:scaleX(-1);">
 
       <!-- Motif Zellige & Faïence Arch (4K Ultra-Centered Image - Right Half) -->
-      <img class="panel-zellige" src="assets/zellige_pattern.png" alt="Zellige Motif" style="display:none; position:absolute; top:0; bottom:0; right:0; width:200%; max-width:none; height:100%; object-fit:cover; object-position:right center; pointer-events:none; opacity:0.98;">
+      <img class="panel-zellige" src="assets/zellige_pattern.png?v=3" alt="Zellige Motif" style="display:none; position:absolute; top:0; bottom:0; right:0; width:200%; max-width:none; height:100%; object-fit:cover; object-position:right center; pointer-events:none; opacity:0.98;">
 
       <!-- Motif Porte Tunisienne Méditerranéenne (4K Ultra-Centered Image - Right Leaf) -->
-      <img class="panel-door" src="assets/tunisian_door_pattern.png" alt="Porte Tunisienne" style="display:none; position:absolute; top:0; bottom:0; right:0; width:200%; max-width:none; height:100%; object-fit:cover; object-position:right center; pointer-events:none; opacity:1;">
+      <img class="panel-door" src="assets/tunisian_door_pattern.png?v=3" alt="Porte Tunisienne" style="display:none; position:absolute; top:0; bottom:0; right:0; width:200%; max-width:none; height:100%; object-fit:cover; object-position:right center; pointer-events:none; opacity:1;">
+
+      <!-- Motif Amazigh Berbère (Pure SVG Amazigh Craftsmanship - Right Half Mirrored) -->
+      <svg class="panel-amazigh" viewBox="0 0 215 760" xmlns="http://www.w3.org/2000/svg" style="display:none; position:absolute; inset:0; width:100%; height:100%; pointer-events:none; transform:scaleX(-1);">
+        <defs>
+          <linearGradient id="amazBgR" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#120c06"/>
+            <stop offset="50%" stop-color="#24160a"/>
+            <stop offset="100%" stop-color="#0c0704"/>
+          </linearGradient>
+          <linearGradient id="amazGoldR" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ffe58f"/>
+            <stop offset="50%" stop-color="#d4af37"/>
+            <stop offset="100%" stop-color="#996515"/>
+          </linearGradient>
+          <linearGradient id="amazTerracottaR" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#e05a47"/>
+            <stop offset="100%" stop-color="#b83826"/>
+          </linearGradient>
+        </defs>
+
+        <rect x="0" y="0" width="215" height="760" fill="url(#amazBgR)"/>
+
+        <line x1="15" y1="0" x2="15" y2="760" stroke="url(#amazGoldR)" stroke-width="2"/>
+        <line x1="24" y1="0" x2="24" y2="760" stroke="url(#amazTerracottaR)" stroke-width="1.5" stroke-dasharray="4 6"/>
+
+        <g transform="translate(135, 200)">
+          <line x1="0" y1="-50" x2="0" y2="50" stroke="url(#amazGoldR)" stroke-width="5" stroke-linecap="round"/>
+          <path d="M -30,-45 C -15,-65 15,-65 30,-45" fill="none" stroke="url(#amazGoldR)" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M -30,45 C -15,65 15,65 30,45" fill="none" stroke="url(#amazGoldR)" stroke-width="4.5" stroke-linecap="round"/>
+          <polygon points="0,-18 18,0 0,18 -18,0" fill="url(#amazTerracottaR)" stroke="url(#amazGoldR)" stroke-width="2"/>
+          <circle cx="0" cy="0" r="4" fill="#ffffff"/>
+        </g>
+
+        <g transform="translate(135, 380)">
+          <polygon points="0,-85 65,0 0,85 -65,0" fill="none" stroke="url(#amazGoldR)" stroke-width="3"/>
+          <polygon points="0,-72 54,0 0,72 -54,0" fill="none" stroke="url(#amazTerracottaR)" stroke-width="2" stroke-dasharray="3 5"/>
+          <polygon points="0,-48 36,0 0,48 -36,0" fill="url(#amazTerracottaR)" stroke="url(#amazGoldR)" stroke-width="2"/>
+          <polygon points="0,-25 18,0 0,25 -18,0" fill="url(#amazBgR)" stroke="url(#amazGoldR)" stroke-width="1.5"/>
+          <circle cx="0" cy="0" r="6" fill="url(#amazGoldR)"/>
+          <path d="M -45,-30 L -58,-30 L -58,-43" fill="none" stroke="url(#amazGoldR)" stroke-width="2"/>
+          <path d="M 45,-30 L 58,-30 L 58,-43" fill="none" stroke="url(#amazGoldR)" stroke-width="2"/>
+          <path d="M -45,30 L -58,30 L -58,43" fill="none" stroke="url(#amazGoldR)" stroke-width="2"/>
+          <path d="M 45,30 L 58,30 L 58,43" fill="none" stroke="url(#amazGoldR)" stroke-width="2"/>
+        </g>
+
+        <g transform="translate(135, 560)">
+          <line x1="0" y1="-50" x2="0" y2="50" stroke="url(#amazGoldR)" stroke-width="5" stroke-linecap="round"/>
+          <path d="M -30,-45 C -15,-65 15,-65 30,-45" fill="none" stroke="url(#amazGoldR)" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M -30,45 C -15,65 15,65 30,45" fill="none" stroke="url(#amazGoldR)" stroke-width="4.5" stroke-linecap="round"/>
+          <polygon points="0,-18 18,0 0,18 -18,0" fill="url(#amazTerracottaR)" stroke="url(#amazGoldR)" stroke-width="2"/>
+          <circle cx="0" cy="0" r="4" fill="#ffffff"/>
+        </g>
+      </svg>
     </div>
 
     <!-- ⑦ Nominative Guest Card — visible only when ?guest= URL param is present -->

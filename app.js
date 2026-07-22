@@ -1272,6 +1272,7 @@ function applyEnvelopeDesign(cfg) {
   const showZellige    = pattern === 'zellige' || pattern === 'crown';
   const showDoor       = pattern === 'door' || pattern === 'porte';
   const showCalligraphy = pattern === 'calligraphy';
+  const showAmazigh    = pattern === 'amazigh';
 
   document.querySelectorAll('.panel-branches').forEach(el => {
     el.style.display = showFloral ? '' : 'none';
@@ -1297,6 +1298,9 @@ function applyEnvelopeDesign(cfg) {
   document.querySelectorAll('.panel-calligraphy').forEach(el => {
     el.style.display = showCalligraphy ? 'block' : 'none';
   });
+  document.querySelectorAll('.panel-amazigh').forEach(el => {
+    el.style.display = showAmazigh ? 'block' : 'none';
+  });
 
   const invitationEl = document.getElementById('invitation');
   if (invitationEl) {
@@ -1319,6 +1323,11 @@ function applyEnvelopeDesign(cfg) {
       invitationEl.classList.add('pattern-calligraphy-active');
     } else {
       invitationEl.classList.remove('pattern-calligraphy-active');
+    }
+    if (showAmazigh) {
+      invitationEl.classList.add('pattern-amazigh-active');
+    } else {
+      invitationEl.classList.remove('pattern-amazigh-active');
     }
   }
 

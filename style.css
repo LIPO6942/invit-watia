@@ -397,7 +397,7 @@ body:not(.env-open) {
 #seal-3d-monogram-text .lock-bride-name {
   color: #38240a;
   font-weight: 900;
-  font-size: 1.35rem;
+  font-size: 1.6rem;
   line-height: 1;
   margin-top: 14px;
   letter-spacing: 1px;
@@ -3322,6 +3322,42 @@ body .invitation.pattern-door-active .right-panel {
 .pattern-door-active .seal-text-svg text {
   fill: #ffe699 !important;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   ⵣ AMAZIGH BERBER ENVELOPE DESIGN (Pattern Amazigh)
+   ════════════════════════════════════════════════════════════════ */
+
+body .invitation.pattern-amazigh-active .left-panel,
+body .invitation.pattern-amazigh-active .right-panel {
+  background: linear-gradient(160deg, #180e08 0%, #2b180d 50%, #120904 100%) !important;
+  border-top: 1px solid rgba(212, 175, 55, 0.5);
+}
+
+.pattern-amazigh-active .left-panel::after,
+.pattern-amazigh-active .right-panel::after {
+  background: linear-gradient(to bottom, transparent 0%, #e05a47 20%, #d4af37 50%, #e05a47 80%, transparent 100%);
+}
+
+.pattern-amazigh-active .left-panel {
+  box-shadow:
+    inset -6px 0 22px rgba(0, 0, 0, 0.7),
+    inset 0 0 40px rgba(224, 90, 71, 0.12);
+}
+
+.pattern-amazigh-active .right-panel {
+  box-shadow:
+    -8px 0 28px rgba(0, 0, 0, 0.75),
+    inset 6px 0 22px rgba(0, 0, 0, 0.7),
+    inset 0 0 40px rgba(224, 90, 71, 0.12);
+}
+
+.panel-amazigh {
+  display: none;
+}
+
+.pattern-amazigh-active .panel-amazigh {
+  display: block !important;
 }
 
 /* ════════════════════════════════════════════════════════════════
