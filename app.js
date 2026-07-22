@@ -453,26 +453,57 @@ window.openEnvelopeNow = function() {
 function spawnPetals() {
   const layer = document.getElementById('petals');
   if (!layer) return;
-  const colors = [
-    '#e8cc7a','#f5e6c0','#c9a84c',
-    '#fff8d0','#d4a960','#f5dca0',
-    '#faf0d0','#dbb86a'
+  layer.innerHTML = ''; // Reset container
+
+  const starSymbols = ['✦', '✧', '★', '•', '❖', '·', '✦'];
+  const goldColors  = [
+    '#ffe58f', '#d4af37', '#ffd700', '#fff8d0',
+    '#f5e6c0', '#c9930c', '#ffffff', '#e8dec9'
   ];
-  for (let i = 0; i < 22; i++) {
-    const p    = document.createElement('div');
-    p.className = 'petal';
-    const size  = Math.random() * 8 + 5;
-    const r1    = Math.floor(Math.random() * 40 + 30);
-    const r2    = Math.floor(Math.random() * 40 + 30);
-    p.style.cssText = [
-      `width:${size}px`,
-      `height:${size * 1.5}px`,
-      `left:${Math.random() * 100}%`,
-      `background:${colors[Math.floor(Math.random() * colors.length)]}`,
-      `animation-duration:${Math.random() * 8 + 7}s`,
-      `animation-delay:${Math.random() * 12}s`,
-      `border-radius:${r1}% 0 ${r2}% 0`,
-    ].join(';');
+
+  // Spawn 32 Golden Stardust & Sparkle particles
+  for (let i = 0; i < 32; i++) {
+    const p = document.createElement('div');
+    const isStar = Math.random() > 0.35;
+    
+    const symbol   = starSymbols[Math.floor(Math.random() * starSymbols.length)];
+    const color    = goldColors[Math.floor(Math.random() * goldColors.length)];
+    const size     = isStar ? (Math.random() * 12 + 10) : (Math.random() * 8 + 4);
+    const duration = Math.random() * 8 + 7; // 7s to 15s
+    const delay    = Math.random() * 10;
+    const driftX   = (Math.random() - 0.5) * 90;
+
+    if (isStar) {
+      p.className = 'stardust-star';
+      p.textContent = symbol;
+      p.style.cssText = [
+        `position: absolute`,
+        `left: ${Math.random() * 100}%`,
+        `font-size: ${size}px`,
+        `color: ${color}`,
+        `text-shadow: 0 0 10px ${color}, 0 0 20px #ffd700`,
+        `animation: stardustRise ${duration}s ease-in-out infinite ${delay}s`,
+        `--drift-x: ${driftX}px`,
+        `pointer-events: none`,
+        `will-change: transform, opacity`
+      ].join(';');
+    } else {
+      p.className = 'petal';
+      const r = Math.floor(Math.random() * 50);
+      p.style.cssText = [
+        `position: absolute`,
+        `left: ${Math.random() * 100}%`,
+        `width: ${size}px`,
+        `height: ${size}px`,
+        `background: ${color}`,
+        `border-radius: ${r}%`,
+        `box-shadow: 0 0 8px ${color}, 0 0 16px rgba(255,215,0,0.8)`,
+        `animation: stardustRise ${duration}s ease-in-out infinite ${delay}s`,
+        `--drift-x: ${driftX}px`,
+        `pointer-events: none`,
+        `will-change: transform, opacity`
+      ].join(';');
+    }
     layer.appendChild(p);
   }
 }
