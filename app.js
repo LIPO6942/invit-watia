@@ -61,12 +61,14 @@ function fromB64(str) {
 function applyConfigToDOM(cfg) {
   const groomDisplay = cfg.ga;
   const brideDisplay = cfg.ba;
+  const envTitle = brideDisplay ? `وطية ${brideDisplay}` : 'وطية رانية';
 
   const MAP = {
     groomAr:          groomDisplay,
     brideAr:          brideDisplay,
     groomNameDisplay: groomDisplay,
     brideNameDisplay: brideDisplay,
+    envHeaderTitle:   envTitle,
     groomFather: cfg.gf,
     groomMother: cfg.gm,
     brideFather: cfg.bf,
@@ -1493,7 +1495,7 @@ const TRANSLATIONS = {
     mr: 'السيد',
     mrs: 'والسيدة',
     and: 'و',
-    invite_desc: 'بدعوتكم لحضور حفل وطية ابنتهم',
+    invite_desc: 'بدعوتكم لحضور حفل وطية ابنتهما',
     and_char: '&',
     scroll_hint: 'اسحب للأسفل',
     countdown_title: 'العد التنازلي',
