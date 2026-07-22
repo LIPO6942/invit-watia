@@ -3314,14 +3314,28 @@ body .invitation.pattern-crown-active .right-panel {
 
 .panel-zellige {
   display: none;
-  top: -15.5% !important;
-  height: 131% !important;
-  bottom: auto !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  height: 100% !important;
+  object-fit: cover !important;
 }
 
 .pattern-zellige-active .panel-zellige,
 .pattern-crown-active .panel-zellige {
   display: block !important;
+}
+
+/* Align seal perfectly in center of zellige rosette medallion & place guest card below without overlap */
+.pattern-zellige-active .seal-wrapper,
+.pattern-crown-active .seal-wrapper {
+  top: 55.5% !important;
+}
+
+.pattern-zellige-active .guest-name-banner,
+.pattern-crown-active .guest-name-banner,
+.pattern-zellige-active #role-inscription-banner,
+.pattern-crown-active #role-inscription-banner {
+  bottom: 65px !important;
 }
 
 /* ════════════════════════════════════════════════════════════════
