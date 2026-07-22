@@ -471,7 +471,7 @@ function spawnPetals(mode = 'stardust') {
 
   // 1. Golden Stardust & Sparkles (Rising upward from bottom)
   if (showStardust) {
-    const count = mode === 'both' ? 25 : 35;
+    const count = mode === 'both' ? 15 : 25;
     for (let i = 0; i < count; i++) {
       const p = document.createElement('div');
       const isStar = Math.random() > 0.35;
@@ -521,7 +521,7 @@ function spawnPetals(mode = 'stardust') {
 
   // 2. Traditional Falling Rose Petals (Falling downward from top)
   if (showRosePetals) {
-    const count = mode === 'both' ? 20 : 30;
+    const count = mode === 'both' ? 15 : 25;
     for (let i = 0; i < count; i++) {
       const p = document.createElement('div');
       const size  = Math.random() * 9 + 6;
