@@ -426,7 +426,7 @@ window.openEnvelopeNow = function() {
   startWeddingMusic();
 
   setTimeout(() => {
-    spawnPetals();
+    spawnPetals(window._particleMode || 'stardust');
     startHeartClock();
   }, 900);
 };
@@ -455,7 +455,7 @@ function spawnPetals(mode = 'stardust') {
   if (!layer) return;
   layer.innerHTML = ''; // Reset container
 
-  const starSymbols = ['✦', '✧', '★', '•', '·', '✦']; // Removed ❖ symbol
+  const starSymbols = ['✦', '✧', '★', '•', '·', '✦'];
   const goldColors  = [
     '#ffe58f', '#d4af37', '#ffd700', '#fff8d0',
     '#f5e6c0', '#c9930c', '#ffffff', '#e8dec9'
@@ -475,7 +475,6 @@ function spawnPetals(mode = 'stardust') {
     for (let i = 0; i < count; i++) {
       const p = document.createElement('div');
       const isStar = Math.random() > 0.35;
-      
       const symbol   = starSymbols[Math.floor(Math.random() * starSymbols.length)];
       const color    = goldColors[Math.floor(Math.random() * goldColors.length)];
       const size     = isStar ? (Math.random() * 12 + 10) : (Math.random() * 8 + 4);
@@ -487,56 +486,61 @@ function spawnPetals(mode = 'stardust') {
         p.className = 'stardust-star';
         p.textContent = symbol;
         p.style.cssText = [
-          `position: absolute`,
-          `left: ${Math.random() * 100}%`,
-          `font-size: ${size}px`,
-          `color: ${color}`,
-          `text-shadow: 0 0 10px ${color}, 0 0 20px #ffd700`,
-          `animation: stardustRise ${duration}s ease-in-out infinite ${delay}s`,
-          `--drift-x: ${driftX}px`,
-          `pointer-events: none`,
-          `will-change: transform, opacity`
+          `position:absolute`,
+          `left:${Math.random() * 100}%`,
+          `bottom:-5%`,
+          `font-size:${size}px`,
+          `color:${color}`,
+          `text-shadow:0 0 10px ${color}, 0 0 20px #ffd700`,
+          `animation:stardustRise ${duration}s ease-in-out infinite ${delay}s`,
+          `--drift-x:${driftX}px`,
+          `pointer-events:none`,
+          `will-change:transform,opacity`
         ].join(';');
       } else {
         p.className = 'stardust-particle';
         const r = Math.floor(Math.random() * 50);
         p.style.cssText = [
-          `position: absolute`,
-          `left: ${Math.random() * 100}%`,
-          `width: ${size}px`,
-          `height: ${size}px`,
-          `background: ${color}`,
-          `border-radius: ${r}%`,
-          `box-shadow: 0 0 8px ${color}, 0 0 16px rgba(255,215,0,0.8)`,
-          `animation: stardustRise ${duration}s ease-in-out infinite ${delay}s`,
-          `--drift-x: ${driftX}px`,
-          `pointer-events: none`,
-          `will-change: transform, opacity`
+          `position:absolute`,
+          `left:${Math.random() * 100}%`,
+          `bottom:-5%`,
+          `width:${size}px`,
+          `height:${size}px`,
+          `background:${color}`,
+          `border-radius:${r}%`,
+          `box-shadow:0 0 8px ${color}, 0 0 16px rgba(255,215,0,0.8)`,
+          `animation:stardustRise ${duration}s ease-in-out infinite ${delay}s`,
+          `--drift-x:${driftX}px`,
+          `pointer-events:none`,
+          `will-change:transform,opacity`
         ].join(';');
       }
       layer.appendChild(p);
     }
   }
 
-  // 2. Traditional Falling Rose Petals
+  // 2. Traditional Falling Rose Petals (fall from top)
   if (showRosePetals) {
     const count = mode === 'both' ? 14 : 22;
     for (let i = 0; i < count; i++) {
       const p = document.createElement('div');
-      p.className = 'petal';
       const size  = Math.random() * 8 + 5;
       const r1    = Math.floor(Math.random() * 40 + 30);
       const r2    = Math.floor(Math.random() * 40 + 30);
+      const dur   = (Math.random() * 8 + 7).toFixed(2);
+      const delay = (Math.random() * 12).toFixed(2);
+      // Use inline style fully — avoids conflict with CSS .petal { opacity:0 }
       p.style.cssText = [
-        `position: absolute`,
-        `top: -10%`,
+        `position:absolute`,
+        `top:-10%`,
         `width:${size}px`,
         `height:${size * 1.5}px`,
-        `left:${Math.random() * 100}%`,
+        `left:${(Math.random() * 100).toFixed(1)}%`,
         `background:${petalColors[Math.floor(Math.random() * petalColors.length)]}`,
-        `animation: petalFall ${Math.random() * 8 + 7}s linear infinite ${Math.random() * 12}s`,
         `border-radius:${r1}% 0 ${r2}% 0`,
-        `pointer-events: none`
+        `animation:petalFall ${dur}s linear infinite ${delay}s`,
+        `pointer-events:none`,
+        `will-change:transform,opacity`
       ].join(';');
       layer.appendChild(p);
     }
@@ -627,37 +631,103 @@ startHeartClock._started = false;
 /* ────────────────────────────────────────────────
    4. COUNTDOWN SECTION PETALS
 ──────────────────────────────────────────────── */
-(function spawnCountdownPetals() {
+// Named function so applyEnvelopeDesign can call it with the chosen mode
+function spawnCountdownEffect(mode) {
   const container = document.getElementById('cdPetals');
   const section   = document.getElementById('countdown-section');
   if (!container || !section) return;
-  const colors  = ['#c9a84c','#e8cc7a','#f5e6c0','#d4a96a','#fff8ee','#b8973a'];
-  let   spawned = false;
+
+  const petalColors = ['#c9a84c','#e8cc7a','#f5e6c0','#d4a96a','#fff8ee','#b8973a'];
+  const starSymbols = ['✦', '✧', '★', '•', '·'];
+  const goldColors  = ['#ffe58f','#d4af37','#ffd700','#fff8d0','#f5e6c0','#c9930c'];
+
+  let spawned = false;
+
+  const showPetals   = mode === 'petals'   || mode === 'both';
+  const showStardust = mode === 'stardust' || mode === 'both';
 
   new IntersectionObserver(entries => {
     if (entries[0].isIntersecting && !spawned) {
       spawned = true;
-      for (let i = 0; i < 26; i++) {
-        const p  = document.createElement('div');
-        p.className = 'cd-petal';
-        const sz = 6 + Math.random() * 9;
-        const r1 = Math.floor(Math.random() * 30 + 40);
-        const r2 = Math.floor(Math.random() * 30 + 40);
-        p.style.cssText = [
-          `width:${sz}px`,
-          `height:${sz * 1.5}px`,
-          `left:${Math.random() * 100}%`,
-          `top:-5%`,
-          `background:${colors[Math.floor(Math.random() * colors.length)]}`,
-          `animation-duration:${6 + Math.random() * 8}s`,
-          `animation-delay:${Math.random() * 8}s`,
-          `border-radius:${r1}% 0 ${r2}% 0`,
-        ].join(';');
-        container.appendChild(p);
+      container.innerHTML = ''; // reset if called again
+
+      // --- Falling Rose Petals ---
+      if (showPetals) {
+        const count = mode === 'both' ? 14 : 26;
+        for (let i = 0; i < count; i++) {
+          const p  = document.createElement('div');
+          p.className = 'cd-petal';
+          const sz = 6 + Math.random() * 9;
+          const r1 = Math.floor(Math.random() * 30 + 40);
+          const r2 = Math.floor(Math.random() * 30 + 40);
+          p.style.cssText = [
+            `width:${sz}px`,
+            `height:${sz * 1.5}px`,
+            `left:${Math.random() * 100}%`,
+            `top:-5%`,
+            `background:${petalColors[Math.floor(Math.random() * petalColors.length)]}`,
+            `animation-duration:${6 + Math.random() * 8}s`,
+            `animation-delay:${Math.random() * 8}s`,
+            `border-radius:${r1}% 0 ${r2}% 0`,
+          ].join(';');
+          container.appendChild(p);
+        }
+      }
+
+      // --- Rising Stardust Sparkles ---
+      if (showStardust) {
+        const count = mode === 'both' ? 14 : 22;
+        for (let i = 0; i < count; i++) {
+          const p = document.createElement('div');
+          const isStar = Math.random() > 0.4;
+          const color  = goldColors[Math.floor(Math.random() * goldColors.length)];
+          const size   = isStar ? (Math.random() * 10 + 8) : (Math.random() * 7 + 3);
+          const dur    = (Math.random() * 7 + 6).toFixed(2);
+          const delay  = (Math.random() * 9).toFixed(2);
+          const driftX = ((Math.random() - 0.5) * 80).toFixed(1);
+
+          if (isStar) {
+            p.className = 'stardust-star';
+            p.textContent = starSymbols[Math.floor(Math.random() * starSymbols.length)];
+            p.style.cssText = [
+              `position:absolute`,
+              `left:${Math.random() * 100}%`,
+              `bottom:-5%`,
+              `font-size:${size}px`,
+              `color:${color}`,
+              `text-shadow:0 0 8px ${color}, 0 0 16px #ffd700`,
+              `animation:stardustRise ${dur}s ease-in-out infinite ${delay}s`,
+              `--drift-x:${driftX}px`,
+              `pointer-events:none`,
+              `will-change:transform,opacity`
+            ].join(';');
+          } else {
+            p.className = 'stardust-particle';
+            const r = Math.floor(Math.random() * 50);
+            p.style.cssText = [
+              `position:absolute`,
+              `left:${Math.random() * 100}%`,
+              `bottom:-5%`,
+              `width:${size}px`,
+              `height:${size}px`,
+              `background:${color}`,
+              `border-radius:${r}%`,
+              `box-shadow:0 0 6px ${color}, 0 0 12px rgba(255,215,0,0.8)`,
+              `animation:stardustRise ${dur}s ease-in-out infinite ${delay}s`,
+              `--drift-x:${driftX}px`,
+              `pointer-events:none`,
+              `will-change:transform,opacity`
+            ].join(';');
+          }
+          container.appendChild(p);
+        }
       }
     }
   }, { threshold: 0.1 }).observe(section);
-})();
+}
+// Will be called by applyEnvelopeDesign once cfg is known
+// Default fallback (no cfg) — keeps backward compat
+spawnCountdownEffect('petals');
 
 /* ────────────────────────────────────────────────
    5. COUNTDOWN TIMER — Slot Machine
@@ -1344,7 +1414,9 @@ function applyEnvelopeDesign(cfg) {
 
   // ── Particle Effect (pe: 'stardust' | 'petals' | 'both') ──
   const particleEffect = cfg.pe || 'stardust';
+  window._particleMode = particleEffect; // store globally for openEnvelopeNow
   spawnPetals(particleEffect);
+  spawnCountdownEffect(particleEffect);
 
   document.querySelectorAll('.panel-branches').forEach(el => {
     el.style.display = showFloral ? '' : 'none';
