@@ -507,14 +507,14 @@
       <!-- Motif Calligraphie Arabe -->
       <img class="panel-calligraphy" src="assets/arabic_calligraphy_pattern.png" alt="Calligraphy Motif" style="display:none; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none; opacity:0.95;">
 
-      <!-- Motif Zellige & Faïence Arch (4K Ultra-Centered Image - Left Half, strictly above vases) -->
-      <img class="panel-zellige" src="assets/zellige_pattern.png?v=7" alt="Zellige Motif" style="display:none; position:absolute; top:0; bottom:0; left:0; width:200%; max-width:none; height:100%; object-fit:cover; object-position:left center; pointer-events:none; opacity:1;">
+      <!-- Motif Zellige & Faïence Arch (4K Ultra-Centered - Left Half) -->
+      <img class="panel-zellige" src="assets/zellige_pattern.png?v=9" alt="Zellige Motif" style="display:none; position:absolute; top:0; bottom:0; left:0; width:200%; max-width:none; height:100%; object-fit:cover; object-position:left top; pointer-events:none; opacity:1;">
 
-      <!-- Motif Porte Tunisienne Méditerranéenne (4K Ultra-Centered Image - Left Leaf) -->
+      <!-- Motif Porte Tunisienne Méditerranéenne (4K Ultra-Centered - Left Leaf) -->
       <img class="panel-door" src="assets/tunisian_door_pattern.png?v=5" alt="Porte Tunisienne" style="display:none; position:absolute; top:0; bottom:0; left:0; width:200%; max-width:none; height:100%; object-fit:cover; object-position:left center; pointer-events:none; opacity:1;">
 
-      <!-- Motif Amazigh Berbère (4K Woven Wool Tapestry - Left Half) -->
-      <img class="panel-amazigh" src="assets/amazigh_pattern.png?v=7" alt="Motif Amazigh" style="display:none; position:absolute; top:0; bottom:0; left:0; width:200%; max-width:none; height:100%; object-fit:cover; object-position:left center; pointer-events:none; opacity:1;">
+      <!-- Motif Amazigh Berbère (4K Tapestry - Left Half) -->
+      <img class="panel-amazigh" src="assets/amazigh_pattern.png?v=9" alt="Motif Amazigh" style="display:none; position:absolute; top:0; bottom:0; left:0; width:200%; max-width:none; height:100%; object-fit:cover; object-position:left center; pointer-events:none; opacity:1;">
     </div>
 
     <div class="env-panel right-panel" id="rightPanel">
@@ -527,14 +527,14 @@
       <!-- Motif Calligraphie Arabe -->
       <img class="panel-calligraphy" src="assets/arabic_calligraphy_pattern.png" alt="Calligraphy Motif" style="display:none; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none; opacity:0.95; transform:scaleX(-1);">
 
-      <!-- Motif Zellige & Faïence Arch (4K Ultra-Centered Image - Right Half) -->
-      <img class="panel-zellige" src="assets/zellige_pattern.png?v=7" alt="Zellige Motif" style="display:none; position:absolute; top:0; bottom:0; right:0; width:200%; max-width:none; height:100%; object-fit:cover; object-position:right center; pointer-events:none; opacity:1;">
+      <!-- Motif Zellige & Faïence Arch (4K Ultra-Centered - Right Half) -->
+      <img class="panel-zellige" src="assets/zellige_pattern.png?v=9" alt="Zellige Motif" style="display:none; position:absolute; top:0; bottom:0; right:0; width:200%; max-width:none; height:100%; object-fit:cover; object-position:right top; pointer-events:none; opacity:1;">
 
-      <!-- Motif Porte Tunisienne Méditerranéenne (4K Ultra-Centered Image - Right Leaf) -->
+      <!-- Motif Porte Tunisienne Méditerranéenne (4K Ultra-Centered - Right Leaf) -->
       <img class="panel-door" src="assets/tunisian_door_pattern.png?v=5" alt="Porte Tunisienne" style="display:none; position:absolute; top:0; bottom:0; right:0; width:200%; max-width:none; height:100%; object-fit:cover; object-position:right center; pointer-events:none; opacity:1;">
 
-      <!-- Motif Amazigh Berbère (4K Woven Wool Tapestry - Right Half) -->
-      <img class="panel-amazigh" src="assets/amazigh_pattern.png?v=7" alt="Motif Amazigh" style="display:none; position:absolute; top:0; bottom:0; right:0; width:200%; max-width:none; height:100%; object-fit:cover; object-position:right center; pointer-events:none; opacity:1;">
+      <!-- Motif Amazigh Berbère (4K Tapestry - Right Half) -->
+      <img class="panel-amazigh" src="assets/amazigh_pattern.png?v=9" alt="Motif Amazigh" style="display:none; position:absolute; top:0; bottom:0; right:0; width:200%; max-width:none; height:100%; object-fit:cover; object-position:right center; pointer-events:none; opacity:1;">
     </div>
 
     <!-- ⑦ Nominative Guest Card — visible only when ?guest= URL param is present -->
@@ -646,6 +646,25 @@
         
         <!-- Monogram overlay text (displayed only when monogram is selected) -->
         <div id="seal-3d-monogram-text" class="font-amiri" style="display:none;">M &amp; M</div>
+
+        <!-- Golden SVG ring — covers white/transparent perimeter fringe -->
+        <svg id="seal-gold-ring" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"
+          style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:10;">
+          <defs>
+            <linearGradient id="goldRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%"   stop-color="#ffe58f"/>
+              <stop offset="30%"  stop-color="#d4af37"/>
+              <stop offset="60%"  stop-color="#c9930c"/>
+              <stop offset="100%" stop-color="#ffe58f"/>
+            </linearGradient>
+          </defs>
+          <!-- Outer fill ring to blot out white fringe (radius 49, stroke 3 → covers 47..50) -->
+          <circle cx="50" cy="50" r="48.2" fill="none"
+            stroke="url(#goldRingGrad)" stroke-width="3.6"/>
+          <!-- Inner hair-line for depth -->
+          <circle cx="50" cy="50" r="45.5" fill="none"
+            stroke="rgba(255,228,120,0.35)" stroke-width="0.8"/>
+        </svg>
       </div>
       <!-- Curved text SVG around the seal — 280x280 to clear 135px seal radius -->
       <svg class="seal-text-svg" viewBox="0 0 280 280">

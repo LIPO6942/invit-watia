@@ -1471,12 +1471,21 @@ function applyEnvelopeDesign(cfg) {
           nameSpan.className = 'mono-letter lock-bride-name';
           sealMonoText.appendChild(nameSpan);
         }
-      } else if (seal === 'amazigh') {
-        sealImg.src = 'assets/amazigh_wax_seal.png';
-        if (sealMonoText) sealMonoText.style.display = 'none';
-      } else if (seal === 'zellige') {
-        sealImg.src = 'assets/zellige_wax_seal.png';
-        if (sealMonoText) sealMonoText.style.display = 'none';
+      } else if (seal === 'amazigh' || seal === 'zellige') {
+        sealImg.src = seal === 'amazigh' ? 'assets/amazigh_wax_seal.png' : 'assets/zellige_wax_seal.png';
+        if (sealMonoText) {
+          sealMonoText.style.display = 'flex';
+          sealMonoText.style.flexDirection = 'column';
+          sealMonoText.style.justifyContent = 'flex-end';
+          sealMonoText.style.alignItems = 'center';
+          const brideName = (cfg.ba || 'العروسة').trim();
+          sealMonoText.innerHTML = `
+            <div class="seal-sub-engraved-wrapper">
+              <div class="seal-sub-line"></div>
+              <span class="seal-sub-bride-name">${brideName}</span>
+            </div>
+          `;
+        }
       } else {
         sealImg.src = `assets/${seal}_wax_seal.png`;
         if (sealMonoText) {
