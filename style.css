@@ -321,22 +321,13 @@ body:not(.env-open) {
   height: 135px;
   cursor: pointer;
   border-radius: 50%;
-  /* Rich layered gold wax — the PNG seal blends on top via mix-blend-mode: multiply */
-  background: radial-gradient(
-    circle at 36% 30%,
-    #fffef5 0%,
-    #fdf0b0 15%,
-    #f0c84a 38%,
-    #c9930c 68%,
-    #7a4e08 100%
-  );
+  /* Transparent — seal image fills the circle via overflow:hidden */
+  background: transparent;
   border: none;
   box-shadow:
     0 14px 36px rgba(45, 22, 4, 0.55),
     0 0 0 3px rgba(201, 168, 76, 0.55),
-    0 0 0 7px rgba(201, 168, 76, 0.18),
-    inset 0 3px 10px rgba(255, 255, 220, 0.55),
-    inset 0 -3px 10px rgba(0, 0, 0, 0.3);
+    0 0 0 7px rgba(201, 168, 76, 0.18);
   animation: sealPulse 2.8s ease-in-out infinite;
   position: relative;
   z-index: 2;
@@ -353,8 +344,7 @@ body:not(.env-open) {
   object-fit: cover;
   display: block;
   border-radius: 50%;
-  clip-path: circle(48.5%);
-  /* GPU acceleration + enhanced golden filter */
+  /* overflow:hidden on .seal clips this — no clip-path needed so no transparency edge */
   transform: translateZ(0);
   filter: brightness(1.1) contrast(1.05) saturate(1.15);
 }
