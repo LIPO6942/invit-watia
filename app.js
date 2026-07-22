@@ -1375,7 +1375,10 @@ function applyEnvelopeDesign(cfg) {
   if (!_sealApplied) {
     let seal = cfg.es;
     if (!seal) {
-      seal = showDoor ? 'lock' : 'heart';
+      if (showDoor) seal = 'lock';
+      else if (showAmazigh) seal = 'amazigh';
+      else if (showZellige) seal = 'zellige';
+      else seal = 'heart';
     }
     const sealImg = document.getElementById('seal-3d-img');
     const sealMonoText = document.getElementById('seal-3d-monogram-text');
@@ -1459,7 +1462,7 @@ function applyEnvelopeDesign(cfg) {
           sealMonoText.style.display = 'flex';
           const brideName = (cfg.ba || 'العروسة').trim();
           sealMonoText.style.fontFamily = "'Amiri', serif";
-          sealMonoText.style.fontSize = brideName.length > 10 ? "1.2rem" : "1.5rem";
+          sealMonoText.style.fontSize = brideName.length > 10 ? "1.2rem" : "1.6rem";
           sealMonoText.style.flexDirection = 'row';
           sealMonoText.innerHTML = '';
 
@@ -1468,6 +1471,12 @@ function applyEnvelopeDesign(cfg) {
           nameSpan.className = 'mono-letter lock-bride-name';
           sealMonoText.appendChild(nameSpan);
         }
+      } else if (seal === 'amazigh') {
+        sealImg.src = 'assets/amazigh_wax_seal.png';
+        if (sealMonoText) sealMonoText.style.display = 'none';
+      } else if (seal === 'zellige') {
+        sealImg.src = 'assets/zellige_wax_seal.png';
+        if (sealMonoText) sealMonoText.style.display = 'none';
       } else {
         sealImg.src = `assets/${seal}_wax_seal.png`;
         if (sealMonoText) {
