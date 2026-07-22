@@ -3358,7 +3358,7 @@ body .invitation.pattern-crown-active .right-panel {
 /* Align seal perfectly in center of zellige rosette medallion & place guest card below without overlap */
 .pattern-zellige-active .seal-wrapper,
 .pattern-crown-active .seal-wrapper {
-  top: 53.8% !important;
+  top: 54.6% !important;
 }
 
 .pattern-zellige-active .guest-name-banner,

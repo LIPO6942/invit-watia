@@ -244,6 +244,14 @@
               <option value="bismillah">🕌 البسملة الشريفة (Bismillah)</option>
             </select>
           </div>
+          <div class="field">
+            <label>تأثير الحركة والتأثيرات (Animation d'ambiance)</label>
+            <select id="envParticle">
+              <option value="stardust" selected>✨ غبار النجوم الذهبي (Étincelles & Poussière d'étoiles)</option>
+              <option value="petals">🌸 تساقط بتلات الورد (Pétales de Rose)</option>
+              <option value="both">✨🌸 الكل معاً (Les Deux)</option>
+            </select>
+          </div>
         </div>
         <div class="form-row" id="sealInitialsField" style="margin-top: 15px; display: none;">
           <div class="field">
@@ -1106,6 +1114,7 @@ function buildConfig() {
     ep: val('envPattern'),   // envelope pattern
     es: val('envSeal'),      // envelope seal
     si: val('envSealInitials'), // seal initials
+    pe: val('envParticle'),  // particle animation effect ('stardust' | 'petals' | 'both')
     hp: window._selectedHallPhoto   || 'watia_hall_bg', // hall photo background
     cp: window._selectedClosingPhoto || 'watia_closing_board',  // closing section photo
     la: 'ar',               // Watia: always Arabic
@@ -1220,6 +1229,7 @@ function applyConfigToFields(c) {
   set('envPattern',        c.ep  || 'vintage');
   set('envSeal',           c.es  || 'heart');
   set('envSealInitials',   c.si  || '');
+  set('envParticle',       c.pe  || 'stardust');
   
   // Toggle initials field visibility dynamically
   const initialsField = document.getElementById('sealInitialsField');

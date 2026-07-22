@@ -450,61 +450,96 @@ window.openEnvelopeNow = function() {
 /* ────────────────────────────────────────────────
    2. INTRO PETALS (Hero section)
 ──────────────────────────────────────────────── */
-function spawnPetals() {
+function spawnPetals(mode = 'stardust') {
   const layer = document.getElementById('petals');
   if (!layer) return;
   layer.innerHTML = ''; // Reset container
 
-  const starSymbols = ['✦', '✧', '★', '•', '❖', '·', '✦'];
+  const starSymbols = ['✦', '✧', '★', '•', '·', '✦']; // Removed ❖ symbol
   const goldColors  = [
     '#ffe58f', '#d4af37', '#ffd700', '#fff8d0',
     '#f5e6c0', '#c9930c', '#ffffff', '#e8dec9'
   ];
+  const petalColors = [
+    '#e8cc7a','#f5e6c0','#c9a84c',
+    '#fff8d0','#d4a960','#f5dca0',
+    '#faf0d0','#dbb86a'
+  ];
 
-  // Spawn 32 Golden Stardust & Sparkle particles
-  for (let i = 0; i < 32; i++) {
-    const p = document.createElement('div');
-    const isStar = Math.random() > 0.35;
-    
-    const symbol   = starSymbols[Math.floor(Math.random() * starSymbols.length)];
-    const color    = goldColors[Math.floor(Math.random() * goldColors.length)];
-    const size     = isStar ? (Math.random() * 12 + 10) : (Math.random() * 8 + 4);
-    const duration = Math.random() * 8 + 7; // 7s to 15s
-    const delay    = Math.random() * 10;
-    const driftX   = (Math.random() - 0.5) * 90;
+  const showStardust   = mode === 'stardust' || mode === 'both';
+  const showRosePetals = mode === 'petals'   || mode === 'both';
 
-    if (isStar) {
-      p.className = 'stardust-star';
-      p.textContent = symbol;
-      p.style.cssText = [
-        `position: absolute`,
-        `left: ${Math.random() * 100}%`,
-        `font-size: ${size}px`,
-        `color: ${color}`,
-        `text-shadow: 0 0 10px ${color}, 0 0 20px #ffd700`,
-        `animation: stardustRise ${duration}s ease-in-out infinite ${delay}s`,
-        `--drift-x: ${driftX}px`,
-        `pointer-events: none`,
-        `will-change: transform, opacity`
-      ].join(';');
-    } else {
-      p.className = 'petal';
-      const r = Math.floor(Math.random() * 50);
-      p.style.cssText = [
-        `position: absolute`,
-        `left: ${Math.random() * 100}%`,
-        `width: ${size}px`,
-        `height: ${size}px`,
-        `background: ${color}`,
-        `border-radius: ${r}%`,
-        `box-shadow: 0 0 8px ${color}, 0 0 16px rgba(255,215,0,0.8)`,
-        `animation: stardustRise ${duration}s ease-in-out infinite ${delay}s`,
-        `--drift-x: ${driftX}px`,
-        `pointer-events: none`,
-        `will-change: transform, opacity`
-      ].join(';');
+  // 1. Golden Stardust & Sparkles (Rising upward)
+  if (showStardust) {
+    const count = mode === 'both' ? 20 : 32;
+    for (let i = 0; i < count; i++) {
+      const p = document.createElement('div');
+      const isStar = Math.random() > 0.35;
+      
+      const symbol   = starSymbols[Math.floor(Math.random() * starSymbols.length)];
+      const color    = goldColors[Math.floor(Math.random() * goldColors.length)];
+      const size     = isStar ? (Math.random() * 12 + 10) : (Math.random() * 8 + 4);
+      const duration = Math.random() * 8 + 7;
+      const delay    = Math.random() * 10;
+      const driftX   = (Math.random() - 0.5) * 90;
+
+      if (isStar) {
+        p.className = 'stardust-star';
+        p.textContent = symbol;
+        p.style.cssText = [
+          `position: absolute`,
+          `left: ${Math.random() * 100}%`,
+          `font-size: ${size}px`,
+          `color: ${color}`,
+          `text-shadow: 0 0 10px ${color}, 0 0 20px #ffd700`,
+          `animation: stardustRise ${duration}s ease-in-out infinite ${delay}s`,
+          `--drift-x: ${driftX}px`,
+          `pointer-events: none`,
+          `will-change: transform, opacity`
+        ].join(';');
+      } else {
+        p.className = 'stardust-particle';
+        const r = Math.floor(Math.random() * 50);
+        p.style.cssText = [
+          `position: absolute`,
+          `left: ${Math.random() * 100}%`,
+          `width: ${size}px`,
+          `height: ${size}px`,
+          `background: ${color}`,
+          `border-radius: ${r}%`,
+          `box-shadow: 0 0 8px ${color}, 0 0 16px rgba(255,215,0,0.8)`,
+          `animation: stardustRise ${duration}s ease-in-out infinite ${delay}s`,
+          `--drift-x: ${driftX}px`,
+          `pointer-events: none`,
+          `will-change: transform, opacity`
+        ].join(';');
+      }
+      layer.appendChild(p);
     }
-    layer.appendChild(p);
+  }
+
+  // 2. Traditional Falling Rose Petals
+  if (showRosePetals) {
+    const count = mode === 'both' ? 14 : 22;
+    for (let i = 0; i < count; i++) {
+      const p = document.createElement('div');
+      p.className = 'petal';
+      const size  = Math.random() * 8 + 5;
+      const r1    = Math.floor(Math.random() * 40 + 30);
+      const r2    = Math.floor(Math.random() * 40 + 30);
+      p.style.cssText = [
+        `position: absolute`,
+        `top: -10%`,
+        `width:${size}px`,
+        `height:${size * 1.5}px`,
+        `left:${Math.random() * 100}%`,
+        `background:${petalColors[Math.floor(Math.random() * petalColors.length)]}`,
+        `animation: petalFall ${Math.random() * 8 + 7}s linear infinite ${Math.random() * 12}s`,
+        `border-radius:${r1}% 0 ${r2}% 0`,
+        `pointer-events: none`
+      ].join(';');
+      layer.appendChild(p);
+    }
   }
 }
 
@@ -1306,6 +1341,10 @@ function applyEnvelopeDesign(cfg) {
   const showDoor       = pattern === 'door' || pattern === 'porte';
   const showCalligraphy = pattern === 'calligraphy';
   const showAmazigh    = pattern === 'amazigh';
+
+  // ── Particle Effect (pe: 'stardust' | 'petals' | 'both') ──
+  const particleEffect = cfg.pe || 'stardust';
+  spawnPetals(particleEffect);
 
   document.querySelectorAll('.panel-branches').forEach(el => {
     el.style.display = showFloral ? '' : 'none';
