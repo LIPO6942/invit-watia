@@ -404,25 +404,11 @@
       <div class="page-title">📸 ألبوم الصور (Photo Stack)</div>
       <div class="page-subtitle">تفعيل وإدارة ألبوم الصور التفاعلي المنزلق في أسفل الدعوة</div>
       
-      <!-- Activation card -->
-      <div class="card">
-        <div class="card-title">⚙️ تفعيل الألبوم</div>
-        <div class="form-row" style="grid-template-columns: 1fr; margin-top: 10px;">
-          <div class="field">
-            <label>عرض قسم ألبوم الصور في الدعوة :</label>
-            <select id="photoStackActive" onchange="togglePhotoStackFields()">
-              <option value="false">❌ غير نشط (مخفي)</option>
-              <option value="true">✅ نشط (معروض)</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <!-- Cloudinary Config card -->
-      <div class="card photo-stack-setting-container" style="display:none; border-color: rgba(201,168,76,0.35); background: rgba(201,168,76,0.03);">
-        <div class="card-title">☁️ إعدادات Cloudinary (اختياري / لتفادي Base64)</div>
+      <!-- Cloudinary Config card (Always visible at top) -->
+      <div class="card" style="border-color: rgba(201,168,76,0.35); background: rgba(201,168,76,0.03);">
+        <div class="card-title">☁️ إعدادات Cloudinary (تخزين الصور في السحاب)</div>
         <div style="font-size:0.72rem; color:var(--text-muted); margin-bottom:12px;">
-          إذا تركت هذه الحقول فارغة، فسيتم حفظ الصور مباشرة في كود الدعوة (Base64) بحد أقصى 3 صور. لتخزين أسرع ومظهر أنظف، أدخل إعدادات حساب Cloudinary الخاص بك.
+          قم بإدخال إعدادات حساب Cloudinary الخاص بك هنا لتخزين جميع صور الدعوة مباشرة في السحاب (Unsigned Preset). إذا تركتها فارغة فسيتم الحفظ بتنسيق Base64.
         </div>
         <div class="form-row">
           <div class="field">
@@ -432,6 +418,20 @@
           <div class="field">
             <label>Upload Preset (Unsigned)</label>
             <input id="cloudinaryUploadPreset" type="text" placeholder="مثال: my_preset" oninput="saveCloudinarySettings()" dir="ltr" style="background:rgba(0,0,0,0.25); color:white; border:1px solid var(--border); padding:10px; border-radius:6px;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Activation card -->
+      <div class="card">
+        <div class="card-title">⚙️ تفعيل الألبوم للحفل</div>
+        <div class="form-row" style="grid-template-columns: 1fr; margin-top: 10px;">
+          <div class="field">
+            <label>عرض قسم ألبوم الصور في الدعوة :</label>
+            <select id="photoStackActive" onchange="togglePhotoStackFields()">
+              <option value="false">❌ غير نشط (مخفي)</option>
+              <option value="true">✅ نشط (معروض)</option>
+            </select>
           </div>
         </div>
       </div>
