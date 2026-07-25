@@ -2456,8 +2456,8 @@ body.env-open .animated-bride-family {
   bottom: -17px;
   left: 50%;
   transform: translateX(-50%);
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background: radial-gradient(
     circle at 36% 30%,
@@ -2469,7 +2469,7 @@ body.env-open .animated-bride-family {
   );
   box-shadow:
     0 4px 10px rgba(45, 22, 4, 0.45),
-    0 0 0 2px rgba(201, 168, 76, 0.6),
+    0 0 0 2px rgba(201, 168, 76, 0.8),
     inset 0 2px 4px rgba(255, 255, 220, 0.6),
     inset 0 -2px 4px rgba(0, 0, 0, 0.35);
   display: flex;
@@ -2484,8 +2484,8 @@ body.env-open .animated-bride-family {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  mix-blend-mode: multiply;
-  filter: brightness(1.1) contrast(1.05);
+  border-radius: 50%;
+  filter: brightness(1.05) contrast(1.05);
 }
 
 /* Hide nominative card completely when invitation is opened */
