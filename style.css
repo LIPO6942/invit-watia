@@ -2438,15 +2438,54 @@ body.env-open .animated-bride-family {
   justify-content: center;
   align-items: center;
   width: 250px;           /* slightly reduced width for a delicate look */
-  background: rgba(247, 240, 222, 0.55);   /* semi-transparent warm cream matching envelope */
-  border: 1px solid rgba(201, 168, 76, 0.4); /* soft gold border */
+  background: rgba(247, 240, 222, 0.65);   /* semi-transparent warm cream matching envelope */
+  border: 1.5px solid rgba(201, 168, 76, 0.55); /* gold border */
   box-shadow: 
-    inset 0 0 12px rgba(201, 168, 76, 0.1),
-    0 4px 20px rgba(0, 0, 0, 0.05);
+    inset 0 0 12px rgba(201, 168, 76, 0.12),
+    0 6px 22px rgba(0, 0, 0, 0.08);
   border-radius: 10px;     /* soft card shape */
   padding: 8px 16px;       /* reduced padding */
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(4px);
   animation: guestBannerFadeIn 1.4s cubic-bezier(0.16, 1, 0.3, 1) both 0.5s;
+  overflow: visible !important;
+}
+
+/* ── Mini 3D Wax Seal sealing the guest label onto envelope ── */
+.guest-seal-mini {
+  position: absolute;
+  bottom: -17px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 36% 30%,
+    #fffef5 0%,
+    #fdf0b0 15%,
+    #f0c84a 38%,
+    #c9930c 68%,
+    #7a4e08 100%
+  );
+  box-shadow:
+    0 4px 10px rgba(45, 22, 4, 0.45),
+    0 0 0 2px rgba(201, 168, 76, 0.6),
+    inset 0 2px 4px rgba(255, 255, 220, 0.6),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.35);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.guest-seal-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  mix-blend-mode: multiply;
+  filter: brightness(1.1) contrast(1.05);
 }
 
 /* Hide nominative card completely when invitation is opened */

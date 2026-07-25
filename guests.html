@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -152,6 +152,29 @@ details[open] .chevron{transform:rotate(180deg)}
   </div>
 </div>
 
+<div id="edit-modal" style="display:none; position:fixed; inset:0; z-index:10000; align-items:center; justify-content:center; padding:18px;">
+  <div style="position:absolute; inset:0; background:rgba(10,6,2,0.8); backdrop-filter:blur(8px);" onclick="closeEditModal()"></div>
+  <div style="position:relative; background:var(--bg2); border:1px solid var(--border); width:100%; max-width:440px; border-radius:20px; padding:24px; box-shadow:0 20px 60px rgba(0,0,0,0.6); z-index:10; font-family:'Amiri',serif; direction:rtl;">
+    <button style="position:absolute; top:14px; left:14px; background:none; border:none; font-size:1.2rem; color:var(--muted); cursor:pointer;" onclick="closeEditModal()">✕</button>
+    <div style="font-size:1.15rem; color:var(--gold); font-weight:700; margin-bottom:16px; display:flex; align-items:center; gap:8px;">
+      ✏️ تعديل بيانات المدعو واللقب
+    </div>
+    <input type="hidden" id="edit-guest-id">
+    <div class="field">
+      <label>اسم المدعو أو العائلة</label>
+      <input id="edit-name" class="f-input" type="text" placeholder="اسم المدعو..." autocomplete="off">
+    </div>
+    <div class="field">
+      <label>صيغة التوجيه / اللقب على الدعوة</label>
+      <div class="formula-grid" id="edit-formula-grid"></div>
+    </div>
+    <div style="display:flex; gap:10px; margin-top:18px;">
+      <button class="btn-primary" onclick="saveGuestEdit()" style="flex:2;">💾 حفظ التغييرات</button>
+      <button class="btn-primary" onclick="closeEditModal()" style="flex:1; background:rgba(255,255,255,0.08); color:var(--text);">إلغاء</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -169,7 +192,7 @@ const FIREBASE_CONFIG = {
 };
 let _fbApp=null,_db=null;
 function initFirebase(){if(_fbApp)return;_fbApp=firebase.initializeApp(FIREBASE_CONFIG);_db=firebase.firestore()}
-let _slug='',_invData=null,_guests=[],_addFormula='ar_couple',_bulkFormula='ar_couple',_filterQ='';
+let _slug='',_invData=null,_guests=[],_addFormula='ar_couple',_bulkFormula='ar_couple',_editFormula='ar_couple',_filterQ='';
 const FORMULAS=[
   {value:'ar_couple',          label:'إلى السيد ... وحرمه',           badge:'b-arc', emoji:'👨‍👩‍👧'},
   {value:'ar_couple_children', label:'إلى السيد ... وحرمه وأبنائه', badge:'b-arcc',emoji:'👨‍👩‍👦‍👦'},
@@ -214,11 +237,12 @@ window.addEventListener('DOMContentLoaded',()=>{
 function renderFormulaGrid(containerId,mode){
   const grid=document.getElementById(containerId);
   if(!grid)return;
-  const active=mode==='bulk'?_bulkFormula:_addFormula;
+  const active=mode==='bulk'?_bulkFormula:mode==='edit'?_editFormula:_addFormula;
   grid.innerHTML=FORMULAS.map(f=>`<button class="f-btn ${f.value===active?'active':''}" onclick="selectFormula('${f.value}','${mode}',this)">${f.emoji} ${f.label}</button>`).join('');
 }
 function selectFormula(value,mode,btn){
   if(mode==='bulk'){_bulkFormula=value;document.querySelectorAll('#bulk-formula-grid .f-btn').forEach(b=>b.classList.remove('active'))}
+  else if(mode==='edit'){_editFormula=value;document.querySelectorAll('#edit-formula-grid .f-btn').forEach(b=>b.classList.remove('active'))}
   else{_addFormula=value;document.querySelectorAll('#add-formula-grid .f-btn').forEach(b=>b.classList.remove('active'))}
   btn.classList.add('active');
 }
@@ -314,6 +338,37 @@ function deleteGuest(id){
   renderGuestList();updateStats();
   saveGuests().then(()=>{checkPackUI();showToast('🗑️ تم الحذف')}).catch(()=>{_guests=prev;renderGuestList();updateStats();showToast('❌ فشل الحذف')});
 }
+function openEditModal(id){
+  const g=_guests.find(g=>g.id===id);
+  if(!g)return;
+  document.getElementById('edit-guest-id').value=g.id;
+  document.getElementById('edit-name').value=g.name;
+  _editFormula=g.type||'ar_couple';
+  renderFormulaGrid('edit-formula-grid','edit');
+  document.getElementById('edit-modal').style.display='flex';
+}
+function closeEditModal(){
+  document.getElementById('edit-modal').style.display='none';
+}
+function saveGuestEdit(){
+  const id=document.getElementById('edit-guest-id').value;
+  const name=document.getElementById('edit-name').value.trim();
+  if(!name){showToast('⚠️ أدخل اسم المدعو');return}
+  const idx=_guests.findIndex(g=>g.id===id);
+  if(idx===-1)return;
+  const prev={..._guests[idx]};
+  _guests[idx].name=name;
+  _guests[idx].type=_editFormula;
+  saveGuests().then(()=>{
+    closeEditModal();
+    renderGuestList();
+    showToast('✅ تم تعديل بيانات '+name+' بنجاح');
+  }).catch(()=>{
+    _guests[idx]=prev;
+    renderGuestList();
+    showToast('❌ فشل حفظ التعديلات');
+  });
+}
 async function saveGuests(){
   initFirebase();
   await _db.collection('invitations').doc(_slug).update({guests:_guests.map(g=>({id:g.id,name:g.name,type:g.type,createdAt:g.createdAt,views:g.views||0}))});
@@ -344,6 +399,9 @@ function renderGuestList(){
         ${photoBadge}
       </div>
       <div class="guest-actions">
+        <button class="btn-icon" title="تعديل البيانات واللقب" onclick="openEditModal('${g.id}')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
         <button class="btn-icon" title="نسخ الرابط البسيط" onclick="copyLink('${g.id}')">
           <svg width="15" height="15" fill="currentColor" viewBox="0 0 16 16"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/></svg>
         </button>

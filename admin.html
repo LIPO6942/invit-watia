@@ -601,6 +601,10 @@
           <div class="pack-card selected" data-pack="60" onclick="selectPack(this)"><div class="pack-num">60</div><div class="pack-label">مشاركة</div><div class="pack-price">⭐ الأكثر شيوعاً</div></div>
           <div class="pack-card" data-pack="100" onclick="selectPack(this)"><div class="pack-num">100</div><div class="pack-label">مشاركة</div><div class="pack-price">باقة كبيرة</div></div>
         </div>
+        <div id="editingBanner" style="display:none; background:rgba(230,126,34,0.15); border:1px solid rgba(230,126,34,0.4); border-radius:8px; padding:10px 14px; margin-bottom:12px; font-size:0.82rem; color:#f39c12; align-items:center; justify-content:space-between;">
+          <span>✏️ أنت تقوم حالياً بتعديل الدعوة: <strong id="editingSlugDisplay" style="font-family:monospace"></strong></span>
+          <button class="btn btn-ghost" type="button" style="padding:3px 8px; font-size:0.75rem; color:#fff" onclick="cancelEditingSlug()">✕ إلغاء التعديل</button>
+        </div>
         <button class="btn btn-primary" style="width:100%" id="generateBtn" onclick="generateLink()">
           ✨ إنشاء الرابط
         </button>
@@ -2153,6 +2157,8 @@ async function generateLink() {
 
     // Clear editing state
     window._currentEditingSlug = null;
+    const banner = document.getElementById('editingBanner');
+    if (banner) banner.style.display = 'none';
     document.getElementById('generateBtn').textContent = '✨ إنشاء الرابط';
 
     await renderLinksHistory();
@@ -2202,8 +2208,14 @@ async function renderLinksHistory() {
       });
     });
     hist.sort((a, b) => new Date(b.created) - new Date(a.created));
+
+    const syncHeader = '<div style="background:rgba(201,168,76,0.08); border:1px solid rgba(201,168,76,0.25); border-radius:10px; padding:10px 14px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">'
+      + '<div style="font-size:0.8rem; color:var(--gold-light); font-weight:700;">🔄 مزامنة التفضيلات (القاعة، الموسيقى، التاريخ...)</div>'
+      + '<button class="btn btn-outline" style="padding:6px 12px; font-size:0.75rem; border-color:var(--gold); color:var(--gold);" onclick="applyCurrentConfigToAllInvitations()">✨ تحديث جميع الدعوات بالسيرفر</button>'
+      + '</div>';
+
     if (!hist.length) {
-      c.innerHTML = '<div style="color:var(--text-muted);font-size:0.82rem;text-align:center;padding:20px">لا توجد روابط بعد</div>';
+      c.innerHTML = syncHeader + '<div style="color:var(--text-muted);font-size:0.82rem;text-align:center;padding:20px">لا توجد روابط بعد</div>';
       return;
     }
     const prodUrl = val('prodUrlInput');
@@ -2219,7 +2231,7 @@ async function renderLinksHistory() {
     }
     const guestsBase = base.replace('index.html','guests.html').replace(INVITATION_FILE,'guests.html');
 
-    c.innerHTML = hist.map(h => {
+    c.innerHTML = syncHeader + hist.map(h => {
       const invUrl    = base + '?inv=' + h.id;
       const guestsUrl = guestsBase + '?inv=' + h.id;
       const packPct   = h.ps > 0 ? Math.min(100, Math.round((h.guestsUsed / h.ps) * 100)) : 0;
@@ -2300,8 +2312,9 @@ async function renderLinksHistory() {
           + '</details>'
           + wishesHTML
           // Admin actions
-          + '<div style="display:flex;gap:6px;justify-content:flex-end;padding-top:6px;border-top:1px solid rgba(255,255,255,0.05)">'
-            + '<button class="btn btn-ghost" style="padding:4px 8px;font-size:0.72rem;color:var(--gold)" onclick="updateLinkConfig(\'' + h.id + '\')">🔄 تحديث الدعوة</button>'
+          + '<div style="display:flex;gap:6px;justify-content:flex-end;padding-top:6px;border-top:1px solid rgba(255,255,255,0.05);flex-wrap:wrap">'
+            + '<button class="btn btn-ghost" style="padding:4px 8px;font-size:0.72rem;color:var(--gold)" onclick="applyCurrentConfigToInvitation(\'' + h.id + '\')" title="تطبيق إعدادات اللوحة الحالية فوراً على هذه الدعوة">🔄 تحديث بالإعدادات الحالية</button>'
+            + '<button class="btn btn-ghost" style="padding:4px 8px;font-size:0.72rem;color:var(--text-muted)" onclick="loadInvitationConfig(\'' + h.id + '\')" title="تعديل تفاصيل هذه الدعوة في لوحة التحكم">📥 تعديل في اللوحة</button>'
             + '<button class="btn btn-ghost" style="padding:4px 8px;font-size:0.72rem;color:#e74c3c" onclick="deleteLink(\'' + h.id + '\')">🗑️ حذف</button>'
           + '</div>'
         + '</div>'
@@ -2347,8 +2360,75 @@ function updateCounter(slug, data) {
     </div>`;
 }
 
-// ── Update existing invitation config ──
-async function updateLinkConfig(slug) {
+function cancelEditingSlug() {
+  window._currentEditingSlug = null;
+  const banner = document.getElementById('editingBanner');
+  if (banner) banner.style.display = 'none';
+  document.getElementById('generateBtn').textContent = '✨ إنشاء الرابط';
+  showToast('ℹ️ تم إلغاء نمط التعديل');
+}
+
+async function applyCurrentConfigToInvitation(slug) {
+  try {
+    initFirebase();
+    await saveAll();
+    const cfg = buildConfig();
+    cfg.id = slug;
+    
+    const docRef = _db.collection('invitations').doc(slug);
+    const doc = await docRef.get();
+    if (!doc.exists) {
+      showToast('❌ الدعوة غير موجودة على السيرفر');
+      return;
+    }
+    
+    await docRef.update({
+      config: cfg,
+      updated: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    
+    showToast(`✅ تم تحديث تفضيلات الدعوة (${slug}) بالإعدادات الحالية بنجاح!`);
+    await renderLinksHistory();
+  } catch (err) {
+    console.error('Error updating invitation config:', err);
+    showToast('❌ فشل تحديث إعدادات الدعوة: ' + err.message);
+  }
+}
+
+async function applyCurrentConfigToAllInvitations() {
+  try {
+    initFirebase();
+    const querySnapshot = await _db.collection('invitations').get();
+    if (querySnapshot.empty) {
+      showToast('⚠️ لا توجد دعوات على السيرفر لتحديثها');
+      return;
+    }
+    
+    if (!confirm(`هل أنت متأكد من تحديث جميع الدعوات (${querySnapshot.size}) المحفوظة بالسيرفر وتطبيق تفضيلات التحكم الحالية (القاعة، الموسيقى، التاريخ...) عليها جميعاً؟`)) {
+      return;
+    }
+    
+    await saveAll();
+    const cfg = buildConfig();
+    
+    const batch = _db.batch();
+    querySnapshot.forEach(doc => {
+      batch.update(doc.ref, {
+        config: { ...cfg, id: doc.id },
+        updated: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    });
+    
+    await batch.commit();
+    showToast(`🎉 تم تحديث جميع الدعوات (${querySnapshot.size}) بالإعدادات الحالية بنجاح!`);
+    await renderLinksHistory();
+  } catch (err) {
+    console.error('Error updating all invitations:', err);
+    showToast('❌ فشل تحديث جميع الدعوات: ' + err.message);
+  }
+}
+
+async function loadInvitationConfig(slug) {
   try {
     initFirebase();
     const doc = await _db.collection('invitations').doc(slug).get();
@@ -2366,18 +2446,28 @@ async function updateLinkConfig(slug) {
     // Set editing state
     window._currentEditingSlug = slug;
     
-    // Update button text
-    document.getElementById('generateBtn').textContent = '✅ تحديث الدعوة';
+    // Update banner & button text
+    const banner = document.getElementById('editingBanner');
+    const slugDisp = document.getElementById('editingSlugDisplay');
+    if (banner && slugDisp) {
+      slugDisp.textContent = slug;
+      banner.style.display = 'flex';
+    }
+    document.getElementById('generateBtn').textContent = '✅ حفظ وتحديث الدعوة';
     
     // Switch to the couple page to show the loaded config
     showPage('page-couple');
     
-    showToast('✅ تم تحميل إعدادات الدعوة - يمكنك الآن تعديلها وحفظ التغييرات');
+    showToast(`✅ تم تحميل إعدادات الدعوة (${slug}) للوحة التحكم - يمكنك الآن تعديلها وحفظ التغييرات`);
     
   } catch (err) {
     console.error('Error loading invitation config:', err);
     showToast('❌ فشل تحميل الإعدادات');
   }
+}
+
+async function updateLinkConfig(slug) {
+  await applyCurrentConfigToInvitation(slug);
 }
 
 function shareHistLink(url) {

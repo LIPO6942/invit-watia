@@ -1500,17 +1500,7 @@ function applyEnvelopeDesign(cfg) {
       } else if (seal === 'lock') {
         sealImg.src = 'assets/lock_wax_seal.png?v=25';
         if (sealMonoText) {
-          sealMonoText.style.display = 'flex';
-          const brideName = (cfg.ba || 'العروسة').trim();
-          sealMonoText.style.fontFamily = "'Amiri', serif";
-          sealMonoText.style.fontSize = brideName.length > 10 ? "1.2rem" : "1.6rem";
-          sealMonoText.style.flexDirection = 'row';
-          sealMonoText.innerHTML = '';
-
-          const nameSpan = document.createElement('span');
-          nameSpan.textContent = brideName;
-          nameSpan.className = 'mono-letter lock-bride-name';
-          sealMonoText.appendChild(nameSpan);
+          sealMonoText.style.display = 'none';
         }
       } else if (seal === 'amazigh' || seal === 'zellige') {
         sealImg.src = seal === 'amazigh' ? 'assets/amazigh_wax_seal.png?v=25' : 'assets/zellige_wax_seal.png?v=25';
@@ -1536,6 +1526,16 @@ function applyEnvelopeDesign(cfg) {
     }
     sealImg.style.opacity = '1';
     _sealApplied = true; // Mark seal as applied to prevent future changes
+
+    // Update mini wax seals on guest banners
+    const miniSealSrc = (seal === 'monogram') ? 'assets/monogram_wax_seal_bg.png' :
+                        (seal === 'lock') ? 'assets/lock_wax_seal.png' :
+                        (seal === 'amazigh') ? 'assets/amazigh_wax_seal.png' :
+                        (seal === 'zellige') ? 'assets/zellige_wax_seal.png' :
+                        `assets/${seal}_wax_seal.png`;
+    document.querySelectorAll('.guest-seal-img').forEach(img => {
+      img.src = miniSealSrc;
+    });
   }
 
   // Sync Day/Night mode icon
