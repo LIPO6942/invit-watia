@@ -1499,11 +1499,13 @@ function applyEnvelopeDesign(cfg) {
         }
       } else if (seal === 'lock') {
         sealImg.src = 'assets/lock_wax_seal.png?v=25';
+        sealImg.style.transform = 'scale(1.18)';
         if (sealMonoText) {
           sealMonoText.style.display = 'none';
         }
       } else if (seal === 'amazigh' || seal === 'zellige') {
         sealImg.src = seal === 'amazigh' ? 'assets/amazigh_wax_seal.png?v=25' : 'assets/zellige_wax_seal.png?v=25';
+        sealImg.style.transform = 'none';
         if (sealMonoText) {
           sealMonoText.style.display = 'flex';
           sealMonoText.style.flexDirection = 'column';
@@ -1519,6 +1521,7 @@ function applyEnvelopeDesign(cfg) {
         }
       } else {
         sealImg.src = `assets/${seal}_wax_seal.png?v=25`;
+        sealImg.style.transform = 'none';
         if (sealMonoText) {
           sealMonoText.style.display = 'none';
         }
