@@ -329,11 +329,119 @@ function formatTo24h(timeStr, ampmStr) {
   return `${hoursFormatted}:${minutesFormatted}`;
 }
 
+/* ────────────────────────────────────────────────
+   GOOGLE CALENDAR INTEGRATION
+──────────────────────────────────────────────── */
+
+function formatToGCalUTC(dateObj) {
+  const pad = num => String(num).padStart(2, '0');
+  const year = dateObj.getUTCFullYear();
+  const month = pad(dateObj.getUTCMonth() + 1);
+  const day = pad(dateObj.getUTCDate());
+  const hours = pad(dateObj.getUTCHours());
+  const minutes = pad(dateObj.getUTCMinutes());
+  const seconds = pad(dateObj.getUTCSeconds());
+  return `${year}${month}${day}T${hours}${minutes}${seconds}Z`;
+}
+
+function buildGoogleCalendarUrl(title, dateRaw, timeRaw, location, details) {
+  let startDate = new Date();
+  
+  if (dateRaw) {
+    if (typeof dateRaw === 'string' && dateRaw.includes('/')) {
+      const parts = dateRaw.split('/').map(p => p.trim());
+      if (parts.length === 3) {
+        const d = parseInt(parts[0], 10);
+        const m = parseInt(parts[1], 10) - 1;
+        const y = parseInt(parts[2], 10);
+        startDate = new Date(y, m, d);
+      }
+    } else if (typeof dateRaw === 'string' && dateRaw.includes('-')) {
+      startDate = new Date(dateRaw);
+    }
+  }
+
+  if (timeRaw && typeof timeRaw === 'string' && !isNaN(startDate.getTime())) {
+    const timeParts = timeRaw.split(':');
+    if (timeParts.length >= 2) {
+      const h = parseInt(timeParts[0], 10);
+      const m = parseInt(timeParts[1], 10);
+      if (!isNaN(h) && !isNaN(m)) {
+        startDate.setHours(h, m, 0, 0);
+      }
+    }
+  }
+
+  if (isNaN(startDate.getTime())) {
+    startDate = new Date(_weddingDateTime || '2026-07-16T20:00:00');
+  }
+
+  const endDate = new Date(startDate.getTime() + 4 * 60 * 60 * 1000);
+
+  const startUtc = formatToGCalUTC(startDate);
+  const endUtc = formatToGCalUTC(endDate);
+
+  const defaultDetails = `يسرنا ويشرفنا دعوتكم لحضور حفلنا!\n\n` +
+    `تذكير: يرجى حفظ المناسبة في Calendrier Google. تذكير مقترح: قبل يوم واحد (24 ساعة) وقبل ساعة واحدة من الموعد.\n\n` +
+    `رابط الدعوة الإلكترونية: ${window.location.href}`;
+
+  const finalDetails = details || defaultDetails;
+  const finalLocation = location || _weatherLocation || 'طبلبة، تونس';
+
+  const params = new URLSearchParams({
+    action: 'TEMPLATE',
+    text: title || document.title || 'حفل وطية',
+    dates: `${startUtc}/${endUtc}`,
+    details: finalDetails,
+    location: finalLocation,
+    ctz: 'Africa/Tunis'
+  });
+
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
+}
+
+function openMainGoogleCalendar() {
+  const brideEl = document.querySelector('[data-cfg="brideNameDisplay"]');
+  const brideName = brideEl ? brideEl.textContent.trim() : 'العروسة';
+  const title = `حفل وطية ${brideName} 🌸`;
+  const location = _weatherLocation || 'طبلبة، تونس';
+  const url = buildGoogleCalendarUrl(title, _weddingDateTime, null, location, null);
+  window.open(url, '_blank', 'noopener,noreferrer');
+}
+
+function openEventGoogleCalendar(btn) {
+  const item = btn.closest('.timeline-item');
+  if (!item) return;
+
+  const titleEl = item.querySelector('.tl-event');
+  const dateEl = item.querySelector('.tl-date');
+  const timeEl = item.querySelector('.tl-time');
+  
+  const eventTitle = titleEl ? titleEl.textContent.trim() : 'حفل الزفاف';
+  const eventDate = dateEl ? dateEl.textContent.trim() : null;
+  const eventTime = timeEl ? timeEl.textContent.trim() : null;
+  const eventLocation = item.getAttribute('data-location') || 'تونس';
+
+  const brideEl = document.querySelector('[data-cfg="brideNameDisplay"]');
+  const brideName = brideEl ? brideEl.textContent.trim() : '';
+  const fullTitle = `${eventTitle} - وطية ${brideName}`.trim();
+
+  const details = `دعوة لحضور ${eventTitle}.\n\n` +
+    `تذكير: يرجى حفظ المناسبة في Calendrier Google. تذكير مقترح: قبل يوم واحد (24 ساعة) وقبل ساعة واحدة من الموعد.\n\n` +
+    `المكان: ${eventLocation}\n` +
+    `رابط الدعوة: ${window.location.href}`;
+
+  const url = buildGoogleCalendarUrl(fullTitle, eventDate, eventTime, eventLocation, details);
+  window.open(url, '_blank', 'noopener,noreferrer');
+}
+
 function rebuildTimelineFromConfig(events) {
   const timeline = document.getElementById('timeline');
   if (!timeline) return;
   const pinLabel = 'الموقع';
+  const calLabel = 'التقويم';
   const pinIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`;
+  const calIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>`;
   timeline.innerHTML = events.map((ev, i) => {
     const isEven  = i % 2 === 0;
     const evName  = ev.n || '';
@@ -343,7 +451,10 @@ function rebuildTimelineFromConfig(events) {
       <div class="tl-event font-amiri">${evName}</div>
       <div class="tl-location">${ev.l||''}</div>
       <div class="tl-time">${formatTo24h(ev.t, ev.a)}</div>
-      <button class="tl-location-btn" onclick="openMap(this)">${pinIcon}<span>${pinLabel}</span></button>`;
+      <div class="tl-actions">
+        <button class="tl-location-btn" onclick="openMap(this)">${pinIcon}<span>${pinLabel}</span></button>
+        <button class="tl-calendar-btn" onclick="openEventGoogleCalendar(this)">${calIcon}<span>${calLabel}</span></button>
+      </div>`;
     return `
       <div class="timeline-item"
            data-location="${ev.l||''}"
@@ -354,7 +465,6 @@ function rebuildTimelineFromConfig(events) {
         <div class="tl-right-cell">${isEven ? iconHTML : infoHTML}</div>
       </div>`;
   }).join('');
-  // Re-attach observers after rebuild
   initTimelineReveal();
 }
 

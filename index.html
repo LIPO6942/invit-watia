@@ -179,6 +179,16 @@
               </div>
             </div>
 
+            <div class="gcal-card-container">
+              <button class="gcal-main-btn" onclick="openMainGoogleCalendar()">
+                <svg class="gcal-icon" viewBox="0 0 24 24" width="20" height="20">
+                  <path fill="#4285F4" d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/>
+                  <path fill="#34A853" d="M9 10h4v4H9z"/>
+                </svg>
+                <span data-tr="gcal_main_btn">حفظ الموعد في Calendrier Google 📅</span>
+              </button>
+            </div>
+
             <div class="scroll-hint-2">
               <span>اسحب للأسفل</span>
               <div class="scroll-arrow-2"></div>
@@ -202,10 +212,16 @@
                   <div class="tl-event font-amiri">مراسم العقد</div>
                   <div class="tl-location">فضاء الحبيب</div>
                   <div class="tl-time">15:30</div>
-                  <button class="tl-location-btn" onclick="openMap(this)">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                    <span data-tr="location_btn">الموقع</span>
-                  </button>
+                  <div class="tl-actions">
+                    <button class="tl-location-btn" onclick="openMap(this)">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                      <span data-tr="location_btn">الموقع</span>
+                    </button>
+                    <button class="tl-calendar-btn" onclick="openEventGoogleCalendar(this)">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+                      <span data-tr="calendar_btn">التقويم</span>
+                    </button>
+                  </div>
                 </div>
                 <div class="tl-dot-wrapper"><div class="tl-dot"></div></div>
                 <div class="tl-right-cell">
@@ -223,10 +239,16 @@
                   <div class="tl-event font-amiri">استقبال الضيوف</div>
                   <div class="tl-location">منزل العريس</div>
                   <div class="tl-time">16:30</div>
-                  <button class="tl-location-btn" onclick="openMap(this)">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                    <span data-tr="location_btn">الموقع</span>
-                  </button>
+                  <div class="tl-actions">
+                    <button class="tl-location-btn" onclick="openMap(this)">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                      <span data-tr="location_btn">الموقع</span>
+                    </button>
+                    <button class="tl-calendar-btn" onclick="openEventGoogleCalendar(this)">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+                      <span data-tr="calendar_btn">التقويم</span>
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -236,10 +258,16 @@
                   <div class="tl-event font-amiri">جلسة تصوير</div>
                   <div class="tl-location">برج الراس</div>
                   <div class="tl-time">17:00</div>
-                  <button class="tl-location-btn" onclick="openMap(this)">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                    <span data-tr="location_btn">الموقع</span>
-                  </button>
+                  <div class="tl-actions">
+                    <button class="tl-location-btn" onclick="openMap(this)">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                      <span data-tr="location_btn">الموقع</span>
+                    </button>
+                    <button class="tl-calendar-btn" onclick="openEventGoogleCalendar(this)">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+                      <span data-tr="calendar_btn">التقويم</span>
+                    </button>
+                  </div>
                 </div>
                 <div class="tl-dot-wrapper"><div class="tl-dot"></div></div>
                 <div class="tl-right-cell">
@@ -257,10 +285,16 @@
                   <div class="tl-event font-amiri">مأدبة العشاء</div>
                   <div class="tl-location">منزل العريس</div>
                   <div class="tl-time">18:30</div>
-                  <button class="tl-location-btn" onclick="openMap(this)">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                    <span data-tr="location_btn">الموقع</span>
-                  </button>
+                  <div class="tl-actions">
+                    <button class="tl-location-btn" onclick="openMap(this)">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                      <span data-tr="location_btn">الموقع</span>
+                    </button>
+                    <button class="tl-calendar-btn" onclick="openEventGoogleCalendar(this)">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+                      <span data-tr="calendar_btn">التقويم</span>
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -270,10 +304,16 @@
                   <div class="tl-event font-amiri">حفل الأفراح</div>
                   <div class="tl-location">فضاء موازين</div>
                   <div class="tl-time">20:00</div>
-                  <button class="tl-location-btn" onclick="openMap(this)">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                    <span data-tr="location_btn">الموقع</span>
-                  </button>
+                  <div class="tl-actions">
+                    <button class="tl-location-btn" onclick="openMap(this)">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                      <span data-tr="location_btn">الموقع</span>
+                    </button>
+                    <button class="tl-calendar-btn" onclick="openEventGoogleCalendar(this)">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+                      <span data-tr="calendar_btn">التقويم</span>
+                    </button>
+                  </div>
                 </div>
                 <div class="tl-dot-wrapper"><div class="tl-dot"></div></div>
                 <div class="tl-right-cell">
