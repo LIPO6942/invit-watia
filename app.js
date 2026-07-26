@@ -344,6 +344,21 @@ function formatToGCalUTC(dateObj) {
   return `${year}${month}${day}T${hours}${minutes}${seconds}Z`;
 }
 
+function _getGuestFormattedName() {
+  if (typeof _resolvedGuestName === 'undefined' || !_resolvedGuestName) return null;
+  const guestName = _resolvedGuestName;
+  const guestType = (typeof _resolvedGuestType !== 'undefined' && _resolvedGuestType) ? _resolvedGuestType : 'ar_couple';
+  switch (guestType) {
+    case 'ar_couple':          return `السيد ${guestName} وحرمه`;
+    case 'ar_couple_children': return `السيد ${guestName} وحرمه وأبنائه`;
+    case 'ar_man':             return `السيد ${guestName}`;
+    case 'ar_woman':           return `السيدة ${guestName}`;
+    case 'ar_friend_m':        return `الصديق العزيز ${guestName}`;
+    case 'ar_friend_f':        return `الصديقة العزيزة ${guestName}`;
+    default:                   return guestName;
+  }
+}
+
 function buildGoogleCalendarUrl(title, dateRaw, timeRaw, location, details) {
   let startDate = new Date();
   
@@ -381,9 +396,12 @@ function buildGoogleCalendarUrl(title, dateRaw, timeRaw, location, details) {
   const startUtc = formatToGCalUTC(startDate);
   const endUtc = formatToGCalUTC(endDate);
 
-  const defaultDetails = `يسرنا ويشرفنا دعوتكم لحضور حفلنا!\n\n` +
+  const guestSalutation = _getGuestFormattedName();
+  const guestHeader = guestSalutation ? `أهلاً وسهلاً بك ${guestSalutation} 🌸\n` : '';
+
+  const defaultDetails = `${guestHeader}يسرنا ويشرفنا دعوتكم لحضور حفلنا!\n\n` +
     `تذكير: يرجى حفظ المناسبة في Calendrier Google. تذكير مقترح: قبل يوم واحد (24 ساعة) وقبل ساعة واحدة من الموعد.\n\n` +
-    `رابط الدعوة الإلكترونية: ${window.location.href}`;
+    `رابط دعوتك الخاصة: ${window.location.href}`;
 
   const finalDetails = details || defaultDetails;
   const finalLocation = location || _weatherLocation || 'طبلبة، تونس';
@@ -403,7 +421,10 @@ function buildGoogleCalendarUrl(title, dateRaw, timeRaw, location, details) {
 function openMainGoogleCalendar() {
   const brideEl = document.querySelector('[data-cfg="brideNameDisplay"]');
   const brideName = brideEl ? brideEl.textContent.trim() : 'العروسة';
-  const title = `حفل وطية ${brideName} 🌸`;
+  const guestSalutation = _getGuestFormattedName();
+  const title = guestSalutation 
+    ? `حفل وطية ${brideName} 🌸 (خاصة بـ ${guestSalutation})`
+    : `حفل وطية ${brideName} 🌸`;
   const location = _weatherLocation || 'طبلبة، تونس';
   const url = buildGoogleCalendarUrl(title, _weddingDateTime, null, location, null);
   window.open(url, '_blank', 'noopener,noreferrer');
@@ -424,12 +445,17 @@ function openEventGoogleCalendar(btn) {
 
   const brideEl = document.querySelector('[data-cfg="brideNameDisplay"]');
   const brideName = brideEl ? brideEl.textContent.trim() : '';
-  const fullTitle = `${eventTitle} - وطية ${brideName}`.trim();
+  const guestSalutation = _getGuestFormattedName();
+  const fullTitle = guestSalutation
+    ? `${eventTitle} - وطية ${brideName} (${guestSalutation})`.trim()
+    : `${eventTitle} - وطية ${brideName}`.trim();
 
-  const details = `دعوة لحضور ${eventTitle}.\n\n` +
+  const guestHeader = guestSalutation ? `أهلاً وسهلاً بك ${guestSalutation} 🌸\n` : '';
+
+  const details = `${guestHeader}دعوة لحضور ${eventTitle}.\n\n` +
     `تذكير: يرجى حفظ المناسبة في Calendrier Google. تذكير مقترح: قبل يوم واحد (24 ساعة) وقبل ساعة واحدة من الموعد.\n\n` +
     `المكان: ${eventLocation}\n` +
-    `رابط الدعوة: ${window.location.href}`;
+    `رابط دعوتك الخاصة: ${window.location.href}`;
 
   const url = buildGoogleCalendarUrl(fullTitle, eventDate, eventTime, eventLocation, details);
   window.open(url, '_blank', 'noopener,noreferrer');
