@@ -439,9 +439,8 @@ function rebuildTimelineFromConfig(events) {
   const timeline = document.getElementById('timeline');
   if (!timeline) return;
   const pinLabel = 'الموقع';
-  const calLabel = 'التقويم';
   const pinIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`;
-  const calIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>`;
+  const calIcon = `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>`;
   timeline.innerHTML = events.map((ev, i) => {
     const isEven  = i % 2 === 0;
     const evName  = ev.n || '';
@@ -453,7 +452,7 @@ function rebuildTimelineFromConfig(events) {
       <div class="tl-time">${formatTo24h(ev.t, ev.a)}</div>
       <div class="tl-actions">
         <button class="tl-location-btn" onclick="openMap(this)">${pinIcon}<span>${pinLabel}</span></button>
-        <button class="tl-calendar-btn" onclick="openEventGoogleCalendar(this)">${calIcon}<span>${calLabel}</span></button>
+        <button class="tl-calendar-btn" onclick="openEventGoogleCalendar(this)" title="إضافة للتقويم" aria-label="حفظ في التقويم">${calIcon}</button>
       </div>`;
     return `
       <div class="timeline-item"
