@@ -704,6 +704,7 @@ body:not(.env-open) {
 .invitation.open .seal-sparkles,
 .invitation.open .seal-halo {
   opacity: 0;
+  display: none !important;
   transition: opacity 0.4s ease;
   pointer-events: none;
 }
@@ -795,6 +796,255 @@ body:not(.env-open) {
   line-height: 1;
   display: inline-block;
   user-select: none;
+}
+
+/* ─────── Full-Page 3D Cinematic Video Intro & Modern Reveal ─────── */
+.full-video-intro {
+  position: relative;
+  width: 100%;
+  min-height: 100dvh;
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.video-bg-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+  pointer-events: none;
+  background: #090502;
+}
+
+#template-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform, opacity, filter;
+  transition: opacity 1.2s ease;
+}
+
+.invitation.open #template-video {
+  animation: modernVideoCinematicReveal 3.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes modernVideoCinematicReveal {
+  0% {
+    opacity: 0;
+    transform: scale(1.14);
+    filter: brightness(0.4) blur(8px);
+  }
+  30% {
+    opacity: 0.9;
+    filter: brightness(0.8) blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.0);
+    filter: brightness(0.88) contrast(1.06) blur(0px);
+  }
+}
+
+.video-cinematic-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: 
+    radial-gradient(circle at 50% 50%, rgba(12, 7, 3, 0.25) 0%, rgba(10, 5, 2, 0.6) 70%, rgba(8, 4, 1, 0.9) 100%),
+    linear-gradient(to bottom, rgba(8, 4, 1, 0.82) 0%, rgba(8, 4, 1, 0.1) 18%, rgba(8, 4, 1, 0.1) 78%, rgba(8, 4, 1, 0.92) 100%);
+}
+
+.video-full-overlay {
+  position: relative;
+  z-index: 4;
+  width: 100%;
+  max-width: 420px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 24px 16px 52px 16px;
+  box-sizing: border-box;
+}
+
+/* Header badge on top of video */
+.v-header-badge {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffe5a3;
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
+  background: rgba(201, 168, 76, 0.18);
+  padding: 3px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(201, 168, 76, 0.4);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Basmala directly on top of video */
+.v-basmala {
+  font-family: 'Aref Ruqaa Ink', serif;
+  font-size: clamp(1.5rem, 6.6vw, 2.3rem);
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 4px 0 6px 0;
+  background: linear-gradient(135deg, #FFF9D2 0%, #f0c84a 45%, #c9930c 80%, #7a4e08 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 16px rgba(201, 168, 76, 0.5));
+}
+
+.video-full-overlay .divider-ornament {
+  color: var(--gold);
+  font-size: 1.15rem;
+  letter-spacing: 8px;
+  margin: 3px 0 6px 0;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+}
+
+.video-full-overlay .families-main-title {
+  font-size: clamp(1.1rem, 4.4vw, 1.35rem) !important;
+  font-weight: 700 !important;
+  color: #fff8e7 !important;
+  letter-spacing: 1.2px;
+  margin-bottom: 6px;
+  text-shadow: 0 3px 8px rgba(0, 0, 0, 0.95) !important;
+}
+
+.video-full-overlay .families-row {
+  margin: 4px 0 8px 0;
+  gap: 16px;
+}
+
+.v-invite-desc {
+  font-size: clamp(0.92rem, 3.6vw, 1.1rem) !important;
+  color: #faf5ef !important;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95) !important;
+  margin: 6px 0 4px 0 !important;
+  font-weight: 500;
+}
+
+.video-full-overlay .bride-name {
+  font-size: clamp(2.4rem, 9.8vw, 3.4rem);
+  font-weight: 900;
+  background: linear-gradient(135deg, #FFFFFF 0%, #FFF5CC 25%, #f0c84a 55%, #c9930c 85%, #8a6010 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 20px rgba(201, 168, 76, 0.65));
+  line-height: 1.25;
+}
+
+/* Modern Replay Button */
+.modern-replay-btn {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  z-index: 10;
+  background: rgba(15, 8, 3, 0.65);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #f7d070;
+  border: 1.5px solid rgba(201, 168, 76, 0.6);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.modern-replay-btn:hover {
+  background: rgba(201, 168, 76, 0.9);
+  color: #1a0f00;
+  transform: rotate(-70deg) scale(1.1);
+  box-shadow: 0 0 16px rgba(201, 168, 76, 0.7);
+}
+
+/* Staggered Modern Opening Entrance for Elements */
+.animated-elem {
+  opacity: 0;
+  transform: translateY(22px);
+  will-change: opacity, transform;
+}
+
+.invitation.open .elem-step-0 { animation: modernFadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards; }
+.invitation.open .elem-step-1 { animation: modernBasmalaReveal 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards; }
+.invitation.open .elem-step-2 { animation: modernFadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.9s forwards; }
+.invitation.open .elem-step-3 { animation: modernFadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards; }
+.invitation.open .elem-step-4 { animation: modernFadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 1.5s forwards; }
+.invitation.open .elem-step-5 { animation: modernFadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 1.8s forwards; }
+.invitation.open .elem-step-6 { animation: modernBrideReveal 1.6s cubic-bezier(0.16, 1, 0.3, 1) 2.1s forwards; }
+.invitation.open .elem-step-7 { animation: modernFadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 2.4s forwards; }
+.invitation.open .elem-step-8 { animation: modernFadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 2.7s forwards; }
+
+@keyframes modernFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes modernBasmalaReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.92);
+    filter: brightness(1.6) blur(4px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.02);
+    filter: brightness(1.2) blur(0px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: brightness(1.0) blur(0px);
+  }
+}
+
+@keyframes modernBrideReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(28px) scale(0.88);
+    filter: brightness(1.9) drop-shadow(0 0 25px rgba(255, 230, 140, 0.9));
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-3px) scale(1.03);
+    filter: brightness(1.2) drop-shadow(0 0 18px rgba(201, 168, 76, 0.7));
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: brightness(1) drop-shadow(0 4px 14px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 20px rgba(201, 168, 76, 0.65));
+  }
 }
 
 .intro-overlay {

@@ -555,6 +555,7 @@ window.openEnvelopeNow = function() {
   //    (~1.3s in: panels are ~54% open, no blank white space visible)
   setTimeout(() => {
     inv.classList.add('open');
+    playTemplateVideo15s();
   }, 1300);
 
   // Play the actual wedding march MP3 song
@@ -564,6 +565,44 @@ window.openEnvelopeNow = function() {
     spawnPetals(window._particleMode || 'stardust');
     startHeartClock();
   }, 900);
+};
+
+/* ────────────────────────────────────────────────
+   1b. 3D TEMPLATE VIDEO (Plays in slow-motion and freezes on last frame at 15s)
+──────────────────────────────────────────────── */
+function playTemplateVideo15s() {
+  const vid = document.getElementById('template-video');
+  if (!vid) return;
+
+  try {
+    vid.currentTime = 0;
+    vid.playbackRate = 0.72; // Slow motion playback (luxurious & dreamy pace)
+  } catch (e) {}
+
+  const playPromise = vid.play();
+  if (playPromise !== undefined) {
+    playPromise.catch(err => {
+      // Browser autoplay restriction fallback: muted play is always allowed
+      console.log('Video autoplay note:', err);
+    });
+  }
+
+  // Freeze on the last frame precisely at 15 seconds of the video
+  vid.ontimeupdate = function() {
+    if (vid.currentTime >= 15) {
+      vid.pause();
+      vid.currentTime = 15;
+      vid.ontimeupdate = null; // remove listener once frozen
+    }
+  };
+
+  vid.onended = function() {
+    vid.pause();
+  };
+}
+
+window.replayTemplateVideo = function() {
+  playTemplateVideo15s();
 };
 
 // Secret admin shortcut: triple-tap the closing section to go to admin

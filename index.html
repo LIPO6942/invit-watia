@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Scheherazade+New:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@600;700&family=Aref+Ruqaa+Ink:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<link rel="stylesheet" href="style.css?v=27">
+<link rel="stylesheet" href="style.css?v=30">
 </head>
 <body>
 
@@ -59,21 +59,53 @@
     <!-- ─── wedding content (revealed on open) ─── -->
     <div class="env-card">
 
-      <!-- ── بسم الله الرحمان الرحيم — arabesque Basmala banner (top of opened card) ── -->
-      <div class="outeya-basmala-banner" id="outeyaBasmalaBanner">
-        <div class="outeya-basmala-inner">
-          <div class="outeya-basmala-text font-ruqaa">بِسْمِ اللهِ الرَّحْمَانِ الرَّحِيمِ</div>
-        </div>
-      </div>
+      <!-- ── Basmala banner moved directly on top of full-screen video ── -->
+      <div class="outeya-basmala-banner" id="outeyaBasmalaBanner" style="display:none;"></div>
       <div id="wedding-content">
 
-        <!-- ── INTRO ── -->
-        <section class="w-section" id="intro">
-          <div class="hero-bg-parallax"></div>
-          <div class="intro-overlay">
-            <div class="divider-ornament">✦✦✦</div>
-            <p class="p1-invite-text families-main-title" data-tr="invite_title">تتشرف عائلة</p>
-            <div class="families-row outeya-family-row">
+        <!-- ── INTRO / FULL-SCREEN 3D CINEMATIC VIDEO ── -->
+        <section class="w-section full-video-intro" id="intro">
+          
+          <!-- Full-page background video (Slow-motion, freezes at 15s) -->
+          <div class="video-bg-container">
+            <video 
+              id="template-video" 
+              src="assets/wedding_template.mp4#t=0,15" 
+              playsinline 
+              muted 
+              preload="auto">
+            </video>
+            <div class="video-cinematic-overlay"></div>
+          </div>
+
+          <!-- Subtle modern replay button -->
+          <button class="video-replay-btn modern-replay-btn" onclick="replayTemplateVideo()" title="إعادة تشغيل الفيديو" aria-label="Replay animation">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
+            </svg>
+          </button>
+
+          <!-- Complete Overlay Elements (All placed directly over the video) -->
+          <div class="intro-overlay video-full-overlay">
+            
+            <!-- 1. Header / Watia Badge -->
+            <div class="v-header-badge font-amiri animated-elem elem-step-0" data-cfg="envHeaderTitle">
+              وطية رانية
+            </div>
+
+            <!-- 2. Basmala -->
+            <div class="v-basmala font-ruqaa animated-elem elem-step-1">
+              بِسْمِ اللهِ الرَّحْمَانِ الرَّحِيمِ
+            </div>
+
+            <!-- 3. Ornament -->
+            <div class="divider-ornament animated-elem elem-step-2">✦✦✦</div>
+
+            <!-- 4. Family Title -->
+            <p class="p1-invite-text families-main-title animated-elem elem-step-3" data-tr="invite_title">تتشرف عائلة</p>
+
+            <!-- 5. Parents -->
+            <div class="families-row outeya-family-row animated-elem elem-step-4">
               <div class="family-block">
                 <div class="family-label" data-tr="mr">السيد</div>
                 <div class="family-name font-amiri animated-bride-family" data-cfg="brideFather">والد العروسة</div>
@@ -81,13 +113,21 @@
                 <div class="family-name font-amiri animated-bride-family" data-cfg="brideMother">والدة العروسة</div>
               </div>
             </div>
-            <p class="p1-invite-text" style="margin:10px 0 4px" data-tr="invite_desc">بدعوتكم لحضور حفل وطية ابنتهما</p>
-            <div class="names-main animated-names outeya-bride-name-only">
+
+            <!-- 6. Invitation Description -->
+            <p class="p1-invite-text v-invite-desc animated-elem elem-step-5" data-tr="invite_desc">بدعوتكم لحضور حفل وطية ابنتهما</p>
+
+            <!-- 7. Bride Name Display -->
+            <div class="names-main animated-names outeya-bride-name-only animated-elem elem-step-6">
               <span class="bride-name animated-bride" data-cfg="brideNameDisplay">العروسة</span>
             </div>
-            <div class="shimmer-line"></div>
+
+            <!-- 8. Shimmer line -->
+            <div class="shimmer-line animated-elem elem-step-7"></div>
           </div>
-          <div class="scroll-hint">
+
+          <!-- 9. Scroll hint -->
+          <div class="scroll-hint animated-elem elem-step-8">
             <span data-tr="scroll_hint">اسحب للأسفل</span>
             <div class="scroll-arrow"></div>
           </div>
@@ -833,6 +873,6 @@
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<script src="app.js?v=27"></script>
+<script src="app.js?v=30"></script>
 </body>
 </html>
