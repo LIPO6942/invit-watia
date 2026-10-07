@@ -798,7 +798,7 @@ body:not(.env-open) {
   user-select: none;
 }
 
-/* ─────── Full-Page 3D Cinematic Video Intro & Modern Reveal ─────── */
+/* ─────── Full-Page 3D Cinematic Video Intro (Vibrant & Airy Modern) ─────── */
 .full-video-intro {
   position: relative;
   width: 100%;
@@ -819,7 +819,7 @@ body:not(.env-open) {
   overflow: hidden;
   z-index: 1;
   pointer-events: none;
-  background: #090502;
+  background: #140d06;
 }
 
 #template-video {
@@ -833,146 +833,220 @@ body:not(.env-open) {
   pointer-events: none;
   opacity: 0;
   will-change: transform, opacity, filter;
+  filter: brightness(1.04) contrast(1.08) saturate(1.22);
   transition: opacity 1.2s ease;
 }
 
 .invitation.open #template-video {
-  animation: modernVideoCinematicReveal 3.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: modernVideoCinematicReveal 3.2s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @keyframes modernVideoCinematicReveal {
   0% {
     opacity: 0;
-    transform: scale(1.14);
-    filter: brightness(0.4) blur(8px);
+    transform: scale(1.08);
+    filter: brightness(0.7) saturate(1.1) blur(4px);
   }
-  30% {
-    opacity: 0.9;
-    filter: brightness(0.8) blur(2px);
+  40% {
+    opacity: 0.95;
+    filter: brightness(1.02) saturate(1.2) blur(0px);
   }
   100% {
     opacity: 1;
     transform: scale(1.0);
-    filter: brightness(0.88) contrast(1.06) blur(0px);
+    filter: brightness(1.04) contrast(1.08) saturate(1.22) blur(0px);
   }
 }
 
+/* Very subtle vignette - transparent in center so video colors are vivid and pronounced */
 .video-cinematic-overlay {
   position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 2;
   background: 
-    radial-gradient(circle at 50% 50%, rgba(12, 7, 3, 0.25) 0%, rgba(10, 5, 2, 0.6) 70%, rgba(8, 4, 1, 0.9) 100%),
-    linear-gradient(to bottom, rgba(8, 4, 1, 0.82) 0%, rgba(8, 4, 1, 0.1) 18%, rgba(8, 4, 1, 0.1) 78%, rgba(8, 4, 1, 0.92) 100%);
+    linear-gradient(
+      to bottom,
+      rgba(8, 4, 1, 0.55) 0%,
+      rgba(8, 4, 1, 0.15) 15%,
+      transparent 28%,
+      transparent 68%,
+      rgba(8, 4, 1, 0.25) 82%,
+      rgba(8, 4, 1, 0.75) 100%
+    ),
+    radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(8, 4, 1, 0.45) 100%);
+}
+
+/* Top Floating Crown Container for Watia Badge */
+.v-top-crown-container {
+  position: absolute;
+  top: 24px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.v-header-badge {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff4d1;
+  letter-spacing: 2.5px;
+  background: rgba(18, 12, 6, 0.45);
+  border: 1px solid rgba(255, 215, 120, 0.45);
+  padding: 5px 20px;
+  border-radius: 30px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4), 0 0 10px rgba(201, 168, 76, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
 }
 
 .video-full-overlay {
   position: relative;
   z-index: 4;
   width: 100%;
-  max-width: 420px;
+  max-width: 430px;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 24px 16px 52px 16px;
+  padding: 70px 20px 45px 20px;
   box-sizing: border-box;
 }
 
-/* Header badge on top of video */
-.v-header-badge {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #ffe5a3;
-  letter-spacing: 2px;
-  margin-bottom: 6px;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
-  background: rgba(201, 168, 76, 0.18);
-  padding: 3px 16px;
-  border-radius: 20px;
-  border: 1px solid rgba(201, 168, 76, 0.4);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-}
-
-/* Basmala directly on top of video */
+/* Basmala: floating, airy, majestic calligraphy */
 .v-basmala {
-  font-family: 'Aref Ruqaa Ink', serif;
-  font-size: clamp(1.5rem, 6.6vw, 2.3rem);
+  font-family: 'Aref Ruqaa Ink', 'Amiri', serif;
+  font-size: clamp(1.45rem, 6.2vw, 2.15rem);
   font-weight: 700;
   line-height: 1.35;
-  margin: 4px 0 6px 0;
-  background: linear-gradient(135deg, #FFF9D2 0%, #f0c84a 45%, #c9930c 80%, #7a4e08 100%);
+  margin: 0 0 14px 0;
+  letter-spacing: 1.5px;
+  background: linear-gradient(135deg, #ffffff 0%, #fff2be 35%, #ffd768 70%, #d4a942 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 16px rgba(201, 168, 76, 0.5));
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 16px rgba(255, 215, 104, 0.45));
 }
 
 .video-full-overlay .divider-ornament {
-  color: var(--gold);
-  font-size: 1.15rem;
-  letter-spacing: 8px;
-  margin: 3px 0 6px 0;
+  color: #ffd768;
+  font-size: 0.95rem;
+  letter-spacing: 14px;
+  margin: 0 0 14px 0;
+  opacity: 0.85;
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
 }
 
 .video-full-overlay .families-main-title {
-  font-size: clamp(1.1rem, 4.4vw, 1.35rem) !important;
-  font-weight: 700 !important;
-  color: #fff8e7 !important;
-  letter-spacing: 1.2px;
-  margin-bottom: 6px;
-  text-shadow: 0 3px 8px rgba(0, 0, 0, 0.95) !important;
+  font-family: 'Noto Naskh Arabic', 'Amiri', sans-serif !important;
+  font-size: clamp(1.05rem, 4.2vw, 1.25rem) !important;
+  font-weight: 600 !important;
+  color: #ffffff !important;
+  letter-spacing: 3.5px !important;
+  margin-bottom: 14px !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9) !important;
 }
 
-.video-full-overlay .families-row {
-  margin: 4px 0 8px 0;
+/* Modern Airy Parents Row */
+.modern-parents-row {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
   gap: 16px;
+  margin: 2px 0 16px 0;
+}
+
+.parent-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.parent-role-badge {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #ffe5a3;
+  background: rgba(201, 168, 76, 0.22);
+  border: 1px solid rgba(201, 168, 76, 0.45);
+  padding: 2px 12px;
+  border-radius: 12px;
+  letter-spacing: 1px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.parent-name {
+  font-size: clamp(1.05rem, 4.2vw, 1.3rem);
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
+  letter-spacing: 0.5px;
+}
+
+.parent-separator-bullet {
+  color: #ffd768;
+  font-size: 0.85rem;
+  opacity: 0.75;
+  align-self: center;
+  margin-top: 15px;
 }
 
 .v-invite-desc {
-  font-size: clamp(0.92rem, 3.6vw, 1.1rem) !important;
-  color: #faf5ef !important;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95) !important;
-  margin: 6px 0 4px 0 !important;
+  font-size: clamp(0.92rem, 3.6vw, 1.12rem) !important;
+  color: rgba(255, 255, 255, 0.95) !important;
+  letter-spacing: 1.5px !important;
+  margin: 12px 0 10px 0 !important;
   font-weight: 500;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9) !important;
 }
 
 .video-full-overlay .bride-name {
-  font-size: clamp(2.4rem, 9.8vw, 3.4rem);
+  font-size: clamp(2.6rem, 10vw, 3.8rem);
   font-weight: 900;
-  background: linear-gradient(135deg, #FFFFFF 0%, #FFF5CC 25%, #f0c84a 55%, #c9930c 85%, #8a6010 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #fff7d6 20%, #ffd768 55%, #e6a82a 85%, #b37e1a 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 20px rgba(201, 168, 76, 0.65));
-  line-height: 1.25;
+  filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 24px rgba(255, 215, 104, 0.55));
+  line-height: 1.2;
+  margin: 4px 0 14px 0;
+}
+
+.video-full-overlay .shimmer-line {
+  width: 140px;
+  height: 1.5px;
+  margin: 4px auto 0 auto;
 }
 
 /* Modern Replay Button */
 .modern-replay-btn {
   position: absolute;
-  top: 18px;
-  left: 18px;
+  top: 22px;
+  left: 20px;
   z-index: 10;
-  background: rgba(15, 8, 3, 0.65);
+  background: rgba(18, 12, 6, 0.5);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  color: #f7d070;
-  border: 1.5px solid rgba(201, 168, 76, 0.6);
+  color: #ffd768;
+  border: 1px solid rgba(255, 215, 120, 0.5);
   border-radius: 50%;
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.45);
   transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
